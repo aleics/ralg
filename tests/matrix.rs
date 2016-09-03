@@ -40,6 +40,32 @@ fn pop_col_test() {
     assert_eq!(1, m.ncols());
 }
 #[test]
+fn swap_col_test() {
+    let val: Vec<u32> = vec![1, 2, 3, 4, 5];
+    let val2: Vec<u32> = vec![6, 7, 8, 9, 10];
+
+    let mut m = init::<u32>();
+    m.push_col(val.clone());
+    m.push_col(val2.clone());
+
+    m.swap_col(0, 1);
+    assert_eq!(val[0], m.get_element(1, 0));
+    assert_eq!(val2[0], m.get_element(0, 0));
+}
+#[test]
+fn swap_row_test() {
+    let val: Vec<u32> = vec![1, 2, 3, 4, 5];
+    let val2: Vec<u32> = vec![6, 7, 8, 9, 10];
+
+    let mut m = init::<u32>();
+    m.push_col(val.clone());
+    m.push_col(val2.clone());
+
+    m.swap_row(0, 1);
+    assert_eq!(val[1], m.get_element(0, 0));
+    assert_eq!(val[0], m.get_element(0, 1));
+}
+#[test]
 fn get_row_test() {
     let resp: Vec<u32> = vec![1];
     let col: Vec<u32> = vec![1, 2, 3, 4, 5];

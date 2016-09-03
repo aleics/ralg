@@ -5,4 +5,5 @@ An uncomplicated library for mathematics written in Rust.
 * **0.1.0**
   * *matrix initialization*
   * *matrix push and get values*
-  * *matrix comparations (bigger_than, equal_to, etc.)*
+  * *matrix comparison (bigger_than, equal_to, etc.)*
+  * *matrix swapping (columns and rows)*

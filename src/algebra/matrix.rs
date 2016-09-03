@@ -69,6 +69,11 @@ impl<N: Copy> Matrix<N> { // implementation of Matrix<N>
         self.values[i_col][i_row]
     }
 
+    fn update_sizes(&mut self) { // helping function to update the size if matrix is modified
+        self.ncols = self.values.len();
+        self.nrows = self.values[0].len();
+    }
+
     // Push a column to the matrix
     pub fn push_col(&mut self, col: Vec<N>) {
         self.values.push(col);
@@ -88,7 +93,7 @@ impl<N: Copy> Matrix<N> { // implementation of Matrix<N>
 
     // Pop a column of the matrix
     pub fn pop_col(&mut self, index: usize) {
-        if index > self.ncols {
+        if index >= self.ncols {
             panic!("invalid index({}). ncols = '{}'", index, self.ncols)
         }
 
@@ -104,7 +109,7 @@ impl<N: Copy> Matrix<N> { // implementation of Matrix<N>
 
     // Pop a row of the matrix
     pub fn pop_row(&mut self, index: usize) {
-        if index > self.nrows {
+        if index >= self.nrows {
             panic!("invalid index({}). nrows = '{}'", index, self.nrows)
         }
 
@@ -114,11 +119,25 @@ impl<N: Copy> Matrix<N> { // implementation of Matrix<N>
         self.update_sizes();
     }
 
-    fn update_sizes(&mut self) { // helping function to update the size if matrix is modified
-        self.ncols = self.values.len();
-        self.nrows = self.values[0].len();
+    // Swap the column of index_a with the column of index_b
+    pub fn swap_col(&mut self, index_a: usize, index_b: usize) {
+        if (index_a >= self.ncols) || (index_b >= self.ncols) {
+            panic!("invalid indexes(index_a = {}, index_b = {}). ncols = {}",
+                                    index_a, index_b, self.ncols);
+        }
+        self.values.swap(index_a, index_b);
     }
 
+    // Swap the row of index_a with the row of index_b
+    pub fn swap_row(&mut self, index_a: usize, index_b: usize) {
+        if (index_a >= self.nrows) || (index_b >= self.nrows) {
+            panic!("invalid indexes(index_a = {}, index_b = {}). nrows = {}",
+                                    index_a, index_b, self.nrows);
+        }
+        for i in 0..self.ncols {
+            self.values[i].swap(index_a, index_b);
+        }
+    }
 
     // Return a matrix showing at each coordinate if a member was
     // equal to the value given
