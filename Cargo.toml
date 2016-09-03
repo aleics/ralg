@@ -1,10 +1,11 @@
 [package]
 name = "ralg"
 version = "0.1.0"
-authors = ["Aleics <aleics.casanovas@gmail.com>"]
+authors = ["Aleix Casanovas <aleics.casanovas@gmail.com>"]
 
 [lib]
 name = "ralg"
 path = "src/lib.rs"
 
 [dependencies]
+num = "0.1.35"
