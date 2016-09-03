@@ -13,7 +13,7 @@ fn cols_test() {
     assert_eq!(m.ncols(), 5);
 }
 #[test]
-fn get_col_test() {
+fn get_push_col_test() {
     let val: Vec<u32> = vec![1, 2, 3, 4, 5];
     let mut m = init_with_capacity::<u32>(2, 5);
     m.push_col(val.clone());
@@ -25,6 +25,19 @@ fn get_col_test() {
         None => assert_eq!(true, false),
     }
     assert_eq!(get_val.len(), val.len());
+}
+#[test]
+fn pop_col_test() {
+    let val: Vec<u32> = vec![1, 2, 3, 4, 5];
+
+    let mut m = init::<u32>();
+    for _ in 0..2 {
+        m.push_col(val.clone());
+    }
+
+    m.pop_col(0);
+
+    assert_eq!(1, m.ncols());
 }
 #[test]
 fn get_row_test() {
@@ -54,6 +67,24 @@ fn push_row_test() {
     val = vec![6, 7];
     m.push_row(val.clone());
     assert_eq!(m.nrows(), 6);
+}
+#[test]
+fn pop_row_test() {
+    let val: Vec<u32> = vec![1, 2, 3, 4, 5];
+    let mut resp: Vec<u32> = val.clone();
+    resp.remove(0);
+
+
+    let mut m = init::<u32>();
+    m.push_col(val.clone());
+
+    m.pop_row(0);
+
+    assert_eq!(4, m.nrows());
+    assert_eq!(resp[0], m.get_element(0, 0));
+    assert_eq!(resp[1], m.get_element(0, 1));
+    assert_eq!(resp[2], m.get_element(0, 2));
+    assert_eq!(resp[3], m.get_element(0, 3));
 }
 #[test]
 fn get_element_test() {
