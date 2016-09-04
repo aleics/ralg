@@ -15,31 +15,35 @@ pub struct Matrix<N: Copy> {
     ncols: usize,
 }
 
-/// Initializes a Matrix variable with empty values
-pub fn init<N: Copy>() -> Matrix<N> {
-    Matrix::<N> { values: Vec::new(),
-                  nrows: 0,
-                  ncols: 0 }
-}
-
-/// Initializes a Matrix variable with a defined capacity for the rows
-/// and the columns
-///
-/// # Arguments
-///
-/// * `nc`: columns capacity
-/// * `nr`: rows capacity
-pub fn init_with_capacity<N: Copy>(nc: usize, nr: usize) -> Matrix<N>{
-    let mut vec: Vec<Vec<N>> = Vec::with_capacity(nc);
-    for i in 0..vec.len() {
-        vec[i] = Vec::with_capacity(nr);
-    }
-    Matrix::<N> { values: vec,
-                  nrows: nr,
-                  ncols: nc }
-}
+////////////////////////////////////////////////////////////////////////////////
+// Inherent methods
+////////////////////////////////////////////////////////////////////////////////
 
 impl<N: Copy> Matrix<N> { // implementation of Matrix<N>
+
+    /// Initializes a Matrix variable with empty values
+    pub fn init() -> Matrix<N> {
+        Matrix::<N> { values: Vec::new(),
+                      nrows: 0,
+                      ncols: 0 }
+    }
+
+    /// Initializes a Matrix variable with a defined capacity for the rows
+    /// and the columns
+    ///
+    /// # Arguments
+    ///
+    /// * `nc`: columns capacity
+    /// * `nr`: rows capacity
+    pub fn init_with_capacity(nc: usize, nr: usize) -> Matrix<N>{
+        let mut vec: Vec<Vec<N>> = Vec::with_capacity(nc);
+        for i in 0..vec.len() {
+            vec[i] = Vec::with_capacity(nr);
+        }
+        Matrix::<N> { values: vec,
+                      nrows: nr,
+                      ncols: nc }
+    }
 
     /// Returns the number of currently rows
     pub fn nrows(&self) -> usize {
@@ -57,9 +61,9 @@ impl<N: Copy> Matrix<N> { // implementation of Matrix<N>
     ///
     /// * `index`: index of the column that wants to be returned
     pub fn get_col(&self, index: usize) -> Option<&Vec<N>> {
-        for i in 0..self.ncols {
+        for (i, item) in self.values.iter().enumerate() {
             if i == index {
-                return Some(&self.values[i]);
+                return Some(item);
             }
         }
         None
@@ -76,8 +80,8 @@ impl<N: Copy> Matrix<N> { // implementation of Matrix<N>
         }
 
         let mut ret: Vec<N> = Vec::new();
-        for i in 0..self.ncols {
-            ret.push(self.values[i][index]);
+        for (_, item) in self.values.iter().enumerate() {
+            ret.push(item[index]);
         }
         Some(ret)
     }
@@ -102,6 +106,7 @@ impl<N: Copy> Matrix<N> { // implementation of Matrix<N>
     ///
     /// If the value is found then `Some(usize)` is returned, if not `None`
     pub fn contains(&self, element: &N) -> Option<usize> where N: num::Num {
+
         for (i, item) in self.values.iter().enumerate() {
             if item.contains(element) {
                 return Some(i)
@@ -122,12 +127,7 @@ impl<N: Copy> Matrix<N> { // implementation of Matrix<N>
     pub fn contains_col(&self, column: &Vec<N>) -> Option<usize>
         where Vec<N>: PartialEq {
 
-        for (i, item) in self.values.iter().enumerate() {
-            if item == column {
-                return Some(i)
-            }
-        }
-        None
+        self.values.iter().position(|item| item == column)
     }
 
     /// Returns the index of a row if it's present on the matrix
@@ -264,7 +264,7 @@ impl<N: Copy> Matrix<N> { // implementation of Matrix<N>
     pub fn equal_to(&self, value: &N) -> Matrix<bool>
         where N: num::Num + PartialEq<N> {
 
-        let mut m = init::<bool>();
+        let mut m = Matrix::<bool>::init();
         for col in self.values.iter() {
             let mut col_out: Vec<bool> = Vec::new();
 
@@ -290,7 +290,7 @@ impl<N: Copy> Matrix<N> { // implementation of Matrix<N>
             panic!("sizes not equal!");
         }
 
-        let mut m = init::<bool>();
+        let mut m = Matrix::<bool>::init();
         for (i, col) in self.values.iter().enumerate() {
             let mut col_out: Vec<bool> = Vec::new();
 
@@ -316,7 +316,7 @@ impl<N: Copy> Matrix<N> { // implementation of Matrix<N>
     pub fn bigger_than(&self, value: &N) -> Matrix<bool>
         where N: num::Num + PartialOrd<N> {
 
-        let mut m = init::<bool>();
+        let mut m = Matrix::<bool>::init();
         for col in self.values.iter() {
             let mut col_out: Vec<bool> = Vec::new();
 
@@ -346,7 +346,7 @@ impl<N: Copy> Matrix<N> { // implementation of Matrix<N>
             panic!("sizes not equal!");
         }
 
-        let mut m = init::<bool>();
+        let mut m = Matrix::<bool>::init();
         for (i, col) in self.values.iter().enumerate() {
             let mut col_out: Vec<bool> = Vec::new();
 
