@@ -7,3 +7,6 @@ An uncomplicated library for mathematics written in Rust.
   * *matrix push and get values*
   * *matrix comparison (bigger_than, equal_to, etc.)*
   * *matrix swapping (columns and rows)*
+
+* **0.1.1**
+  * *matrix contains element, column and row*

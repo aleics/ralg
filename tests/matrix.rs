@@ -125,12 +125,74 @@ fn get_element_test() {
     assert_eq!(m.get_element(0, 4), 5);
 }
 #[test]
+fn contains_test() {
+    let col: Vec<f32> = vec![0.2, 2.5, 10.2, 8.7, 5.0];
+    let mut m = init::<f32>();
+    m.push_col(col);
+
+    let mut result = m.contains(&0.2);
+    match result {
+        Some(x) => assert_eq!(x, 0),
+        None => assert_eq!(true, false),
+    }
+
+    result = m.contains(&0.7);
+    match result {
+        Some(_) => assert_eq!(true, false),
+        None => assert_eq!(true, true),
+    }
+}
+#[test]
+fn contains_col_test() {
+    let col: Vec<i32> = vec![-1, 0, -2, 2, 3];
+    let col2: Vec<i32> = vec![0, 0, -2, 2, 2];
+
+    let mut m = init::<i32>();
+    m.push_col(col.clone());
+
+    let mut result = m.contains_col(&col);
+    match result {
+        Some(x) => assert_eq!(x, 0),
+        None => assert_eq!(true, false),
+    }
+
+    result = m.contains_col(&col2);
+    match result {
+        Some(_) => assert_eq!(true, false),
+        None => assert_eq!(true, true),
+    }
+}
+#[test]
+fn contains_row_test() {
+    let col: Vec<i32> = vec![-1, 0, -2, 2, 3];
+    let col2: Vec<i32> = vec![0, 0, -2, 2, 2];
+
+    let mut m = init::<i32>();
+    m.push_col(col.clone());
+    m.push_col(col2.clone());
+
+    let row: Vec<i32> = vec![col[0], col2[0]];
+    let row2: Vec<i32> = vec![2, 3];
+
+    let mut result = m.contains_row(&row);
+    match result {
+        Some(x) => assert_eq!(x, 0),
+        None => assert_eq!(true, false),
+    }
+
+    result = m.contains_col(&row2);
+    match result {
+        Some(_) => assert_eq!(true, false),
+        None => assert_eq!(true, true),
+    }
+}
+#[test]
 fn equal_to_test() {
     let col: Vec<i32> = vec![1, 3, 2, 3];
     let mut m = init::<i32>();
     m.push_col(col);
 
-    let eq = m.equal_to(3);
+    let eq = m.equal_to(&3);
 
     assert_eq!(eq.get_element(0, 0), false);
     assert_eq!(eq.get_element(0, 1), true);
@@ -160,7 +222,7 @@ fn bigger_than_test() {
     let mut m = init::<f32>();
     m.push_col(col);
 
-    let bigger = m.bigger_than(0.9);
+    let bigger = m.bigger_than(&0.9);
 
     assert_eq!(bigger.get_element(0, 0), false);
     assert_eq!(bigger.get_element(0, 1), false);
