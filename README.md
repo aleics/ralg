@@ -15,4 +15,4 @@ An uncomplicated library for mathematics written in Rust.
     * *Transposition*
     * *Scalar multiplication*
     * *Clone, PartialEq Trait*
-    * *Add, Sub Trait*
+    * *Add, Sub and Mul Trait*
