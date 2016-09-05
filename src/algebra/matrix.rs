@@ -1,7 +1,8 @@
 extern crate num;
 
+use std::default::Default;
 use std::cmp::{PartialEq};
-use std::ops::{Add, Sub};
+use std::ops::{Add, Sub, Mul};
 
 /// Matrix with a defined number of rows and columns that can
 /// add, remove and edit values.
@@ -432,6 +433,10 @@ impl<N: Copy> Matrix<N> { // implementation of Matrix<N>
     }
 }
 
+////////////////////////////////////////////////////////////////////////////////
+// Traits
+////////////////////////////////////////////////////////////////////////////////
+
 /// Clone implementation for Matrix
 impl<N: Copy> Clone for Matrix<N> {
     fn clone(&self) -> Matrix<N> {
@@ -507,5 +512,51 @@ impl<N: Copy> Sub for Matrix<N> where N: num::Num {
         res.nrows = self.nrows;
 
         res
+    }
+}
+
+/// Multiplication `*` implementation for matrix
+impl<N: Copy + Default> Mul for Matrix<N> where N: num::Num {
+    type Output = Matrix<N>;
+
+    fn mul(self, other: Matrix<N>) -> Matrix<N> {
+        if self.ncols != other.nrows {
+            panic!("matrix dimension mismatch")
+        } else {
+            let mut res: Matrix<N> = Matrix::<N>::init();
+
+            for ico in 0..other.ncols {
+                let mut new_col: Vec<N> = Vec::new();
+                for irs in 0..self.nrows {
+                    let rs: Vec<N>;
+                    let result_r = self.get_row(irs);
+                    match result_r {
+                        Some(x) => rs = x,
+                        None => panic!("row of input matrix not found {}", irs),
+                    }
+
+                    let co: Vec<N>;
+                    let result_c = other.get_col(ico);
+                    match result_c {
+                        Some(x) => co = x.clone(),
+                        None => panic!("column of input matrix not found {}", irs),
+                    }
+
+                    let mut sum_r: N = N::default();
+                    for el_rs in rs.iter() {
+                        sum_r = sum_r + *el_rs;
+                    }
+
+                    let mut sum_c: N = N::default();
+                    for el_co in co.iter() {
+                        sum_c = sum_c + *el_co;
+                    }
+
+                    new_col.push(sum_r * sum_c);
+                }
+                res.push_col(new_col);
+            }
+            res
+        }
     }
 }

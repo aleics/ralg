@@ -3,6 +3,18 @@ extern crate ralg as r;
 use r::algebra::matrix::*;
 
 #[test]
+fn init_with_values_test() {
+    let values: Vec<Vec<i32>> = vec![vec![1, 2], vec![3, 4]];
+    let m = Matrix::<i32>::init_with_value(&values);
+
+    assert_eq!(m.get_element(0, 0), values[0][0]);
+    assert_eq!(m.get_element(0, 1), values[0][1]);
+    assert_eq!(m.get_element(1, 0), values[1][0]);
+    assert_eq!(m.get_element(1, 1), values[1][1]);
+    assert_eq!(m.ncols(), values.len());
+    assert_eq!(m.nrows(), values[0].len());
+}
+#[test]
 fn rows_test() {
     let m = Matrix::<u32>::init_with_capacity(5, 10);
     assert_eq!(m.nrows(), 10);
@@ -327,4 +339,17 @@ fn scalar_mul_test() {
     assert_eq!(pr.get_element(1, 0), 8);
     assert_eq!(pr.get_element(1, 1), 10);
     assert_eq!(pr.get_element(1, 2), 12);
+}
+#[test]
+fn mul_trait_test(){
+    let mut values: Vec<Vec<i32>> = vec![vec![1, 4], vec![2, 5], vec![3, 6]];
+    let m = Matrix::<i32>::init_with_value(&values);
+
+    values = vec![vec![7, 8, 9], vec![10, 11, 12]];
+    let m2 = Matrix::<i32>::init_with_value(&values);
+
+    let prod = m.clone() * m2.clone(); // this must be corrected
+
+    assert_eq!(prod.ncols(), m2.ncols());
+    assert_eq!(prod.nrows(), m.nrows());
 }
