@@ -246,3 +246,85 @@ fn bigger_than_matrix_test() {
     assert_eq!(eq_matrix.get_element(0, 2), false);
     assert_eq!(eq_matrix.get_element(0, 3), false);
 }
+#[test]
+fn eq_trait_test() {
+    let col: Vec<u32> = vec![1, 3, 2, 3];
+    let mut m = Matrix::<u32>::init();
+    m.push_col(col);
+
+    let m2 = m.clone();
+
+    let col3: Vec<u32> = vec![1, 2, 3, 4];
+    let mut m3 = Matrix::<u32>::init();
+    m3.push_col(col3);
+
+    assert_eq!(m == m2, true);
+    assert_eq!(m == m3, false);
+}
+#[test]
+fn add_trait_test(){
+    let col: Vec<u32> = vec![1, 3, 2, 3];
+    let mut m = Matrix::<u32>::init();
+    m.push_col(col);
+
+    let m2: Matrix<u32> = m.clone();
+
+    let res = m + m2;
+
+    assert_eq!(res.get_element(0, 0), 2);
+    assert_eq!(res.get_element(0, 1), 6);
+    assert_eq!(res.get_element(0, 2), 4);
+    assert_eq!(res.get_element(0, 3), 6);
+    assert_eq!(res.ncols(), 1);
+    assert_eq!(res.nrows(), 4);
+}
+#[test]
+fn sub_trait_test(){
+    let col: Vec<u32> = vec![5, 6, 7, 8];
+    let mut m = Matrix::<u32>::init();
+    m.push_col(col);
+
+    let col2: Vec<u32> = vec![1, 2, 3, 3];
+    let mut m2 = Matrix::<u32>::init();
+    m2.push_col(col2);
+
+    let res = m - m2;
+
+    assert_eq!(res.get_element(0, 0), 4);
+    assert_eq!(res.get_element(0, 1), 4);
+    assert_eq!(res.get_element(0, 2), 4);
+    assert_eq!(res.get_element(0, 3), 5);
+    assert_eq!(res.ncols(), 1);
+    assert_eq!(res.nrows(), 4);
+}
+#[test]
+fn transpose_test(){
+    let mut col: Vec<i32> = vec![1, 2, 3];
+    let mut m = Matrix::<i32>::init();
+    m.push_col(col);
+
+    col = vec![5, 7, 8];
+    m.push_col(col);
+
+    let save = m.clone();
+
+    m.transpose();
+    assert_eq!(save.ncols(), m.nrows());
+    assert_eq!(save.nrows(), m.ncols());
+    assert_eq!(save.get_element(0, 0), m.get_element(0, 0));
+    assert_eq!(save.get_element(0, 1), m.get_element(1, 0));
+    assert_eq!(save.get_element(0, 2), m.get_element(2, 0));
+}
+#[test]
+fn scalar_mul_test() {
+    let values: Vec<Vec<i32>> = vec![vec![1, 2, 3], vec![4, 5, 6]];
+    let m = Matrix::<i32>::init_with_value(&values);
+    let pr = m.scalar_mul(2);
+
+    assert_eq!(pr.get_element(0, 0), 2);
+    assert_eq!(pr.get_element(0, 1), 4);
+    assert_eq!(pr.get_element(0, 2), 6);
+    assert_eq!(pr.get_element(1, 0), 8);
+    assert_eq!(pr.get_element(1, 1), 10);
+    assert_eq!(pr.get_element(1, 2), 12);
+}

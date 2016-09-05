@@ -3,10 +3,16 @@ An uncomplicated library for mathematics written in Rust.
 
 ## release notes
 * **0.1.0**
-  * *matrix initialization*
-  * *matrix push and get values*
-  * *matrix comparison (bigger_than, equal_to, etc.)*
-  * *matrix swapping (columns and rows)*
+  * *Matrix*
+    * *initialization*
+    * *push and get values*
+    * *comparison (bigger_than, equal_to, etc.)*
+    * *swapping (columns and rows)*
 
 * **0.1.1**
-  * *matrix contains element, column and row*
+  * *Matrix*
+    * *Contains element, column and row*
+    * *Transposition*
+    * *Scalar multiplication*
+    * *Clone, PartialEq Trait*
+    * *Add, Sub Trait*

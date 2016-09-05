@@ -1,6 +1,7 @@
 extern crate num;
 
 use std::cmp::{PartialEq};
+use std::ops::{Add, Sub};
 
 /// Matrix with a defined number of rows and columns that can
 /// add, remove and edit values.
@@ -35,7 +36,7 @@ impl<N: Copy> Matrix<N> { // implementation of Matrix<N>
     ///
     /// * `nc`: columns capacity
     /// * `nr`: rows capacity
-    pub fn init_with_capacity(nc: usize, nr: usize) -> Matrix<N>{
+    pub fn init_with_capacity(nc: usize, nr: usize) -> Matrix<N> {
         let mut vec: Vec<Vec<N>> = Vec::with_capacity(nc);
         for i in 0..vec.len() {
             vec[i] = Vec::with_capacity(nr);
@@ -43,6 +44,29 @@ impl<N: Copy> Matrix<N> { // implementation of Matrix<N>
         Matrix::<N> { values: vec,
                       nrows: nr,
                       ncols: nc }
+    }
+
+    /// Initializes a Matrix variable with a defined values
+    ///
+    /// # Arguments
+    ///
+    /// * `val`: the matrix will be initialized with these values
+    pub fn init_with_value(val: &Vec<Vec<N>>) -> Matrix<N> {
+        let mut m = Matrix::<N>::init();
+        m.values = val.clone();
+        m.update_sizes();
+        m
+    }
+
+    /// Copies a matrix value
+    ///
+    /// # Arguments
+    ///
+    /// * `m`: matrix to be copied
+    pub fn copy(&mut self, m: Matrix<N>) {
+        self.values = m.values;
+        self.ncols = m.ncols;
+        self.nrows = m.nrows;
     }
 
     /// Returns the number of currently rows
@@ -160,7 +184,12 @@ impl<N: Copy> Matrix<N> { // implementation of Matrix<N>
 
     fn update_sizes(&mut self) { // helping function to update the size if matrix is modified
         self.ncols = self.values.len();
-        self.nrows = self.values[0].len();
+
+        if self.ncols > 0 {
+            self.nrows = self.values[0].len();
+        } else { // if number of columns is 0, the number of rows must be also 0
+            self.nrows = 0;
+        }
     }
 
     /// Appends a column to the end of the matrix
@@ -179,12 +208,19 @@ impl<N: Copy> Matrix<N> { // implementation of Matrix<N>
     ///
     /// * `row`: row to push
     pub fn push_row(&mut self, row: Vec<N>) {
-        if self.ncols != row.len() {
-            panic!("invalid size for a row. ncols = {}, row.len() = {}", self.ncols, row.len())
-        }
+        if self.ncols > 0 && self.nrows > 0 {
+            if self.ncols != row.len() {
+                panic!("invalid size for a row. ncols = {}, row.len() = {}", self.ncols, row.len())
+            }
 
-        for (i, item) in row.iter().enumerate() {
-            self.values[i].push(*item);
+            for (i, item) in row.iter().enumerate() {
+                self.values[i].push(*item);
+            }
+        } else { // if self is empty -> push the first row
+            for (i, item) in row.iter().enumerate() {
+                self.values.push(Vec::new()); // initializye column vector
+                self.values[i].push(*item); // push element
+            }
         }
         self.update_sizes();
     }
@@ -333,8 +369,8 @@ impl<N: Copy> Matrix<N> { // implementation of Matrix<N>
         m
     }
 
-    // Returns a matrix comparing two matrixes and show which have bigger values
-    // in an specific coordinate
+    /// Returns a matrix comparing two matrixes and show which have bigger values
+    /// in an specific coordinate
     ///
     /// # Arguments
     ///
@@ -361,5 +397,115 @@ impl<N: Copy> Matrix<N> { // implementation of Matrix<N>
             m.push_col(col_out);
         }
         m
+    }
+
+    /// Returns the product of an scalar multiplication with the current matrix
+    ///
+    /// # Arguments
+    ///
+    /// * `scalar`: number to multiply
+    pub fn scalar_mul(&self, scalar: N) -> Matrix<N> where N: num::Num {
+        let mut m: Matrix<N> = Matrix::<N>::init();
+
+        for col in self.values.iter() {
+            let mut new_col: Vec<N> = Vec::new();
+
+            for row in col.iter() {
+                new_col.push(scalar * (*row));
+            }
+
+            m.values.push(new_col);
+        }
+        m.update_sizes();
+        m
+    }
+
+    /// Transposes a Matrix
+    pub fn transpose(&mut self) {
+        let mut res: Matrix<N> = Matrix::<N>::init();
+        for item in self.values.iter() {
+            res.push_row(item.clone());
+        }
+
+        res.update_sizes();
+        self.copy(res);
+    }
+}
+
+/// Clone implementation for Matrix
+impl<N: Copy> Clone for Matrix<N> {
+    fn clone(&self) -> Matrix<N> {
+        let mut m: Matrix<N> = Matrix::<N>::init();
+        m.values = self.values.clone();
+        m.ncols = self.ncols;
+        m.nrows = self.nrows;
+
+        m
+    }
+}
+
+/// Equivalence ´==´ implementation for Matrix
+impl<N: Copy + PartialEq> PartialEq for Matrix<N> {
+    fn eq(&self, other: &Matrix<N>) -> bool {
+        for i in 0..self.ncols {
+            for j in 0..self.nrows {
+                if self.values[i][j] != other.values[i][j] {
+                    return false;
+                }
+            }
+        }
+        true
+    }
+}
+
+/// Addition ´+´ implementation for Matrix
+impl<N: Copy> Add for Matrix<N> where N: num::Num {
+    type Output = Matrix<N>;
+
+    fn add(self, other: Matrix<N>) -> Matrix<N> {
+        if (self.nrows != other.nrows) || (self.ncols != other.ncols) {
+            panic!("sizes not compatible!");
+        }
+
+        let mut res: Matrix<N> = Matrix::<N>::init();
+        for i in 0..self.ncols {
+
+            let mut res_col: Vec<N> = Vec::new();
+            for j in 0..self.nrows {
+                let val = self.values[i][j] + other.values[i][j];
+                res_col.push(val);
+            }
+            res.values.push(res_col);
+        }
+        res.ncols = self.ncols;
+        res.nrows = self.nrows;
+
+        res
+    }
+}
+
+/// Substraction ´-´ implementation for Matrix
+impl<N: Copy> Sub for Matrix<N> where N: num::Num {
+    type Output = Matrix<N>;
+
+    fn sub(self, other: Matrix<N>) -> Matrix<N> {
+        if (self.nrows != other.nrows) || (self.ncols != other.ncols) {
+            panic!("sizes not compatible!");
+        }
+
+        let mut res: Matrix<N> = Matrix::<N>::init();
+        for i in 0..self.ncols {
+
+            let mut res_col: Vec<N> = Vec::new();
+            for j in 0..self.nrows {
+                let val = self.values[i][j] - other.values[i][j];
+                res_col.push(val);
+            }
+            res.values.push(res_col);
+        }
+        res.ncols = self.ncols;
+        res.nrows = self.nrows;
+
+        res
     }
 }
