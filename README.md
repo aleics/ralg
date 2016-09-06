@@ -16,3 +16,5 @@ An uncomplicated library for mathematics written in Rust.
     * *Scalar multiplication*
     * *Clone, PartialEq Trait*
     * *Add, Sub and Mul Trait*
+    * *Display Trait*
+    * *Create random*

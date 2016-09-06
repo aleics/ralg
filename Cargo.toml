@@ -9,3 +9,4 @@ path = "src/lib.rs"
 
 [dependencies]
 num = "0.1.35"
+rand = "0.3"

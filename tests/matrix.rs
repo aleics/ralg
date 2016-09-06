@@ -15,6 +15,14 @@ fn init_with_values_test() {
     assert_eq!(m.nrows(), values[0].len());
 }
 #[test]
+fn create_random_test() {
+    let range: [f64; 2] = [0.0, 10.0];
+    let m = Matrix::<f64>::create_random(3, 3, &range);
+    
+    assert_eq!(m.ncols(), 3);
+    assert_eq!(m.nrows(), 3);
+}
+#[test]
 fn rows_test() {
     let m = Matrix::<u32>::init_with_capacity(5, 10);
     assert_eq!(m.nrows(), 10);

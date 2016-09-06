@@ -1,8 +1,15 @@
-extern crate num;
 
-use std::default::Default;
+use rand;
+use rand::Rng;
+use num::Num;
+use std::fmt;
+use std::fmt::Display;
 use std::cmp::{PartialEq};
+use std::default::Default;
 use std::ops::{Add, Sub, Mul};
+use rand::distributions::range::SampleRange;
+
+
 
 /// Matrix with a defined number of rows and columns that can
 /// add, remove and edit values.
@@ -36,7 +43,7 @@ impl<N: Copy> Matrix<N> { // implementation of Matrix<N>
     /// # Arguments
     ///
     /// * `nc`: columns capacity
-    /// * `nr`: rows capacity
+    /// * `nr`: rowsextern crate rand; capacity
     pub fn init_with_capacity(nc: usize, nr: usize) -> Matrix<N> {
         let mut vec: Vec<Vec<N>> = Vec::with_capacity(nc);
         for i in 0..vec.len() {
@@ -55,6 +62,33 @@ impl<N: Copy> Matrix<N> { // implementation of Matrix<N>
     pub fn init_with_value(val: &Vec<Vec<N>>) -> Matrix<N> {
         let mut m = Matrix::<N>::init();
         m.values = val.clone();
+        m.update_sizes();
+        m
+    }
+
+    /// Creates a Matrix variable with random values with a defined size
+    ///
+    /// # Arguments
+    ///
+    /// * `size_columns`: number of columns
+    /// * `size_rows`: number of rows
+    /// * `range`: range of the values
+    pub fn create_random(size_columns: usize, size_rows: usize, range: &[N; 2])
+        -> Matrix<N> where N: Num + PartialOrd + SampleRange {
+
+        if range.len() != 2 {
+                panic!("just permitted range of size 2 (actual={})", range.len());
+        }
+
+        let mut m = Matrix::<N>::init();
+        for _ in 0..size_columns {
+            let mut col: Vec<N> = Vec::new();
+            for _ in 0..size_rows {
+                col.push(rand::thread_rng().gen_range(range[0], range[1]));
+            }
+            m.values.push(col);
+        }
+
         m.update_sizes();
         m
     }
@@ -130,7 +164,7 @@ impl<N: Copy> Matrix<N> { // implementation of Matrix<N>
     /// # Remarks
     ///
     /// If the value is found then `Some(usize)` is returned, if not `None`
-    pub fn contains(&self, element: &N) -> Option<usize> where N: num::Num {
+    pub fn contains(&self, element: &N) -> Option<usize> where N: Num {
 
         for (i, item) in self.values.iter().enumerate() {
             if item.contains(element) {
@@ -299,7 +333,7 @@ impl<N: Copy> Matrix<N> { // implementation of Matrix<N>
     ///
     /// * `value`: value to compare
     pub fn equal_to(&self, value: &N) -> Matrix<bool>
-        where N: num::Num + PartialEq<N> {
+        where N: Num + PartialEq<N> {
 
         let mut m = Matrix::<bool>::init();
         for col in self.values.iter() {
@@ -321,7 +355,7 @@ impl<N: Copy> Matrix<N> { // implementation of Matrix<N>
     ///
     /// * `comp_matrix`: matrix to compare
     pub fn equal_to_matrix(&self, comp_matrix: &Matrix<N>) -> Matrix<bool>
-        where N: num::Num + PartialEq<N> {
+        where N: Num + PartialEq<N> {
 
         if (self.ncols != comp_matrix.ncols()) || (self.nrows != comp_matrix.nrows()) {
             panic!("sizes not equal!");
@@ -351,7 +385,7 @@ impl<N: Copy> Matrix<N> { // implementation of Matrix<N>
     ///
     /// * `value`: value to compare
     pub fn bigger_than(&self, value: &N) -> Matrix<bool>
-        where N: num::Num + PartialOrd<N> {
+        where N: Num + PartialOrd<N> {
 
         let mut m = Matrix::<bool>::init();
         for col in self.values.iter() {
@@ -377,7 +411,7 @@ impl<N: Copy> Matrix<N> { // implementation of Matrix<N>
     ///
     /// * `comp_matrix`: matrix to compare
     pub fn bigger_than_matrix(&self, comp_matrix: &Matrix<N>) -> Matrix<bool>
-        where N: num::Num + PartialOrd<N> {
+        where N: Num + PartialOrd<N> {
 
         if (self.ncols != comp_matrix.ncols()) || (self.nrows != comp_matrix.nrows()) {
             panic!("sizes not equal!");
@@ -405,7 +439,7 @@ impl<N: Copy> Matrix<N> { // implementation of Matrix<N>
     /// # Arguments
     ///
     /// * `scalar`: number to multiply
-    pub fn scalar_mul(&self, scalar: N) -> Matrix<N> where N: num::Num {
+    pub fn scalar_mul(&self, scalar: N) -> Matrix<N> where N: Num {
         let mut m: Matrix<N> = Matrix::<N>::init();
 
         for col in self.values.iter() {
@@ -464,7 +498,7 @@ impl<N: Copy + PartialEq> PartialEq for Matrix<N> {
 }
 
 /// Addition ´+´ implementation for Matrix
-impl<N: Copy> Add for Matrix<N> where N: num::Num {
+impl<N: Copy> Add for Matrix<N> where N: Num {
     type Output = Matrix<N>;
 
     fn add(self, other: Matrix<N>) -> Matrix<N> {
@@ -490,7 +524,7 @@ impl<N: Copy> Add for Matrix<N> where N: num::Num {
 }
 
 /// Substraction ´-´ implementation for Matrix
-impl<N: Copy> Sub for Matrix<N> where N: num::Num {
+impl<N: Copy> Sub for Matrix<N> where N: Num {
     type Output = Matrix<N>;
 
     fn sub(self, other: Matrix<N>) -> Matrix<N> {
@@ -516,7 +550,7 @@ impl<N: Copy> Sub for Matrix<N> where N: num::Num {
 }
 
 /// Multiplication `*` implementation for matrix
-impl<N: Copy + Default> Mul for Matrix<N> where N: num::Num {
+impl<N: Copy + Default> Mul for Matrix<N> where N: Num {
     type Output = Matrix<N>;
 
     fn mul(self, other: Matrix<N>) -> Matrix<N> {
@@ -558,5 +592,21 @@ impl<N: Copy + Default> Mul for Matrix<N> where N: num::Num {
             }
             res
         }
+    }
+}
+
+/// Display implementation for Matrix
+impl<N: Copy> fmt::Display for Matrix<N> where N: Display {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        try!(writeln!(f, "{{"));
+        for col in self.values.iter() {
+            try!(write!(f, "[ "));
+            for el in col.iter() {
+                try!(write!(f, "{} ", el));
+            }
+            try!(writeln!(f, "]"));
+        }
+        try!(writeln!(f, "}}"));
+        write!(f, "size: {col} x {row}", col = self.ncols, row = self.nrows)
     }
 }
