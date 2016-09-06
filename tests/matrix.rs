@@ -1,378 +1,381 @@
 extern crate ralg as r;
 
-use r::algebra::matrix::*;
+#[cfg(test)]
+mod tests {
+    use r::algebra::matrix::*;
 
-#[test]
-fn init_with_values_test() {
-    let values: Vec<Vec<i32>> = vec![vec![1, 2], vec![3, 4]];
-    let m = Matrix::<i32>::init_with_value(&values);
+    #[test]
+    fn init_with_values_test() {
+        let values: Vec<Vec<i32>> = vec![vec![1, 2], vec![3, 4]];
+        let m = Matrix::<i32>::init_with_value(&values);
 
-    assert_eq!(m.get_element(0, 0), values[0][0]);
-    assert_eq!(m.get_element(0, 1), values[0][1]);
-    assert_eq!(m.get_element(1, 0), values[1][0]);
-    assert_eq!(m.get_element(1, 1), values[1][1]);
-    assert_eq!(m.ncols(), values.len());
-    assert_eq!(m.nrows(), values[0].len());
-}
-#[test]
-fn create_random_test() {
-    let range: [f64; 2] = [0.0, 10.0];
-    let m = Matrix::<f64>::create_random(3, 3, &range);
-
-    assert_eq!(m.ncols(), 3);
-    assert_eq!(m.nrows(), 3);
-}
-#[test]
-fn create_identity_test() {
-    let m = Matrix::<f64>::create_identity(3);
-
-    assert_eq!(m.get_element(0, 0), 1.0);
-    assert_eq!(m.get_element(0, 1), 0.0);
-    assert_eq!(m.get_element(0, 2), 0.0);
-    assert_eq!(m.get_element(1, 0), 0.0);
-    assert_eq!(m.get_element(1, 1), 1.0);
-    assert_eq!(m.get_element(1, 2), 0.0);
-    assert_eq!(m.get_element(2, 0), 0.0);
-    assert_eq!(m.get_element(2, 1), 0.0);
-    assert_eq!(m.get_element(2, 2), 1.0);
-}
-#[test]
-fn rows_test() {
-    let m = Matrix::<u32>::init_with_capacity(5, 10);
-    assert_eq!(m.nrows(), 10);
-}
-#[test]
-fn cols_test() {
-    let m = Matrix::<u32>::init_with_capacity(5, 10);
-    assert_eq!(m.ncols(), 5);
-}
-#[test]
-fn get_push_col_test() {
-    let val: Vec<u32> = vec![1, 2, 3, 4, 5];
-    let mut m = Matrix::<u32>::init_with_capacity(2, 5);
-    m.push_col(val.clone());
-
-    let result = m.get_col(0);
-    let mut get_val: Vec<u32> = Vec::new();
-    match result {
-        Some(x) => get_val = x.clone(),
-        None => assert_eq!(true, false),
+        assert_eq!(m.get_element(0, 0), values[0][0]);
+        assert_eq!(m.get_element(0, 1), values[0][1]);
+        assert_eq!(m.get_element(1, 0), values[1][0]);
+        assert_eq!(m.get_element(1, 1), values[1][1]);
+        assert_eq!(m.ncols(), values.len());
+        assert_eq!(m.nrows(), values[0].len());
     }
-    assert_eq!(get_val.len(), val.len());
-}
-#[test]
-fn pop_col_test() {
-    let val: Vec<u32> = vec![1, 2, 3, 4, 5];
+    #[test]
+    fn create_random_test() {
+        let range: [f64; 2] = [0.0, 10.0];
+        let m = Matrix::<f64>::create_random(3, 3, &range);
 
-    let mut m = Matrix::<u32>::init();
-    for _ in 0..2 {
+        assert_eq!(m.ncols(), 3);
+        assert_eq!(m.nrows(), 3);
+    }
+    #[test]
+    fn create_identity_test() {
+        let m = Matrix::<f64>::create_identity(3);
+
+        assert_eq!(m.get_element(0, 0), 1.0);
+        assert_eq!(m.get_element(0, 1), 0.0);
+        assert_eq!(m.get_element(0, 2), 0.0);
+        assert_eq!(m.get_element(1, 0), 0.0);
+        assert_eq!(m.get_element(1, 1), 1.0);
+        assert_eq!(m.get_element(1, 2), 0.0);
+        assert_eq!(m.get_element(2, 0), 0.0);
+        assert_eq!(m.get_element(2, 1), 0.0);
+        assert_eq!(m.get_element(2, 2), 1.0);
+    }
+    #[test]
+    fn rows_test() {
+        let m = Matrix::<u32>::init_with_capacity(5, 10);
+        assert_eq!(m.nrows(), 10);
+    }
+    #[test]
+    fn cols_test() {
+        let m = Matrix::<u32>::init_with_capacity(5, 10);
+        assert_eq!(m.ncols(), 5);
+    }
+    #[test]
+    fn get_push_col_test() {
+        let val: Vec<u32> = vec![1, 2, 3, 4, 5];
+        let mut m = Matrix::<u32>::init_with_capacity(2, 5);
         m.push_col(val.clone());
+
+        let result = m.get_col(0);
+        let mut get_val: Vec<u32> = Vec::new();
+        match result {
+            Some(x) => get_val = x.clone(),
+            None => assert_eq!(true, false),
+        }
+        assert_eq!(get_val.len(), val.len());
     }
+    #[test]
+    fn pop_col_test() {
+        let val: Vec<u32> = vec![1, 2, 3, 4, 5];
 
-    m.pop_col(0);
+        let mut m = Matrix::<u32>::init();
+        for _ in 0..2 {
+            m.push_col(val.clone());
+        }
 
-    assert_eq!(1, m.ncols());
-}
-#[test]
-fn swap_col_test() {
-    let val: Vec<u32> = vec![1, 2, 3, 4, 5];
-    let val2: Vec<u32> = vec![6, 7, 8, 9, 10];
+        m.pop_col(0);
 
-    let mut m = Matrix::<u32>::init();
-    m.push_col(val.clone());
-    m.push_col(val2.clone());
-
-    m.swap_col(0, 1);
-    assert_eq!(val[0], m.get_element(1, 0));
-    assert_eq!(val2[0], m.get_element(0, 0));
-}
-#[test]
-fn swap_row_test() {
-    let val: Vec<u32> = vec![1, 2, 3, 4, 5];
-    let val2: Vec<u32> = vec![6, 7, 8, 9, 10];
-
-    let mut m = Matrix::<u32>::init();
-    m.push_col(val.clone());
-    m.push_col(val2.clone());
-
-    m.swap_row(0, 1);
-    assert_eq!(val[1], m.get_element(0, 0));
-    assert_eq!(val[0], m.get_element(0, 1));
-}
-#[test]
-fn get_row_test() {
-    let resp: Vec<u32> = vec![1];
-    let col: Vec<u32> = vec![1, 2, 3, 4, 5];
-    let mut m = Matrix::<u32>::init_with_capacity(1, 5);
-    m.push_col(col.clone());
-
-    let result = m.get_row(0);
-    let mut get_val: Vec<u32> = Vec::new();
-    match result {
-        Some(x) => get_val = x.clone(),
-        None => assert_eq!(true, false),
+        assert_eq!(1, m.ncols());
     }
-    assert_eq!(get_val.len(), resp.len());
-    assert_eq!(get_val[0], resp[0]);
-}
-#[test]
-fn push_row_test() {
-    let mut val: Vec<u32> = vec![1, 2, 3, 4, 5];
-    let mut m = Matrix::<u32>::init();
-    for _ in 0..2 {
+    #[test]
+    fn swap_col_test() {
+        let val: Vec<u32> = vec![1, 2, 3, 4, 5];
+        let val2: Vec<u32> = vec![6, 7, 8, 9, 10];
+
+        let mut m = Matrix::<u32>::init();
         m.push_col(val.clone());
+        m.push_col(val2.clone());
+
+        m.swap_col(0, 1);
+        assert_eq!(val[0], m.get_element(1, 0));
+        assert_eq!(val2[0], m.get_element(0, 0));
     }
-    assert_eq!(m.nrows(), val.len());
+    #[test]
+    fn swap_row_test() {
+        let val: Vec<u32> = vec![1, 2, 3, 4, 5];
+        let val2: Vec<u32> = vec![6, 7, 8, 9, 10];
 
-    val = vec![6, 7];
-    m.push_row(val.clone());
-    assert_eq!(m.nrows(), 6);
-}
-#[test]
-fn pop_row_test() {
-    let val: Vec<u32> = vec![1, 2, 3, 4, 5];
-    let mut resp: Vec<u32> = val.clone();
-    resp.remove(0);
+        let mut m = Matrix::<u32>::init();
+        m.push_col(val.clone());
+        m.push_col(val2.clone());
 
-
-    let mut m = Matrix::<u32>::init();
-    m.push_col(val.clone());
-
-    m.pop_row(0);
-
-    assert_eq!(4, m.nrows());
-    assert_eq!(resp[0], m.get_element(0, 0));
-    assert_eq!(resp[1], m.get_element(0, 1));
-    assert_eq!(resp[2], m.get_element(0, 2));
-    assert_eq!(resp[3], m.get_element(0, 3));
-}
-#[test]
-fn get_element_test() {
-    let col: Vec<u32> = vec![1, 2, 3, 4, 5];
-    let mut m = Matrix::<u32>::init_with_capacity(1, 5);
-    m.push_col(col);
-
-    assert_eq!(m.get_element(0, 0), 1);
-    assert_eq!(m.get_element(0, 1), 2);
-    assert_eq!(m.get_element(0, 2), 3);
-    assert_eq!(m.get_element(0, 3), 4);
-    assert_eq!(m.get_element(0, 4), 5);
-}
-#[test]
-fn contains_test() {
-    let col: Vec<f32> = vec![0.2, 2.5, 10.2, 8.7, 5.0];
-    let mut m = Matrix::<f32>::init();
-    m.push_col(col);
-
-    let mut result = m.contains(&0.2);
-    match result {
-        Some(x) => assert_eq!(x, 0),
-        None => assert_eq!(true, false),
+        m.swap_row(0, 1);
+        assert_eq!(val[1], m.get_element(0, 0));
+        assert_eq!(val[0], m.get_element(0, 1));
     }
+    #[test]
+    fn get_row_test() {
+        let resp: Vec<u32> = vec![1];
+        let col: Vec<u32> = vec![1, 2, 3, 4, 5];
+        let mut m = Matrix::<u32>::init_with_capacity(1, 5);
+        m.push_col(col.clone());
 
-    result = m.contains(&0.7);
-    match result {
-        Some(_) => assert_eq!(true, false),
-        None => assert_eq!(true, true),
+        let result = m.get_row(0);
+        let mut get_val: Vec<u32> = Vec::new();
+        match result {
+            Some(x) => get_val = x.clone(),
+            None => assert_eq!(true, false),
+        }
+        assert_eq!(get_val.len(), resp.len());
+        assert_eq!(get_val[0], resp[0]);
     }
-}
-#[test]
-fn contains_col_test() {
-    let col: Vec<i32> = vec![-1, 0, -2, 2, 3];
-    let col2: Vec<i32> = vec![0, 0, -2, 2, 2];
+    #[test]
+    fn push_row_test() {
+        let mut val: Vec<u32> = vec![1, 2, 3, 4, 5];
+        let mut m = Matrix::<u32>::init();
+        for _ in 0..2 {
+            m.push_col(val.clone());
+        }
+        assert_eq!(m.nrows(), val.len());
 
-    let mut m = Matrix::<i32>::init();
-    m.push_col(col.clone());
-
-    let mut result = m.contains_col(&col);
-    match result {
-        Some(x) => assert_eq!(x, 0),
-        None => assert_eq!(true, false),
+        val = vec![6, 7];
+        m.push_row(val.clone());
+        assert_eq!(m.nrows(), 6);
     }
+    #[test]
+    fn pop_row_test() {
+        let val: Vec<u32> = vec![1, 2, 3, 4, 5];
+        let mut resp: Vec<u32> = val.clone();
+        resp.remove(0);
 
-    result = m.contains_col(&col2);
-    match result {
-        Some(_) => assert_eq!(true, false),
-        None => assert_eq!(true, true),
+
+        let mut m = Matrix::<u32>::init();
+        m.push_col(val.clone());
+
+        m.pop_row(0);
+
+        assert_eq!(4, m.nrows());
+        assert_eq!(resp[0], m.get_element(0, 0));
+        assert_eq!(resp[1], m.get_element(0, 1));
+        assert_eq!(resp[2], m.get_element(0, 2));
+        assert_eq!(resp[3], m.get_element(0, 3));
     }
-}
-#[test]
-fn contains_row_test() {
-    let col: Vec<i32> = vec![-1, 0, -2, 2, 3];
-    let col2: Vec<i32> = vec![0, 0, -2, 2, 2];
+    #[test]
+    fn get_element_test() {
+        let col: Vec<u32> = vec![1, 2, 3, 4, 5];
+        let mut m = Matrix::<u32>::init_with_capacity(1, 5);
+        m.push_col(col);
 
-    let mut m = Matrix::<i32>::init();
-    m.push_col(col.clone());
-    m.push_col(col2.clone());
-
-    let row: Vec<i32> = vec![col[0], col2[0]];
-    let row2: Vec<i32> = vec![2, 3];
-
-    let mut result = m.contains_row(&row);
-    match result {
-        Some(x) => assert_eq!(x, 0),
-        None => assert_eq!(true, false),
+        assert_eq!(m.get_element(0, 0), 1);
+        assert_eq!(m.get_element(0, 1), 2);
+        assert_eq!(m.get_element(0, 2), 3);
+        assert_eq!(m.get_element(0, 3), 4);
+        assert_eq!(m.get_element(0, 4), 5);
     }
+    #[test]
+    fn contains_test() {
+        let col: Vec<f32> = vec![0.2, 2.5, 10.2, 8.7, 5.0];
+        let mut m = Matrix::<f32>::init();
+        m.push_col(col);
 
-    result = m.contains_col(&row2);
-    match result {
-        Some(_) => assert_eq!(true, false),
-        None => assert_eq!(true, true),
+        let mut result = m.contains(&0.2);
+        match result {
+            Some(x) => assert_eq!(x, 0),
+            None => assert_eq!(true, false),
+        }
+
+        result = m.contains(&0.7);
+        match result {
+            Some(_) => assert_eq!(true, false),
+            None => assert_eq!(true, true),
+        }
     }
-}
-#[test]
-fn equal_to_test() {
-    let col: Vec<i32> = vec![1, 3, 2, 3];
-    let mut m = Matrix::<i32>::init();
-    m.push_col(col);
+    #[test]
+    fn contains_col_test() {
+        let col: Vec<i32> = vec![-1, 0, -2, 2, 3];
+        let col2: Vec<i32> = vec![0, 0, -2, 2, 2];
 
-    let eq = m.equal_to(&3);
+        let mut m = Matrix::<i32>::init();
+        m.push_col(col.clone());
 
-    assert_eq!(eq.get_element(0, 0), false);
-    assert_eq!(eq.get_element(0, 1), true);
-    assert_eq!(eq.get_element(0, 2), false);
-    assert_eq!(eq.get_element(0, 3), true);
-}
-#[test]
-fn equal_to_matrix_test() {
-    let col: Vec<f32> = vec![1.0, 3.0, 2.0, 3.0];
-    let mut m = Matrix::<f32>::init();
-    m.push_col(col);
+        let mut result = m.contains_col(&col);
+        match result {
+            Some(x) => assert_eq!(x, 0),
+            None => assert_eq!(true, false),
+        }
 
-    let col2: Vec<f32> = vec![1.0, 0.5, 0.2, 3.0];
-    let mut m2 = Matrix::<f32>::init();
-    m2.push_col(col2);
+        result = m.contains_col(&col2);
+        match result {
+            Some(_) => assert_eq!(true, false),
+            None => assert_eq!(true, true),
+        }
+    }
+    #[test]
+    fn contains_row_test() {
+        let col: Vec<i32> = vec![-1, 0, -2, 2, 3];
+        let col2: Vec<i32> = vec![0, 0, -2, 2, 2];
 
-    let eq_matrix = m.equal_to_matrix(&m2);
+        let mut m = Matrix::<i32>::init();
+        m.push_col(col.clone());
+        m.push_col(col2.clone());
 
-    assert_eq!(eq_matrix.get_element(0, 0), true);
-    assert_eq!(eq_matrix.get_element(0, 1), false);
-    assert_eq!(eq_matrix.get_element(0, 2), false);
-    assert_eq!(eq_matrix.get_element(0, 3), true);
-}
-#[test]
-fn bigger_than_test() {
-    let col: Vec<f32> = vec![0.1, 0.5, 0.8, 1.2];
-    let mut m = Matrix::<f32>::init();
-    m.push_col(col);
+        let row: Vec<i32> = vec![col[0], col2[0]];
+        let row2: Vec<i32> = vec![2, 3];
 
-    let bigger = m.bigger_than(&0.9);
+        let mut result = m.contains_row(&row);
+        match result {
+            Some(x) => assert_eq!(x, 0),
+            None => assert_eq!(true, false),
+        }
 
-    assert_eq!(bigger.get_element(0, 0), false);
-    assert_eq!(bigger.get_element(0, 1), false);
-    assert_eq!(bigger.get_element(0, 2), false);
-    assert_eq!(bigger.get_element(0, 3), true);
-}
-#[test]
-fn bigger_than_matrix_test() {
-    let col: Vec<u32> = vec![1, 3, 2, 3];
-    let mut m = Matrix::<u32>::init();
-    m.push_col(col);
+        result = m.contains_col(&row2);
+        match result {
+            Some(_) => assert_eq!(true, false),
+            None => assert_eq!(true, true),
+        }
+    }
+    #[test]
+    fn equal_to_test() {
+        let col: Vec<i32> = vec![1, 3, 2, 3];
+        let mut m = Matrix::<i32>::init();
+        m.push_col(col);
 
-    let col2: Vec<u32> = vec![2, 0, 6, 3];
-    let mut m2 = Matrix::<u32>::init();
-    m2.push_col(col2);
+        let eq = m.equal_to(&3);
 
-    let eq_matrix = m.bigger_than_matrix(&m2);
+        assert_eq!(eq.get_element(0, 0), false);
+        assert_eq!(eq.get_element(0, 1), true);
+        assert_eq!(eq.get_element(0, 2), false);
+        assert_eq!(eq.get_element(0, 3), true);
+    }
+    #[test]
+    fn equal_to_matrix_test() {
+        let col: Vec<f32> = vec![1.0, 3.0, 2.0, 3.0];
+        let mut m = Matrix::<f32>::init();
+        m.push_col(col);
 
-    assert_eq!(eq_matrix.get_element(0, 0), false);
-    assert_eq!(eq_matrix.get_element(0, 1), true);
-    assert_eq!(eq_matrix.get_element(0, 2), false);
-    assert_eq!(eq_matrix.get_element(0, 3), false);
-}
-#[test]
-fn eq_trait_test() {
-    let col: Vec<u32> = vec![1, 3, 2, 3];
-    let mut m = Matrix::<u32>::init();
-    m.push_col(col);
+        let col2: Vec<f32> = vec![1.0, 0.5, 0.2, 3.0];
+        let mut m2 = Matrix::<f32>::init();
+        m2.push_col(col2);
 
-    let m2 = m.clone();
+        let eq_matrix = m.equal_to_matrix(&m2);
 
-    let col3: Vec<u32> = vec![1, 2, 3, 4];
-    let mut m3 = Matrix::<u32>::init();
-    m3.push_col(col3);
+        assert_eq!(eq_matrix.get_element(0, 0), true);
+        assert_eq!(eq_matrix.get_element(0, 1), false);
+        assert_eq!(eq_matrix.get_element(0, 2), false);
+        assert_eq!(eq_matrix.get_element(0, 3), true);
+    }
+    #[test]
+    fn bigger_than_test() {
+        let col: Vec<f32> = vec![0.1, 0.5, 0.8, 1.2];
+        let mut m = Matrix::<f32>::init();
+        m.push_col(col);
 
-    assert_eq!(m == m2, true);
-    assert_eq!(m == m3, false);
-}
-#[test]
-fn add_trait_test(){
-    let col: Vec<u32> = vec![1, 3, 2, 3];
-    let mut m = Matrix::<u32>::init();
-    m.push_col(col);
+        let bigger = m.bigger_than(&0.9);
 
-    let m2: Matrix<u32> = m.clone();
+        assert_eq!(bigger.get_element(0, 0), false);
+        assert_eq!(bigger.get_element(0, 1), false);
+        assert_eq!(bigger.get_element(0, 2), false);
+        assert_eq!(bigger.get_element(0, 3), true);
+    }
+    #[test]
+    fn bigger_than_matrix_test() {
+        let col: Vec<u32> = vec![1, 3, 2, 3];
+        let mut m = Matrix::<u32>::init();
+        m.push_col(col);
 
-    let res = m + m2;
+        let col2: Vec<u32> = vec![2, 0, 6, 3];
+        let mut m2 = Matrix::<u32>::init();
+        m2.push_col(col2);
 
-    assert_eq!(res.get_element(0, 0), 2);
-    assert_eq!(res.get_element(0, 1), 6);
-    assert_eq!(res.get_element(0, 2), 4);
-    assert_eq!(res.get_element(0, 3), 6);
-    assert_eq!(res.ncols(), 1);
-    assert_eq!(res.nrows(), 4);
-}
-#[test]
-fn sub_trait_test(){
-    let col: Vec<u32> = vec![5, 6, 7, 8];
-    let mut m = Matrix::<u32>::init();
-    m.push_col(col);
+        let eq_matrix = m.bigger_than_matrix(&m2);
 
-    let col2: Vec<u32> = vec![1, 2, 3, 3];
-    let mut m2 = Matrix::<u32>::init();
-    m2.push_col(col2);
+        assert_eq!(eq_matrix.get_element(0, 0), false);
+        assert_eq!(eq_matrix.get_element(0, 1), true);
+        assert_eq!(eq_matrix.get_element(0, 2), false);
+        assert_eq!(eq_matrix.get_element(0, 3), false);
+    }
+    #[test]
+    fn eq_trait_test() {
+        let col: Vec<u32> = vec![1, 3, 2, 3];
+        let mut m = Matrix::<u32>::init();
+        m.push_col(col);
 
-    let res = m - m2;
+        let m2 = m.clone();
 
-    assert_eq!(res.get_element(0, 0), 4);
-    assert_eq!(res.get_element(0, 1), 4);
-    assert_eq!(res.get_element(0, 2), 4);
-    assert_eq!(res.get_element(0, 3), 5);
-    assert_eq!(res.ncols(), 1);
-    assert_eq!(res.nrows(), 4);
-}
-#[test]
-fn transpose_test(){
-    let mut col: Vec<i32> = vec![1, 2, 3];
-    let mut m = Matrix::<i32>::init();
-    m.push_col(col);
+        let col3: Vec<u32> = vec![1, 2, 3, 4];
+        let mut m3 = Matrix::<u32>::init();
+        m3.push_col(col3);
 
-    col = vec![5, 7, 8];
-    m.push_col(col);
+        assert_eq!(m == m2, true);
+        assert_eq!(m == m3, false);
+    }
+    #[test]
+    fn add_trait_test(){
+        let col: Vec<u32> = vec![1, 3, 2, 3];
+        let mut m = Matrix::<u32>::init();
+        m.push_col(col);
 
-    let save = m.clone();
+        let m2: Matrix<u32> = m.clone();
 
-    m.transpose();
+        let res = m + m2;
 
-    assert_eq!(save.ncols(), m.nrows());
-    assert_eq!(save.nrows(), m.ncols());
-    assert_eq!(save.get_element(0, 0), m.get_element(0, 0));
-    assert_eq!(save.get_element(0, 1), m.get_element(1, 0));
-    assert_eq!(save.get_element(0, 2), m.get_element(2, 0));
-}
-#[test]
-fn scalar_mul_test() {
-    let values: Vec<Vec<i32>> = vec![vec![1, 2, 3], vec![4, 5, 6]];
-    let m = Matrix::<i32>::init_with_value(&values);
-    let pr = m.scalar_mul(2);
+        assert_eq!(res.get_element(0, 0), 2);
+        assert_eq!(res.get_element(0, 1), 6);
+        assert_eq!(res.get_element(0, 2), 4);
+        assert_eq!(res.get_element(0, 3), 6);
+        assert_eq!(res.ncols(), 1);
+        assert_eq!(res.nrows(), 4);
+    }
+    #[test]
+    fn sub_trait_test(){
+        let col: Vec<u32> = vec![5, 6, 7, 8];
+        let mut m = Matrix::<u32>::init();
+        m.push_col(col);
 
-    assert_eq!(pr.get_element(0, 0), 2);
-    assert_eq!(pr.get_element(0, 1), 4);
-    assert_eq!(pr.get_element(0, 2), 6);
-    assert_eq!(pr.get_element(1, 0), 8);
-    assert_eq!(pr.get_element(1, 1), 10);
-    assert_eq!(pr.get_element(1, 2), 12);
-}
-#[test]
-fn mul_trait_test(){
-    let mut values: Vec<Vec<i32>> = vec![vec![1, 4], vec![2, 5], vec![3, 6]];
-    let m = Matrix::<i32>::init_with_value(&values);
+        let col2: Vec<u32> = vec![1, 2, 3, 3];
+        let mut m2 = Matrix::<u32>::init();
+        m2.push_col(col2);
 
-    values = vec![vec![7, 8, 9], vec![10, 11, 12]];
-    let m2 = Matrix::<i32>::init_with_value(&values);
+        let res = m - m2;
 
-    let prod = m.clone() * m2.clone(); // this must be corrected
+        assert_eq!(res.get_element(0, 0), 4);
+        assert_eq!(res.get_element(0, 1), 4);
+        assert_eq!(res.get_element(0, 2), 4);
+        assert_eq!(res.get_element(0, 3), 5);
+        assert_eq!(res.ncols(), 1);
+        assert_eq!(res.nrows(), 4);
+    }
+    #[test]
+    fn transpose_test(){
+        let mut col: Vec<i32> = vec![1, 2, 3];
+        let mut m = Matrix::<i32>::init();
+        m.push_col(col);
 
-    assert_eq!(prod.ncols(), m2.ncols());
-    assert_eq!(prod.nrows(), m.nrows());
+        col = vec![5, 7, 8];
+        m.push_col(col);
+
+        let save = m.clone();
+
+        m.transpose();
+
+        assert_eq!(save.ncols(), m.nrows());
+        assert_eq!(save.nrows(), m.ncols());
+        assert_eq!(save.get_element(0, 0), m.get_element(0, 0));
+        assert_eq!(save.get_element(0, 1), m.get_element(1, 0));
+        assert_eq!(save.get_element(0, 2), m.get_element(2, 0));
+    }
+    #[test]
+    fn scalar_mul_test() {
+        let values: Vec<Vec<i32>> = vec![vec![1, 2, 3], vec![4, 5, 6]];
+        let m = Matrix::<i32>::init_with_value(&values);
+        let pr = m.scalar_mul(2);
+
+        assert_eq!(pr.get_element(0, 0), 2);
+        assert_eq!(pr.get_element(0, 1), 4);
+        assert_eq!(pr.get_element(0, 2), 6);
+        assert_eq!(pr.get_element(1, 0), 8);
+        assert_eq!(pr.get_element(1, 1), 10);
+        assert_eq!(pr.get_element(1, 2), 12);
+    }
+    #[test]
+    fn mul_trait_test(){
+        let mut values: Vec<Vec<i32>> = vec![vec![1, 4], vec![2, 5], vec![3, 6]];
+        let m = Matrix::<i32>::init_with_value(&values);
+
+        values = vec![vec![7, 8, 9], vec![10, 11, 12]];
+        let m2 = Matrix::<i32>::init_with_value(&values);
+
+        let prod = m.clone() * m2.clone(); // this must be corrected
+
+        assert_eq!(prod.ncols(), m2.ncols());
+        assert_eq!(prod.nrows(), m.nrows());
+    }
 }
