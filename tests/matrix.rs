@@ -18,9 +18,23 @@ fn init_with_values_test() {
 fn create_random_test() {
     let range: [f64; 2] = [0.0, 10.0];
     let m = Matrix::<f64>::create_random(3, 3, &range);
-    
+
     assert_eq!(m.ncols(), 3);
     assert_eq!(m.nrows(), 3);
+}
+#[test]
+fn create_identity_test() {
+    let m = Matrix::<f64>::create_identity(3);
+
+    assert_eq!(m.get_element(0, 0), 1.0);
+    assert_eq!(m.get_element(0, 1), 0.0);
+    assert_eq!(m.get_element(0, 2), 0.0);
+    assert_eq!(m.get_element(1, 0), 0.0);
+    assert_eq!(m.get_element(1, 1), 1.0);
+    assert_eq!(m.get_element(1, 2), 0.0);
+    assert_eq!(m.get_element(2, 0), 0.0);
+    assert_eq!(m.get_element(2, 1), 0.0);
+    assert_eq!(m.get_element(2, 2), 1.0);
 }
 #[test]
 fn rows_test() {
@@ -329,6 +343,7 @@ fn transpose_test(){
     let save = m.clone();
 
     m.transpose();
+
     assert_eq!(save.ncols(), m.nrows());
     assert_eq!(save.nrows(), m.ncols());
     assert_eq!(save.get_element(0, 0), m.get_element(0, 0));

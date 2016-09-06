@@ -1,15 +1,13 @@
 
 use rand;
 use rand::Rng;
-use num::Num;
+use num::{Num, NumCast, ToPrimitive};
 use std::fmt;
 use std::fmt::Display;
 use std::cmp::{PartialEq};
 use std::default::Default;
 use std::ops::{Add, Sub, Mul};
 use rand::distributions::range::SampleRange;
-
-
 
 /// Matrix with a defined number of rows and columns that can
 /// add, remove and edit values.
@@ -90,6 +88,29 @@ impl<N: Copy> Matrix<N> { // implementation of Matrix<N>
         }
 
         m.update_sizes();
+        m
+    }
+
+    /// Creates a Matrix variable with the identity matrix values
+    ///
+    /// # Arguments
+    ///
+    /// * `size`: size of columns and rows (the identity matrix is always square)
+    pub fn create_identity(size: usize) -> Matrix<N>
+        where N: Num + NumCast + ToPrimitive {
+
+        let mut m: Matrix<N> = Matrix::<N>::init_with_capacity(size, size);
+        for i in 0..size {
+            let mut col: Vec<N> = Vec::new();
+            for j in 0..size {
+                if i == j {
+                    col.push(NumCast::from(1usize).unwrap());
+                } else {
+                    col.push(NumCast::from(0usize).unwrap());
+                }
+            }
+            m.values.push(col);
+        }
         m
     }
 
@@ -217,6 +238,7 @@ impl<N: Copy> Matrix<N> { // implementation of Matrix<N>
         None
     }
 
+    // internal use
     fn update_sizes(&mut self) { // helping function to update the size if matrix is modified
         self.ncols = self.values.len();
 
