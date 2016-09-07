@@ -18,3 +18,6 @@ An uncomplicated library for mathematics written in Rust.
     * *Add, Sub and Mul Trait*
     * *Display Trait*
     * *Create random*
+    * *Create identity*
+    * *Get diagonal*
+    * *Submatrix*

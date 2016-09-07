@@ -1,15 +1,13 @@
 
 use rand;
 use rand::Rng;
-use num::Num;
+use num::{Num, NumCast, ToPrimitive};
 use std::fmt;
 use std::fmt::Display;
 use std::cmp::{PartialEq};
 use std::default::Default;
 use std::ops::{Add, Sub, Mul};
 use rand::distributions::range::SampleRange;
-
-
 
 /// Matrix with a defined number of rows and columns that can
 /// add, remove and edit values.
@@ -88,8 +86,30 @@ impl<N: Copy> Matrix<N> { // implementation of Matrix<N>
             }
             m.values.push(col);
         }
-
         m.update_sizes();
+        m
+    }
+
+    /// Creates a Matrix variable with the identity matrix values
+    ///
+    /// # Arguments
+    ///
+    /// * `size`: size of columns and rows (the identity matrix is always square)
+    pub fn create_identity(size: usize) -> Matrix<N>
+        where N: Num + NumCast + ToPrimitive {
+
+        let mut m: Matrix<N> = Matrix::<N>::init_with_capacity(size, size);
+        for i in 0..size {
+            let mut col: Vec<N> = Vec::new();
+            for j in 0..size {
+                if i == j {
+                    col.push(NumCast::from(1usize).unwrap());
+                } else {
+                    col.push(NumCast::from(0usize).unwrap());
+                }
+            }
+            m.values.push(col);
+        }
         m
     }
 
@@ -217,6 +237,7 @@ impl<N: Copy> Matrix<N> { // implementation of Matrix<N>
         None
     }
 
+    // internal use
     fn update_sizes(&mut self) { // helping function to update the size if matrix is modified
         self.ncols = self.values.len();
 
@@ -465,6 +486,54 @@ impl<N: Copy> Matrix<N> { // implementation of Matrix<N>
         res.update_sizes();
         self.copy(res);
     }
+
+    /// Returns the diagonal of a Matrix
+    pub fn get_diagonal(&self) -> Matrix<N> where N: Num + Default {
+
+        if self.ncols != self.nrows {
+            panic!("get_diagonal just available for square matrices");
+        }
+
+        let mut m: Matrix<N> = Matrix::<N>::init_with_capacity(self.ncols, self.nrows);
+        for i in 0..m.ncols {
+            let mut col: Vec<N> = Vec::new();
+            for j in 0..m.nrows {
+                if i != j {
+                    col.push(N::default());
+                } else {
+                    col.push(self.values[i][j]);
+                }
+            }
+            m.values.push(col);
+        }
+        m
+    }
+
+    /// Returns a submatrix of a matrix
+    ///
+    /// # Arguments
+    ///
+    /// * `range_col`: column's range of the submatrix
+    /// * `range_row`: row's range of the submatrix
+    pub fn submatrix(&self, range_col: &[usize; 2], range_row: &[usize; 2]) -> Matrix<N> {
+        if range_col[0] > range_col[1] || range_row[0] > range_row[1] {
+            panic!("please use ascendent ranges. For example '[0 3]'");
+        }
+        if range_col[1] > self.ncols || range_row[1] > self.nrows {
+            panic!("index out of range");
+        }
+
+        let mut submatrix: Matrix<N> = Matrix::<N>::init_with_capacity(self.ncols, self.nrows);
+        for i in range_col[0]..(range_col[1]+1) {
+            let mut col: Vec<N> = Vec::new();
+            for j in range_row[0]..(range_row[1]+1) {
+                col.push(self.values[i][j]);
+            }
+            submatrix.values.push(col);
+        }
+        submatrix.update_sizes();
+        submatrix
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -549,11 +618,12 @@ impl<N: Copy> Sub for Matrix<N> where N: Num {
     }
 }
 
-/// Multiplication `*` implementation for matrix
-impl<N: Copy + Default> Mul for Matrix<N> where N: Num {
+/// Multiplication `*` implementation for &Matrix<N>
+// Note: it will be good to implement Mul using parallelism
+impl<'a, N: Copy + Default> Mul for &'a Matrix<N> where N: Num + Copy {
     type Output = Matrix<N>;
 
-    fn mul(self, other: Matrix<N>) -> Matrix<N> {
+    fn mul(self, other: &'a Matrix<N>) -> Matrix<N> {
         if self.ncols != other.nrows {
             panic!("matrix dimension mismatch")
         } else {
@@ -592,6 +662,15 @@ impl<N: Copy + Default> Mul for Matrix<N> where N: Num {
             }
             res
         }
+    }
+}
+
+/// Multiplication `*` implementation for Matrix<N> (clone() must be used)
+impl<N: Copy + Default> Mul for Matrix<N> where N: Num + Copy {
+    type Output = Matrix<N>;
+
+    fn mul(self, other: Matrix<N>) -> Matrix<N> {
+        &self * &other
     }
 }
 
