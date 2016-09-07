@@ -489,8 +489,7 @@ impl<N: Copy> Matrix<N> { // implementation of Matrix<N>
     }
 
     /// Returns the diagonal of a Matrix
-    pub fn get_diagonal(&self) -> Matrix<N>
-        where N: Num + Default {
+    pub fn get_diagonal(&self) -> Matrix<N> where N: Num + Default {
 
         if self.ncols != self.nrows {
             panic!("get_diagonal just available for square matrices");

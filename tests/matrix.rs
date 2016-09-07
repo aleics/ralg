@@ -399,15 +399,13 @@ mod tests {
     }
     #[test]
     fn submatrix_test() {
-        let mut values: Vec<Vec<f32>> = vec![vec![1.0, 4.0], vec![2.0, 5.0], vec![3.0, 6.0]];
+        let values: Vec<Vec<f32>> = vec![vec![1.0, 4.0], vec![2.0, 5.0], vec![3.0, 6.0]];
         let m = Matrix::<f32>::init_with_value(&values);
 
         let range_col: [usize; 2] = [1, 2];
         let range_row: [usize; 2] = [0, 0];
 
         let s = m.submatrix(&range_col, &range_row);
-
-        println!("{}", s);
 
         assert_eq!(s.ncols(), (range_col[1] + 1) - range_col[0]);
         assert_eq!(s.nrows(), (range_row[1] + 1) - range_row[0]);
