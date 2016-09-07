@@ -20,3 +20,4 @@ An uncomplicated library for mathematics written in Rust.
     * *Create random*
     * *Create identity*
     * *Get diagonal*
+    * *Submatrix*

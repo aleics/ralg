@@ -510,6 +510,32 @@ impl<N: Copy> Matrix<N> { // implementation of Matrix<N>
         }
         m
     }
+
+    /// Returns a submatrix of a matrix
+    ///
+    /// # Arguments
+    ///
+    /// * `range_col`: column's range of the submatrix
+    /// * `range_row`: row's range of the submatrix
+    pub fn submatrix(&self, range_col: &[usize; 2], range_row: &[usize; 2]) -> Matrix<N> {
+        if range_col[0] > range_col[1] || range_row[0] > range_row[1] {
+            panic!("please use ascendent ranges. For example '[0 3]'");
+        }
+        if range_col[1] > self.ncols || range_row[1] > self.nrows {
+            panic!("index out of range");
+        }
+
+        let mut submatrix: Matrix<N> = Matrix::<N>::init_with_capacity(self.ncols, self.nrows);
+        for i in range_col[0]..(range_col[1]+1) {
+            let mut col: Vec<N> = Vec::new();
+            for j in range_row[0]..(range_row[1]+1) {
+                col.push(self.values[i][j]);
+            }
+            submatrix.values.push(col);
+        }
+        submatrix.update_sizes();
+        submatrix
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -595,6 +621,7 @@ impl<N: Copy> Sub for Matrix<N> where N: Num {
 }
 
 /// Multiplication `*` implementation for &Matrix<N>
+// Note: it will be good to implement Mul using parallelism
 impl<'a, N: Copy + Default> Mul for &'a Matrix<N> where N: Num + Copy {
     type Output = Matrix<N>;
 

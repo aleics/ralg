@@ -373,7 +373,7 @@ mod tests {
         values = vec![vec![7, 8, 9], vec![10, 11, 12]];
         let m2 = Matrix::<i32>::init_with_value(&values);
 
-        let prod = m * m2;
+        let prod = &m * &m2;
 
         assert_eq!(prod.ncols(), m2.ncols());
         assert_eq!(prod.nrows(), m.nrows());
@@ -396,5 +396,20 @@ mod tests {
         assert_eq!(d.get_element(2, 2), m.get_element(2, 2));
         assert_eq!(d.get_element(2, 0), 0);
         assert_eq!(d.get_element(2, 1), 0);
+    }
+    #[test]
+    fn submatrix_test() {
+        let mut values: Vec<Vec<f32>> = vec![vec![1.0, 4.0], vec![2.0, 5.0], vec![3.0, 6.0]];
+        let m = Matrix::<f32>::init_with_value(&values);
+
+        let range_col: [usize; 2] = [1, 2];
+        let range_row: [usize; 2] = [0, 0];
+
+        let s = m.submatrix(&range_col, &range_row);
+
+        println!("{}", s);
+
+        assert_eq!(s.ncols(), (range_col[1] + 1) - range_col[0]);
+        assert_eq!(s.nrows(), (range_row[1] + 1) - range_row[0]);
     }
 }
