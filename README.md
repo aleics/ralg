@@ -21,3 +21,6 @@ An uncomplicated library for mathematics written in Rust.
     * *Create identity*
     * *Get diagonal*
     * *Submatrix*
+
+* **0.1.2**
+  * *Vector*
