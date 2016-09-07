@@ -487,6 +487,29 @@ impl<N: Copy> Matrix<N> { // implementation of Matrix<N>
         res.update_sizes();
         self.copy(res);
     }
+
+    /// Returns the diagonal of a Matrix
+    pub fn get_diagonal(&self) -> Matrix<N>
+        where N: Num + Default {
+
+        if self.ncols != self.nrows {
+            panic!("get_diagonal just available for square matrices");
+        }
+
+        let mut m: Matrix<N> = Matrix::<N>::init_with_capacity(self.ncols, self.nrows);
+        for i in 0..m.ncols {
+            let mut col: Vec<N> = Vec::new();
+            for j in 0..m.nrows {
+                if i != j {
+                    col.push(N::default());
+                } else {
+                    col.push(self.values[i][j]);
+                }
+            }
+            m.values.push(col);
+        }
+        m
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -571,11 +594,11 @@ impl<N: Copy> Sub for Matrix<N> where N: Num {
     }
 }
 
-/// Multiplication `*` implementation for matrix
-impl<N: Copy + Default> Mul for Matrix<N> where N: Num {
+/// Multiplication `*` implementation for &Matrix<N>
+impl<'a, N: Copy + Default> Mul for &'a Matrix<N> where N: Num + Copy {
     type Output = Matrix<N>;
 
-    fn mul(self, other: Matrix<N>) -> Matrix<N> {
+    fn mul(self, other: &'a Matrix<N>) -> Matrix<N> {
         if self.ncols != other.nrows {
             panic!("matrix dimension mismatch")
         } else {
@@ -614,6 +637,15 @@ impl<N: Copy + Default> Mul for Matrix<N> where N: Num {
             }
             res
         }
+    }
+}
+
+/// Multiplication `*` implementation for Matrix<N> (clone() must be used)
+impl<N: Copy + Default> Mul for Matrix<N> where N: Num + Copy {
+    type Output = Matrix<N>;
+
+    fn mul(self, other: Matrix<N>) -> Matrix<N> {
+        &self * &other
     }
 }
 

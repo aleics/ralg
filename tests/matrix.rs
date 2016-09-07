@@ -373,9 +373,28 @@ mod tests {
         values = vec![vec![7, 8, 9], vec![10, 11, 12]];
         let m2 = Matrix::<i32>::init_with_value(&values);
 
-        let prod = m.clone() * m2.clone(); // this must be corrected
+        let prod = m * m2;
 
         assert_eq!(prod.ncols(), m2.ncols());
         assert_eq!(prod.nrows(), m.nrows());
+    }
+    #[test]
+    fn get_diagonal_test() {
+        let values: Vec<Vec<i64>> = vec![vec![1, -2, 2], vec![4, -5, 6], vec![2, 1, -2]];
+        let m = Matrix::<i64>::init_with_value(&values);
+
+        let d: Matrix<i64> = m.get_diagonal();
+
+        assert_eq!(d.ncols(), m.ncols());
+        assert_eq!(d.nrows(), m.nrows());
+        assert_eq!(d.get_element(0, 0), m.get_element(0, 0));
+        assert_eq!(d.get_element(0, 1), 0);
+        assert_eq!(d.get_element(0, 2), 0);
+        assert_eq!(d.get_element(1, 1), m.get_element(1, 1));
+        assert_eq!(d.get_element(1, 0), 0);
+        assert_eq!(d.get_element(1, 2), 0);
+        assert_eq!(d.get_element(2, 2), m.get_element(2, 2));
+        assert_eq!(d.get_element(2, 0), 0);
+        assert_eq!(d.get_element(2, 1), 0);
     }
 }
