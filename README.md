@@ -29,3 +29,5 @@ An uncomplicated library for mathematics written in Rust.
     * *Scalar multiplication*
     * *Add, Sub and Mul Trait*
     * *Display Trait*
+  * *Matrix*
+    * *Added complementary Traits*
