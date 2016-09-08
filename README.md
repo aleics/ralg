@@ -4,10 +4,10 @@ An uncomplicated library for mathematics written in Rust.
 ## release notes
 * **0.1.0**
   * *Matrix*
-    * *initialization*
-    * *push, get and pop  values*
-    * *comparison (bigger_than, equal_to, etc.)*
-    * *swapping (columns and rows)*
+    * *Initialization*
+    * *Push, get and pop  values*
+    * *Comparison (bigger_than, equal_to, etc.)*
+    * *Swapping (columns and rows)*
 
 * **0.1.1**
   * *Matrix*
@@ -24,3 +24,8 @@ An uncomplicated library for mathematics written in Rust.
 
 * **0.1.2**
   * *Vector*
+    * *Initialization*
+    * *Modify elements*
+    * *Scalar multiplication*
+    * *Add, Sub and Mul Trait*
+    * *Display Trait*

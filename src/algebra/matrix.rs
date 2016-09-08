@@ -5,7 +5,6 @@ use num::{Num, NumCast, ToPrimitive};
 use std::fmt;
 use std::fmt::Display;
 use std::cmp::{PartialEq};
-use std::default::Default;
 use std::ops::{Add, Sub, Mul};
 use rand::distributions::range::SampleRange;
 
@@ -57,7 +56,7 @@ impl<N: Copy> Matrix<N> { // implementation of Matrix<N>
     /// # Arguments
     ///
     /// * `val`: the matrix will be initialized with these values
-    pub fn init_with_value(val: &Vec<Vec<N>>) -> Matrix<N> {
+    pub fn init_with_values(val: &Vec<Vec<N>>) -> Matrix<N> {
         let mut m = Matrix::<N>::init();
         m.values = val.clone();
         m.update_sizes();
@@ -552,6 +551,8 @@ impl<N: Copy> Clone for Matrix<N> {
     }
 }
 
+impl<N: Copy> Copy for Matrix<N> where N: Num + Copy, Vec<Vec<N>>: Copy { }
+
 /// Equivalence ´==´ implementation for Matrix
 impl<N: Copy + PartialEq> PartialEq for Matrix<N> {
     fn eq(&self, other: &Matrix<N>) -> bool {
@@ -567,7 +568,7 @@ impl<N: Copy + PartialEq> PartialEq for Matrix<N> {
 }
 
 /// Addition ´+´ implementation for Matrix
-impl<N: Copy> Add for Matrix<N> where N: Num {
+impl<N: Copy> Add for Matrix<N> where N: Num + Add {
     type Output = Matrix<N>;
 
     fn add(self, other: Matrix<N>) -> Matrix<N> {
