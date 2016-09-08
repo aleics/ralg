@@ -2,7 +2,7 @@ extern crate ralg as r;
 
 #[cfg(test)]
 mod tests {
-    use r::calcul::vector::*;
+    use r::algebra::vector::*;
 
     #[test]
     fn vector_init_test() {
