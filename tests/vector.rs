@@ -22,13 +22,14 @@ mod tests {
         assert_eq!(v3.z(), -3.0);
     }
     #[test]
-    fn vector_scalar_mul_test() {
-        let v3 = Vector3D::<i32>::init_with_values(-1, 2, 3);
-        let sm = v3.scalar_mul(2);
+    fn vector_scale_test() {
+        let mut v3 = Vector3D::<i32>::init_with_values(-1, 2, 3);
+        let copy = v3.clone();
+        v3.scale(2);
 
-        assert_eq!(sm.x(), v3.x() * 2);
-        assert_eq!(sm.y(), v3.y() * 2);
-        assert_eq!(sm.z(), v3.z() * 2);
+        assert_eq!(v3.x(), copy.x() * 2);
+        assert_eq!(v3.y(), copy.y() * 2);
+        assert_eq!(v3.z(), copy.z() * 2);
     }
     #[test]
     fn vector_add_test() {
@@ -98,5 +99,16 @@ mod tests {
         assert_eq!(a.x(), 2.5);
         assert_eq!(a.y(), 0.1);
         assert_eq!(a.z(), 1.2);
+    }
+    #[test]
+    fn vector_cross_test() {
+        let a = Vector3D::<i32>::init_with_values(-1, 2, 3);
+        let b = Vector3D::<i32>::init_with_values(0, 2, 5);
+
+        let c = Vector3D::<i32>::cross(&a, &b);
+
+        let res = Vector3D::<i32>::init_with_values(4, 5, -2); // online cross vector calculator
+
+        assert_eq!(res == c, true);
     }
 }

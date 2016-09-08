@@ -1,7 +1,7 @@
 use num::Num;
 use std::fmt;
 use std::fmt::Display;
-use std::ops::{Add, Sub, Mul};
+use std::ops::{Add, Sub, Mul, Neg};
 
 /// Vector of 3 dimensions with a defined coordinates
 ///
@@ -93,19 +93,55 @@ impl<N: Copy + Num> Vector3D<N> {
         self.z = new_z;
     }
 
-    /// Scalar multiplication of a vector
+    /// Scale a vector with a given number
     ///
     /// # Arguments
     ///
     /// * `scalar`: scalar value
-    pub fn scalar_mul(&self, scalar: N) -> Vector3D<N> {
-        Vector3D {x: self.x * scalar, y: self.y * scalar, z: self.z * scalar}
+    pub fn scale(&mut self, scalar: N) {
+        self.x = self.x * scalar;
+        self.y = self.y * scalar;
+        self.z = self.z * scalar;
+    }
+
+    /// Scale a vector with a given vector
+    ///
+    /// # Arguments
+    ///
+    /// * `vec`: vector value
+    pub fn scale_vec(&mut self, vec: &Vector3D<N>) {
+        self.x = self.x * vec.x();
+        self.y = self.y * vec.y();
+        self.z = self.z * vec.z();
+    }
+
+    /// Cross multiplication of two vectors
+    ///
+    /// # Arguments
+    ///
+    /// * `first`: first cross vector
+    /// * `second`: second cross vector
+    pub fn cross(first: &Vector3D<N>, second: &Vector3D<N>) -> Vector3D<N> where N: Neg<Output = N> {
+        let new_x: N = (first.y * second.z) - (first.z * second.y);
+        let new_y: N = -((first.x * second.z) - (first.z * second.x));
+        let new_z: N = (first.x * second.y) - (first.y * second.x);
+
+        Vector3D {x: new_x, y: new_y, z: new_z}
     }
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 // Traits
 ////////////////////////////////////////////////////////////////////////////////
+
+impl<N: Copy + PartialEq> PartialEq for Vector3D<N> {
+    fn eq(&self, other: &Vector3D<N>) -> bool {
+        if (self.x == other.x) && (self.y == other.y) && (self.z == other.z) {
+            return true;
+        }
+        false
+    }
+}
 
 /// Add implementation `+` for Vector3D
 impl<N: Copy + Num> Add for Vector3D<N> {
