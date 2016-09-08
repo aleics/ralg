@@ -306,14 +306,14 @@ mod tests {
 
         let m2: Matrix<u32> = m.clone();
 
-        let res = m + m2;
+        let res = &m + &m2;
 
         assert_eq!(res.get_element(0, 0), 2);
         assert_eq!(res.get_element(0, 1), 6);
         assert_eq!(res.get_element(0, 2), 4);
         assert_eq!(res.get_element(0, 3), 6);
-        //assert_eq!(res.ncols(), m.ncols());
-        //assert_eq!(res.nrows(), m.nrows());
+        assert_eq!(res.ncols(), m.ncols());
+        assert_eq!(res.nrows(), m2.nrows());
     }
     #[test]
     fn matrix_sub_trait_test(){
@@ -325,14 +325,14 @@ mod tests {
         let mut m2 = Matrix::<u32>::init();
         m2.push_col(col2);
 
-        let res = m - m2;
+        let res = &m - &m2;
 
         assert_eq!(res.get_element(0, 0), 4);
         assert_eq!(res.get_element(0, 1), 4);
         assert_eq!(res.get_element(0, 2), 4);
         assert_eq!(res.get_element(0, 3), 5);
-        //assert_eq!(res.ncols(), m.ncols());
-        //assert_eq!(res.nrows(), m.nrows());
+        assert_eq!(res.ncols(), m.ncols());
+        assert_eq!(res.nrows(), m.nrows());
     }
     #[test]
     fn matrix_transpose_test(){

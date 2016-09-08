@@ -539,6 +539,10 @@ impl<N: Copy> Matrix<N> { // implementation of Matrix<N>
 // Traits
 ////////////////////////////////////////////////////////////////////////////////
 
+
+/// Copy implementation for Matrix
+impl<N: Copy> Copy for Matrix<N> where Vec<Vec<N>>: Copy + Clone { }
+
 /// Clone implementation for Matrix
 impl<N: Copy> Clone for Matrix<N> {
     fn clone(&self) -> Matrix<N> {
@@ -550,10 +554,6 @@ impl<N: Copy> Clone for Matrix<N> {
         m
     }
 }
-
-
-/// Copy implementation for Matrix
-impl<N: Copy> Copy for Matrix<N> where N: Num + Copy, Vec<Vec<N>>: Copy { }
 
 /// Equivalence ´==´ implementation for Matrix
 impl<N: Copy + PartialEq> PartialEq for Matrix<N> {
@@ -570,10 +570,10 @@ impl<N: Copy + PartialEq> PartialEq for Matrix<N> {
 }
 
 /// Addition ´+´ implementation for Matrix
-impl<N: Copy> Add for Matrix<N> where N: Num + Add {
+impl<'a, N: Copy> Add for &'a Matrix<N> where N: Num + Add {
     type Output = Matrix<N>;
 
-    fn add(self, other: Matrix<N>) -> Matrix<N> {
+    fn add(self, other: &'a Matrix<N>) -> Matrix<N> {
         if (self.nrows != other.nrows) || (self.ncols != other.ncols) {
             panic!("sizes not compatible!");
         }
@@ -595,11 +595,20 @@ impl<N: Copy> Add for Matrix<N> where N: Num + Add {
     }
 }
 
-/// Substraction ´-´ implementation for Matrix
-impl<N: Copy> Sub for Matrix<N> where N: Num {
+// Addition ´+´ implementation for Matrix
+impl<N: Copy> Add for Matrix<N> where N: Num + Add {
     type Output = Matrix<N>;
 
-    fn sub(self, other: Matrix<N>) -> Matrix<N> {
+    fn add(self, other: Matrix<N>) -> Matrix<N> {
+        (&self) + (&other)
+    }
+}
+
+/// Substraction ´-´ implementation for Matrix
+impl<'a, N: Copy> Sub for &'a Matrix<N> where N: Num + Sub {
+    type Output = Matrix<N>;
+
+    fn sub(self, other: &'a Matrix<N>) -> Matrix<N> {
         if (self.nrows != other.nrows) || (self.ncols != other.ncols) {
             panic!("sizes not compatible!");
         }
@@ -618,6 +627,15 @@ impl<N: Copy> Sub for Matrix<N> where N: Num {
         res.nrows = self.nrows;
 
         res
+    }
+}
+
+/// Substraction ´-´ implementation for Matrix
+impl<N: Copy> Sub for Matrix<N> where N: Num + Sub {
+    type Output = Matrix<N>;
+
+    fn sub(self, other: Matrix<N>) -> Matrix<N> {
+        (&self) - (&other)
     }
 }
 
