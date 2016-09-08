@@ -1,7 +1,6 @@
 use num::Num;
 use std::fmt;
 use std::fmt::Display;
-use std::ops::{Add, Sub, Mul};
 
 /// Point of 3 dimensions with a defined coordinates
 ///
@@ -92,17 +91,6 @@ impl<N: Copy + Num> Point3D<N> {
         self.y = new_y;
         self.z = new_z;
     }
-
-    /// Scale a Point with a given number
-    ///
-    /// # Arguments
-    ///
-    /// * `scalar`: scalar value
-    pub fn scale(&mut self, scalar: N) {
-        self.x = self.x * scalar;
-        self.y = self.y * scalar;
-        self.z = self.z * scalar;
-    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -115,33 +103,6 @@ impl<N: Copy + PartialEq> PartialEq for Point3D<N> {
             return true;
         }
         false
-    }
-}
-
-/// Add implementation `+` for Point3D
-impl<N: Copy + Num> Add for Point3D<N> {
-    type Output = Point3D<N>;
-
-    fn add(self, other: Point3D<N>) -> Point3D<N> {
-        Point3D {x: self.x + other.x, y: self.y + other.y, z: self.z + other.z}
-    }
-}
-
-/// Sub implementation `-` for Point3D
-impl<N: Copy + Num> Sub for Point3D<N> {
-    type Output = Point3D<N>;
-
-    fn sub(self, other: Point3D<N>) -> Point3D<N> {
-        Point3D {x: self.x - other.x, y: self.y - other.y, z: self.z - other.z}
-    }
-}
-
-/// Mul implementation `*` for Point3D
-impl<N: Copy + Num> Mul for Point3D<N> {
-    type Output = Point3D<N>;
-
-    fn mul(self, other: Point3D<N>) -> Point3D<N> {
-        Point3D {x: self.x * other.x, y: self.y * other.y, z: self.z * other.z}
     }
 }
 
