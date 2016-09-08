@@ -20,7 +20,7 @@
     * *Submatrix*
 
 * **0.1.2**
-  * *Vector*
+  * *Point*
     * *Initialization*
     * *Modify elements*
     * *Scalar multiplication*
