@@ -551,6 +551,8 @@ impl<N: Copy> Clone for Matrix<N> {
     }
 }
 
+
+/// Copy implementation for Matrix
 impl<N: Copy> Copy for Matrix<N> where N: Num + Copy, Vec<Vec<N>>: Copy { }
 
 /// Equivalence ´==´ implementation for Matrix
