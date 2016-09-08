@@ -63,4 +63,40 @@ mod tests {
         assert_eq!(mul.y(), a.y() * b.y());
         assert_eq!(mul.z(), a.z() * b.z());
     }
+    #[test]
+    fn vector_set_x_test(){
+        let mut a = Vector3D::<u64>::init_with_values(256, 450, 178);
+        a.set_x(200);
+
+        assert_eq!(a.x(), 200);
+        assert_eq!(a.y(), a.y());
+        assert_eq!(a.z(), a.z());
+    }
+    #[test]
+    fn vector_set_y_test(){
+        let mut a = Vector3D::<i64>::init_with_values(-25, 40, -17);
+        a.set_y(20);
+
+        assert_eq!(a.x(), a.x());
+        assert_eq!(a.y(), 20);
+        assert_eq!(a.z(), a.z());
+    }
+    #[test]
+    fn vector_set_z_test(){
+        let mut a = Vector3D::<f32>::init_with_values(25.6, 4.5, 17.8);
+        a.set_z(2.5);
+
+        assert_eq!(a.x(), a.x());
+        assert_eq!(a.y(), a.y());
+        assert_eq!(a.z(), 2.5);
+    }
+    #[test]
+    fn vector_set_test(){
+        let mut a = Vector3D::<f32>::init_with_values(25.6, 4.5, 17.8);
+        a.set(2.5, 0.1, 1.2);
+
+        assert_eq!(a.x(), 2.5);
+        assert_eq!(a.y(), 0.1);
+        assert_eq!(a.z(), 1.2);
+    }
 }
