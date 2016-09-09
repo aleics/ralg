@@ -63,8 +63,7 @@ mod tests {
         let p2 = Point3D::<i32>::init_with_values(0, 5, 8);
 
         let d = Point3D::<i32>::eucl_distance(&p1, &p2);
-        println!("{}", p1);
-        println!("{}", p2);
-        println!("{}", d);
+
+        assert_eq!(d, 5.916079783099616); // using online euclidean distance calculator
     }
 }
