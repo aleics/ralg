@@ -57,4 +57,14 @@ mod tests {
         assert_eq!(a.y(), 0.1);
         assert_eq!(a.z(), 1.2);
     }
+    #[test]
+    fn point_eucl_distance_test() {
+        let p1 = Point3D::<i32>::init_with_values(-1, 2, 3);
+        let p2 = Point3D::<i32>::init_with_values(0, 5, 8);
+
+        let d = Point3D::<i32>::eucl_distance(&p1, &p2);
+        println!("{}", p1);
+        println!("{}", p2);
+        println!("{}", d);
+    }
 }

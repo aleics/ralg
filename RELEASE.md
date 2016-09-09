@@ -24,6 +24,7 @@
     * *Initialization*
     * *Modify elements*        
     * *Display Trait*
+    * *Euclidean Distance between 2 points*
   * *Matrix*
     * *Added complementary Traits*
   * *Vector3D*
