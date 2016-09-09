@@ -139,7 +139,7 @@ impl<N: Copy> Matrix<N> { // implementation of Matrix<N>
     /// # Arguments
     ///
     /// * `index`: index of the column that wants to be returned
-    pub fn get_col(&self, index: usize) -> Option<&Vec<N>> {
+    pub fn col(&self, index: usize) -> Option<&Vec<N>> {
         for (i, item) in self.values.iter().enumerate() {
             if i == index {
                 return Some(item);
@@ -153,7 +153,7 @@ impl<N: Copy> Matrix<N> { // implementation of Matrix<N>
     /// # Arguments
     ///
     /// * `index`: index of the row that wants to be returned
-    pub fn get_row(&self, index: usize) -> Option<Vec<N>> {
+    pub fn row(&self, index: usize) -> Option<Vec<N>> {
         if self.ncols == 0 {
             return None;
         }
@@ -186,7 +186,7 @@ impl<N: Copy> Matrix<N> { // implementation of Matrix<N>
     /// If the value is found then `Some(usize)` is returned, if not `None`
     pub fn contains(&self, element: &N) -> Option<usize> where N: Num {
 
-        for (i, item) in self.values.iter().enumerate() {
+        for (i, item) in self.col_iter().enumerate() {
             if item.contains(element) {
                 return Some(i)
             }
@@ -221,16 +221,8 @@ impl<N: Copy> Matrix<N> { // implementation of Matrix<N>
     pub fn contains_row(&self, row: &Vec<N>) -> Option<usize>
         where Vec<N>: PartialEq {
 
-        for i in 0..self.nrows {
-            let res = self.get_row(i);
-            let mut _val: Vec<N> = Vec::new();
-
-            match res {
-                Some(x) => _val = x.clone(),
-                None => panic!("row of index '{}' not present on the matrix", i),
-            }
-
-            if &_val == row {
+        for (i, irow) in self.row_iter().enumerate() {
+            if irow == *row {
                 return Some(i);
             }
         }
@@ -357,7 +349,7 @@ impl<N: Copy> Matrix<N> { // implementation of Matrix<N>
         where N: Num + PartialEq<N> {
 
         let mut m = Matrix::<bool>::init();
-        for col in self.values.iter() {
+        for col in self.col_iter() {
             let mut col_out: Vec<bool> = Vec::new();
 
             for el in col.iter() {
@@ -409,7 +401,7 @@ impl<N: Copy> Matrix<N> { // implementation of Matrix<N>
         where N: Num + PartialOrd<N> {
 
         let mut m = Matrix::<bool>::init();
-        for col in self.values.iter() {
+        for col in self.col_iter() {
             let mut col_out: Vec<bool> = Vec::new();
 
             for el in col.iter() {
@@ -439,7 +431,7 @@ impl<N: Copy> Matrix<N> { // implementation of Matrix<N>
         }
 
         let mut m = Matrix::<bool>::init();
-        for (i, col) in self.values.iter().enumerate() {
+        for (i, col) in self.col_iter().enumerate() {
             let mut col_out: Vec<bool> = Vec::new();
 
             for (j, row) in col.iter().enumerate() {
@@ -463,11 +455,11 @@ impl<N: Copy> Matrix<N> { // implementation of Matrix<N>
     pub fn scalar_mul(&self, scalar: N) -> Matrix<N> where N: Num {
         let mut m: Matrix<N> = Matrix::<N>::init();
 
-        for col in self.values.iter() {
+        for col in self.col_iter() {
             let mut new_col: Vec<N> = Vec::new();
 
-            for row in col.iter() {
-                new_col.push(scalar * (*row));
+            for el in col.iter() {
+                new_col.push(scalar * (*el));
             }
 
             m.values.push(new_col);
@@ -558,6 +550,42 @@ impl<N: Copy> Matrix<N> { // implementation of Matrix<N>
         }
         m.update_sizes();
         m
+    }
+
+
+    /// Returns a IteratorCol with a defined index
+    ///
+    /// # Arguments
+    ///
+    /// * `n`: index that the iterator will point to
+    pub fn col_iter_at(&self, n: usize) -> IteratorCol<N> {
+        IteratorCol {
+            m: self,
+            index: n
+        }
+    }
+
+    /// Returns a IteratorCol pointing to the initial value
+    pub fn col_iter(&self) -> IteratorCol<N> {
+        self.col_iter_at(0)
+    }
+
+    /// Returns a IteratorRow with a defined index
+    ///
+    /// # Arguments
+    ///
+    /// * `n`: index that the iterator will point to
+    pub fn row_iter_at(&self, n: usize) -> IteratorRow<N> {
+        let copy: Matrix<N> = self.clone();
+        IteratorRow {
+            m: copy,
+            index: n
+        }
+    }
+
+    /// Returns a IteratorRow pointing to the initial value
+    pub fn row_iter(&self) -> IteratorRow<N> {
+        self.row_iter_at(0)
     }
 }
 
@@ -680,14 +708,14 @@ impl<'a, N: Copy + Default> Mul for &'a Matrix<N> where N: Num + Copy {
                 let mut new_col: Vec<N> = Vec::new();
                 for irs in 0..self.nrows {
                     let rs: Vec<N>;
-                    let result_r = self.get_row(irs);
+                    let result_r = self.row(irs);
                     match result_r {
                         Some(x) => rs = x,
                         None => panic!("row of input matrix not found {}", irs),
                     }
 
                     let co: Vec<N>;
-                    let result_c = other.get_col(ico);
+                    let result_c = other.col(ico);
                     match result_c {
                         Some(x) => co = x.clone(),
                         None => panic!("column of input matrix not found {}", irs),
@@ -734,5 +762,45 @@ impl<N: Copy> fmt::Display for Matrix<N> where N: Display {
         }
         try!(writeln!(f, "}}"));
         write!(f, "size: {col} x {row}", col = self.ncols, row = self.nrows)
+    }
+}
+
+// --------------- Iterators ----------------------------------------
+
+/// Definition of IteratorCol: the iterator for the columns dimension
+pub struct IteratorCol<'a, N: 'a + Copy> {
+    m: &'a Matrix<N>,
+    index: usize
+}
+
+/// Implementation of the Iterator for IteratorCol
+impl<'a, N: Clone + Copy> Iterator for IteratorCol<'a, N> {
+    type Item = &'a Vec<N>;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        self.index += 1;
+        match self.index > self.m.ncols() {
+            true => None,
+            false => self.m.col(self.index - 1)
+        }
+    }
+}
+
+/// Definition of IteratorRow: the iterator for the row dimension
+pub struct IteratorRow<N: Copy> {
+    m: Matrix<N>,
+    index: usize
+}
+
+/// Implementation of the Iterator for IteratorRow
+impl<N: Clone + Copy> Iterator for IteratorRow<N> {
+    type Item = Vec<N>;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        self.index += 1;
+        match self.index > self.m.nrows() {
+            true => None,
+            false => self.m.row(self.index - 1)
+        }
     }
 }

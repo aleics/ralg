@@ -55,7 +55,7 @@ mod tests {
 
         m.push_col(val.clone());
 
-        let result = m.get_col(0);
+        let result = m.col(0);
         let mut get_val: Vec<u32> = Vec::new();
         match result {
             Some(x) => get_val = x.clone(),
@@ -103,13 +103,13 @@ mod tests {
         assert_eq!(val[0], m.get_element(0, 1));
     }
     #[test]
-    fn matrix_get_row_test() {
+    fn matrix_row_test() {
         let resp: Vec<u32> = vec![1];
         let col: Vec<u32> = vec![1, 2, 3, 4, 5];
         let mut m = Matrix::<u32>::init_with_capacity(1, 5);
         m.push_col(col.clone());
 
-        let result = m.get_row(0);
+        let result = m.row(0);
         let mut get_val: Vec<u32> = Vec::new();
         match result {
             Some(x) => get_val = x.clone(),
@@ -419,5 +419,37 @@ mod tests {
 
         assert_eq!(d.ncols(), m.ncols());
         assert_eq!(d.nrows(), m.ncols());
+    }
+    #[test]
+    fn matrix_col_iter_at_test() {
+        let m = Matrix::<i32>::init_with_values(&vec![vec![1, 3], vec![2, 5], vec![3, 6]]);
+        let mut i = m.col_iter_at(1);
+
+        assert_eq!(i.next().unwrap(), &vec![2, 5]);
+        assert_eq!(i.next().unwrap(), &vec![3, 6]);
+    }
+    #[test]
+    fn matrix_col_iter_test() {
+        let m = Matrix::<i32>::init_with_values(&vec![vec![1, 3], vec![2, 5], vec![3, 6]]);
+        let mut i = m.col_iter();
+
+        assert_eq!(i.next().unwrap(), &vec![1, 3]);
+        assert_eq!(i.next().unwrap(), &vec![2, 5]);
+        assert_eq!(i.next().unwrap(), &vec![3, 6]);
+    }
+    #[test]
+    fn matrix_row_iter_at_test() {
+        let m = Matrix::<i32>::init_with_values(&vec![vec![1, 3], vec![2, 5], vec![3, 6]]);
+        let mut i = m.row_iter_at(1);
+
+        assert_eq!(i.next().unwrap(), vec![3, 5, 6]);
+    }
+    #[test]
+    fn matrix_row_iter_test() {
+        let m = Matrix::<i32>::init_with_values(&vec![vec![1, 3], vec![2, 5], vec![3, 6]]);
+        let mut i = m.row_iter();
+
+        assert_eq!(i.next().unwrap(), vec![1, 2, 3]);
+        assert_eq!(i.next().unwrap(), vec![3, 5, 6]);
     }
 }
