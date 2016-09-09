@@ -14,4 +14,112 @@ mod tests {
         assert_eq!(v.z(), 0.0);
         assert_eq!(v.get_origin() == Point3D::<f64>::init(), true);
     }
+    #[test]
+    fn vector_init_with_values_test() {
+        let v = Vector3D::<f64>::init_with_values(2.0, 3.1, 5.2);
+
+        assert_eq!(v.x(), 2.0);
+        assert_eq!(v.y(), 3.1);
+        assert_eq!(v.z(), 5.2);
+        assert_eq!(v.get_origin() == Point3D::<f64>::init(), true);
+    }
+    #[test]
+    fn vector_set_origin_test() {
+        let mut v = Vector3D::<i32>::init_with_values(2, -1, 5);
+        let new_origin: Point3D<i32> = Point3D::<i32>::init_with_values(1, 1, 1);
+
+        v.set_origin(&new_origin);
+
+        assert_eq!(v.get_origin() == new_origin, true);
+    }
+    #[test]
+    fn vector_scale_test() {
+        let mut v3 = Vector3D::<i32>::init_with_values(-1, 2, 3);
+        let copy = v3.clone();
+        v3.scale(2);
+
+        assert_eq!(v3.x(), copy.x() * 2);
+        assert_eq!(v3.y(), copy.y() * 2);
+        assert_eq!(v3.z(), copy.z() * 2);
+    }
+    #[test]
+    fn vector_add_test() {
+        let a = Vector3D::<i32>::init_with_values(-2, 3, 5);
+        let b = Vector3D::<i32>::init_with_values(5, -2, -3);
+
+        let sum = a + b;
+
+        assert_eq!(sum.x(), a.x() + b.x());
+        assert_eq!(sum.y(), a.y() + b.y());
+        assert_eq!(sum.z(), a.z() + b.z());
+    }
+    #[test]
+    fn vector_sub_test() {
+        let a = Vector3D::<f32>::init_with_values(0.2, 10.1, -2.5);
+        let b = Vector3D::<f32>::init_with_values(5.7, -2.1, -3.0);
+
+        let sub = a - b;
+
+        assert_eq!(sub.x(), a.x() - b.x());
+        assert_eq!(sub.y(), a.y() - b.y());
+        assert_eq!(sub.z(), a.z() - b.z());
+    }
+    #[test]
+    fn vector_mul_test() {
+        let a = Vector3D::<u32>::init_with_values(0, 10, 5);
+        let b = Vector3D::<u32>::init_with_values(7, 2, 0);
+
+        let mul = a * b;
+
+        assert_eq!(mul.x(), a.x() * b.x());
+        assert_eq!(mul.y(), a.y() * b.y());
+        assert_eq!(mul.z(), a.z() * b.z());
+    }
+    #[test]
+    fn vector_set_x_test(){
+        let mut a = Vector3D::<u64>::init_with_values(256, 450, 178);
+        a.set_x(200);
+
+        assert_eq!(a.x(), 200);
+        assert_eq!(a.y(), a.y());
+        assert_eq!(a.z(), a.z());
+    }
+    #[test]
+    fn vector_set_y_test(){
+        let mut a = Vector3D::<i64>::init_with_values(-25, 40, -17);
+        a.set_y(20);
+
+        assert_eq!(a.x(), a.x());
+        assert_eq!(a.y(), 20);
+        assert_eq!(a.z(), a.z());
+    }
+    #[test]
+    fn vector_set_z_test(){
+        let mut a = Vector3D::<f32>::init_with_values(25.6, 4.5, 17.8);
+        a.set_z(2.5);
+
+        assert_eq!(a.x(), a.x());
+        assert_eq!(a.y(), a.y());
+        assert_eq!(a.z(), 2.5);
+    }
+    #[test]
+    fn vector_set_test(){
+        let mut a = Vector3D::<f32>::init_with_values(25.6, 4.5, 17.8);
+        a.set(2.5, 0.1, 1.2);
+
+        assert_eq!(a.x(), 2.5);
+        assert_eq!(a.y(), 0.1);
+        assert_eq!(a.z(), 1.2);
+    }
+    #[test]
+    fn vector_cross_test() {
+        let a = Vector3D::<i32>::init_with_values(-1, 2, 3);
+        let b = Vector3D::<i32>::init_with_values(0, 2, 5);
+
+        let c = Vector3D::<i32>::cross(&a, &b);
+
+        let res = Vector3D::<i32>::init_with_values(4, 5, -2); // online cross vector calculator
+
+        assert_eq!(res == c, true);
+    }
 }

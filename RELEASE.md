@@ -20,12 +20,16 @@
     * *Submatrix*
 
 * **0.1.2**
-  * *Point*
+  * *Point3D*
+    * *Initialization*
+    * *Modify elements*        
+    * *Display Trait*
+  * *Matrix*
+    * *Added complementary Traits*
+  * *Vector3D*
     * *Initialization*
     * *Modify elements*
     * *Scalar multiplication*
     * *Add, Sub and Mul Trait*
     * *Display Trait*
     * *Cross operation between 2 vectors*
-  * *Matrix*
-    * *Added complementary Traits*

@@ -40,6 +40,46 @@ impl<N: Copy + Num> Vector3D<N> {
         self.z
     }
 
+    /// Modifies the `X` coordinate
+    ///
+    /// # Arguments
+    ///
+    /// * `new_x`: new X value
+    pub fn set_x(&mut self, new_x: N) {
+        self.x = new_x;
+    }
+
+    /// Modifies the `Y` coordinate
+    ///
+    /// # Arguments
+    ///
+    /// * `new_y`: new Y value
+    pub fn set_y(&mut self, new_y: N) {
+        self.y = new_y;
+    }
+
+    // Modifies the `Z` coordinate
+    ///
+    /// # Arguments
+    ///
+    /// * `new_z`: new Z value
+    pub fn set_z(&mut self, new_z: N) {
+        self.z = new_z;
+    }
+
+    /// Modifies all coordinates
+    ///
+    /// # Arguments
+    ///
+    /// * `new_x`: new X value
+    /// * `new_y`: new Y value
+    /// * `new_z`: new Z value
+    pub fn set(&mut self, new_x: N, new_y: N, new_z: N) {
+        self.x = new_x;
+        self.y = new_y;
+        self.z = new_z;
+    }
+
     /// Initializes a Vector3D with default coordinates' values
     pub fn init() -> Vector3D<N> where N: Default {
         Vector3D { origin: Point3D::<N>::init(),
@@ -49,6 +89,7 @@ impl<N: Copy + Num> Vector3D<N> {
     }
 
     /// Initializes a Vector3D with given coordinates
+    ///
     /// # Arguments
     ///
     /// * `x`: X value
@@ -64,6 +105,15 @@ impl<N: Copy + Num> Vector3D<N> {
     /// Returns the origin point
     pub fn get_origin(&self) -> Point3D<N> {
         self.origin
+    }
+
+    /// Modifies the origin of a vector
+    ///
+    /// # Arguments
+    ///
+    /// * `new_origin`: new origin values
+    pub fn set_origin(&mut self, new_origin: &Point3D<N>) {
+        self.origin = *new_origin;
     }
 
     /// Scale a Vector with a given number
@@ -94,6 +144,10 @@ impl<N: Copy + Num> Vector3D<N> {
     ///
     /// * `first`: first cross vector
     /// * `second`: second cross vector
+    ///
+    /// # Remarks
+    ///
+    /// * The `origin` of the output vector will be extracted from the `first` input vector
     pub fn cross(first: &Vector3D<N>, second: &Vector3D<N>) -> Vector3D<N>
         where N: Default + Neg<Output = N> {
 
@@ -101,7 +155,7 @@ impl<N: Copy + Num> Vector3D<N> {
         let new_y: N = -((first.x * second.z) - (first.z * second.x));
         let new_z: N = (first.x * second.y) - (first.y * second.x);
 
-        Vector3D {origin: Point3D::<N>::init(), x: new_x, y: new_y, z: new_z}
+        Vector3D {origin: first.origin, x: new_x, y: new_y, z: new_z}
     }
 }
 
@@ -110,7 +164,21 @@ impl<N: Copy + Num> Vector3D<N> {
 ////////////////////////////////////////////////////////////////////////////////
 
 
+/// Equivalence ´==´ implementation for Vector3D
+impl<N: Copy + PartialEq> PartialEq for Vector3D<N> {
+    fn eq(&self, other: &Vector3D<N>) -> bool {
+        if (self.x == other.x) && (self.y == other.y) && (self.z == other.z) {
+            return true;
+        }
+        false
+    }
+}
+
 /// Add implementation `+` for Vector3D
+///
+/// # Remarks
+///
+/// * The `origin` of the output vector will be extracted from the `self` input vector
 impl<N: Copy + Num + Default> Add for Vector3D<N> {
     type Output = Vector3D<N>;
 
@@ -120,20 +188,28 @@ impl<N: Copy + Num + Default> Add for Vector3D<N> {
 }
 
 /// Sub implementation `-` for Vector3D
+///
+/// # Remarks
+///
+/// * The `origin` of the output vector will be extracted from the `self` input vector
 impl<N: Copy + Num + Default> Sub for Vector3D<N> {
     type Output = Vector3D<N>;
 
     fn sub(self, other: Vector3D<N>) -> Vector3D<N> {
-        Vector3D {origin: Point3D::<N>::init(), x: self.x - other.x, y: self.y - other.y, z: self.z - other.z}
+        Vector3D {origin: self.origin, x: self.x - other.x, y: self.y - other.y, z: self.z - other.z}
     }
 }
 
 /// Mul implementation `*` for Vector3D
+///
+/// # Remarks
+///
+/// * The `origin` of the output vector will be extracted from the `self` input vector
 impl<N: Copy + Num + Default> Mul for Vector3D<N> {
     type Output = Vector3D<N>;
 
     fn mul(self, other: Vector3D<N>) -> Vector3D<N> {
-        Vector3D {origin: Point3D::<N>::init(), x: self.x * other.x, y: self.y * other.y, z: self.z * other.z}
+        Vector3D {origin: self.origin, x: self.x * other.x, y: self.y * other.y, z: self.z * other.z}
     }
 }
 
