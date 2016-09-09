@@ -411,4 +411,13 @@ mod tests {
         assert_eq!(s.ncols(), (range_col[1] + 1) - range_col[0]);
         assert_eq!(s.nrows(), (range_row[1] + 1) - range_row[0]);
     }
+    #[test]
+    fn matrix_eucl_distance_col_test() {
+        let m = Matrix::<i32>::init_with_values(&vec![vec![1, 3], vec![2, 5], vec![3, 6]]);
+
+        let d = m.eucl_distance_col();
+
+        assert_eq!(d.ncols(), m.ncols());
+        assert_eq!(d.nrows(), m.ncols());
+    }
 }

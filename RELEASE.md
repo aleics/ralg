@@ -27,6 +27,7 @@
     * *Euclidean Distance between 2 points*
   * *Matrix*
     * *Added complementary Traits*
+    * *Euclidean Distance between columns*
   * *Vector3D*
     * *Initialization*
     * *Modify elements*

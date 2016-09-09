@@ -1,6 +1,7 @@
 
 use rand;
 use rand::Rng;
+use num::pow;
 use num::{Num, NumCast, ToPrimitive};
 use std::fmt;
 use std::fmt::Display;
@@ -532,6 +533,31 @@ impl<N: Copy> Matrix<N> { // implementation of Matrix<N>
         }
         submatrix.update_sizes();
         submatrix
+    }
+
+    /// Returns a matrix with the Euclidean Distance between the columns
+    ///
+    /// # Remarks
+    ///
+    /// * The result matrix will be an square matrix with size of the columns
+    ///   of the given matrix
+    pub fn eucl_distance_col(&self) -> Matrix<f64> where N: Into<f64> + Num {
+        let mut m: Matrix<f64> = Matrix::<f64>::init();
+
+        for (_, col_i) in self.values.iter().enumerate() {
+            let mut eucl_col: Vec<f64> = Vec::new();
+
+            for (_, col_j) in self.values.iter().enumerate() {
+                let mut val: f64 = 0.0;
+                for x in 0..self.nrows {
+                    val = val + (pow(col_i[x] - col_j[x], 2)).into();
+                }
+                eucl_col.push(val.sqrt());
+            }
+            m.push_col(eucl_col);
+        }
+        m.update_sizes();
+        m
     }
 }
 
