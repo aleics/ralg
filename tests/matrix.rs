@@ -452,4 +452,27 @@ mod tests {
         assert_eq!(i.next().unwrap(), vec![1, 2, 3]);
         assert_eq!(i.next().unwrap(), vec![3, 5, 6]);
     }
+    #[test]
+    fn matrix_el_iter_at_test() {
+        let m = Matrix::<i32>::init_with_values(&vec![vec![1, 3], vec![2, 5], vec![3, 6]]);
+        let mut i = m.el_iter_at(1);
+
+        assert_eq!(i.next().unwrap(), 2);
+        assert_eq!(i.next().unwrap(), 3);
+        assert_eq!(i.next().unwrap(), 3);
+        assert_eq!(i.next().unwrap(), 5);
+        assert_eq!(i.next().unwrap(), 6);
+    }
+    #[test]
+    fn matrix_el_iter_test() {
+        let m = Matrix::<i32>::init_with_values(&vec![vec![8, 3], vec![5, 10]]);
+        let mut i = m.el_iter();
+
+        println!("{}", m);
+
+        assert_eq!(i.next().unwrap(), m.get_element(0, 0));
+        assert_eq!(i.next().unwrap(), m.get_element(1, 0));
+        assert_eq!(i.next().unwrap(), m.get_element(0, 1));
+        assert_eq!(i.next().unwrap(), m.get_element(1, 1));
+    }
 }

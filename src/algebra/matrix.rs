@@ -576,9 +576,8 @@ impl<N: Copy> Matrix<N> { // implementation of Matrix<N>
     ///
     /// * `n`: index that the iterator will point to
     pub fn row_iter_at(&self, n: usize) -> IteratorRow<N> {
-        let copy: Matrix<N> = self.clone();
         IteratorRow {
-            m: copy,
+            m: self,
             index: n
         }
     }
@@ -586,6 +585,23 @@ impl<N: Copy> Matrix<N> { // implementation of Matrix<N>
     /// Returns a IteratorRow pointing to the initial value
     pub fn row_iter(&self) -> IteratorRow<N> {
         self.row_iter_at(0)
+    }
+
+    /// Returns a IteratorElement with a defined index
+    ///
+    /// # Arguments
+    ///
+    /// * `n`: index that the iterator will point to
+    pub fn el_iter_at(&self, n: usize) -> IteratorElement<N> {
+        IteratorElement {
+            m: self,
+            index: n
+        }
+    }
+
+    /// Returns a IteratorElement pointing to the initial value
+    pub fn el_iter(&self) -> IteratorElement<N> {
+        self.el_iter_at(0)
     }
 }
 
@@ -787,13 +803,13 @@ impl<'a, N: Clone + Copy> Iterator for IteratorCol<'a, N> {
 }
 
 /// Definition of IteratorRow: the iterator for the row dimension
-pub struct IteratorRow<N: Copy> {
-    m: Matrix<N>,
+pub struct IteratorRow<'a, N: 'a + Copy> {
+    m: &'a Matrix<N>,
     index: usize
 }
 
 /// Implementation of the Iterator for IteratorRow
-impl<N: Clone + Copy> Iterator for IteratorRow<N> {
+impl<'a, N: Clone + Copy> Iterator for IteratorRow<'a, N> {
     type Item = Vec<N>;
 
     fn next(&mut self) -> Option<Self::Item> {
@@ -802,5 +818,25 @@ impl<N: Clone + Copy> Iterator for IteratorRow<N> {
             true => None,
             false => self.m.row(self.index - 1)
         }
+    }
+}
+
+/// Definition of IteratorElement: the iterator for each element
+pub struct IteratorElement<'a, N: 'a + Copy> {
+    m: &'a Matrix<N>,
+    index: usize
+}
+
+/// Implementation of the Iterator for IteratorElement
+impl<'a, N: Clone + Copy> Iterator for IteratorElement<'a, N> {
+    type Item = N;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        let row_i: usize = self.index / self.m.ncols();
+        let col_i: usize = self.index % self.m.ncols();
+
+        self.index += 1;
+
+        Some(self.m.get_element(col_i, row_i))
     }
 }
