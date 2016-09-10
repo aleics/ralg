@@ -1,4 +1,4 @@
-extern crate ralg as r;
+extern crate rsmath as r;
 
 #[cfg(test)]
 mod tests {

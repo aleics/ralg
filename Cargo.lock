@@ -1,5 +1,5 @@
 [root]
-name = "ralg"
+name = "rsmath"
 version = "0.1.2"
 dependencies = [
  "num 0.1.35 (registry+https://github.com/rust-lang/crates.io-index)",

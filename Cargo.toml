@@ -1,12 +1,16 @@
 [package]
-name = "ralg"
+name = "rsmath"
 version = "0.1.2"
 authors = ["Aleix Casanovas <aleics.casanovas@gmail.com>"]
 
-description = "An uncomplicated library for Mathematics written in Rust."
+description = "An uncomplicated library for Mathematics written in Rust"
+repository = "https://github.com/aleics/rsmath"
+readme = "README.md"
+keywords = [ "math", "linear", "algebra", "matrix", "vector", "point", "space"]
+license = "Apache 2.0"
 
 [lib]
-name = "ralg"
+name = "rsmath"
 path = "src/lib.rs"
 
 [dependencies]
