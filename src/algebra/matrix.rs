@@ -40,12 +40,12 @@ impl<N: Copy> Matrix<N> { // implementation of Matrix<N>
     ///
     /// # Arguments
     ///
+    /// * `nr`: rows capacity
     /// * `nc`: columns capacity
-    /// * `nr`: rowsextern crate rand; capacity
-    pub fn init_with_capacity(nc: usize, nr: usize) -> Matrix<N> {
-        let mut vec: Vec<Vec<N>> = Vec::with_capacity(nc);
+    pub fn init_with_capacity(nr: usize, nc: usize) -> Matrix<N> {
+        let mut vec: Vec<Vec<N>> = Vec::with_capacity(nr);
         for i in 0..vec.len() {
-            vec[i] = Vec::with_capacity(nr);
+            vec[i] = Vec::with_capacity(nc);
         }
         Matrix::<N> { values: vec,
                       nrows: nr,
@@ -68,10 +68,10 @@ impl<N: Copy> Matrix<N> { // implementation of Matrix<N>
     ///
     /// # Arguments
     ///
-    /// * `size_columns`: number of columns
     /// * `size_rows`: number of rows
+    /// * `size_columns`: number of columns
     /// * `range`: range of the values
-    pub fn create_random(size_columns: usize, size_rows: usize, range: &[N; 2])
+    pub fn create_random(size_rows: usize, size_columns: usize, range: &[N; 2])
         -> Matrix<N> where N: Num + PartialOrd + SampleRange {
 
         if range.len() != 2 {
@@ -79,9 +79,9 @@ impl<N: Copy> Matrix<N> { // implementation of Matrix<N>
         }
 
         let mut m = Matrix::<N>::init();
-        for _ in 0..size_columns {
+        for _ in 0..size_rows {
             let mut col: Vec<N> = Vec::new();
-            for _ in 0..size_rows {
+            for _ in 0..size_columns {
                 col.push(rand::thread_rng().gen_range(range[0], range[1]));
             }
             m.values.push(col);
@@ -134,12 +134,12 @@ impl<N: Copy> Matrix<N> { // implementation of Matrix<N>
         self.ncols
     }
 
-    /// Returns a defined column by an index
+    /// Returns a defined row by an index
     ///
     /// # Arguments
     ///
-    /// * `index`: index of the column that wants to be returned
-    pub fn col(&self, index: usize) -> Option<&Vec<N>> {
+    /// * `index`: index of the row that wants to be returned
+    pub fn row(&self, index: usize) -> Option<&Vec<N>> {
         for (i, item) in self.values.iter().enumerate() {
             if i == index {
                 return Some(item);
@@ -148,12 +148,12 @@ impl<N: Copy> Matrix<N> { // implementation of Matrix<N>
         None
     }
 
-    /// Returns a defined row by an index
+    /// Returns a defined column by an index
     ///
     /// # Arguments
     ///
-    /// * `index`: index of the row that wants to be returned
-    pub fn row(&self, index: usize) -> Option<Vec<N>> {
+    /// * `index`: index of the column that wants to be returned
+    pub fn col(&self, index: usize) -> Option<Vec<N>> {
         if self.ncols == 0 {
             return None;
         }
@@ -169,10 +169,10 @@ impl<N: Copy> Matrix<N> { // implementation of Matrix<N>
     ///
     /// # Arguments
     ///
-    /// * `i_col`: column's index
     /// * `i_row`: row's index
-    pub fn get_element(&self, i_col: usize, i_row: usize) -> N {
-        self.values[i_col][i_row]
+    /// * `i_col`: column's index
+    pub fn get_element(&self, i_row: usize, i_col: usize) -> N {
+        self.values[i_row][i_col]
     }
 
     /// Returns the index of an element if it's present on the matrix
@@ -186,12 +186,28 @@ impl<N: Copy> Matrix<N> { // implementation of Matrix<N>
     /// If the value is found then `Some(usize)` is returned, if not `None`
     pub fn contains(&self, element: &N) -> Option<usize> where N: Num {
 
-        for (i, item) in self.col_iter().enumerate() {
+        for (i, item) in self.row_iter().enumerate() {
             if item.contains(element) {
                 return Some(i)
             }
         }
         None
+    }
+
+
+    /// Returns the index of a row if it's present on the matrix
+    ///
+    /// # Arguments
+    ///
+    /// * `row`: row's value
+    ///
+    /// # Remarks
+    ///
+    /// If the value is found then `Some(usize)` is returned, if not `None`
+    pub fn contains_row(&self, row: &Vec<N>) -> Option<usize>
+        where Vec<N>: PartialEq {
+
+        self.values.iter().position(|item| item == row)
     }
 
     /// Returns the index of a column if it's present on the matrix
@@ -206,23 +222,8 @@ impl<N: Copy> Matrix<N> { // implementation of Matrix<N>
     pub fn contains_col(&self, column: &Vec<N>) -> Option<usize>
         where Vec<N>: PartialEq {
 
-        self.values.iter().position(|item| item == column)
-    }
-
-    /// Returns the index of a row if it's present on the matrix
-    ///
-    /// # Arguments
-    ///
-    /// * `row`: row's value
-    ///
-    /// # Remarks
-    ///
-    /// If the value is found then `Some(usize)` is returned, if not `None`
-    pub fn contains_row(&self, row: &Vec<N>) -> Option<usize>
-        where Vec<N>: PartialEq {
-
-        for (i, irow) in self.row_iter().enumerate() {
-            if irow == *row {
+        for (i, icol) in self.col_iter().enumerate() {
+            if icol == *column {
                 return Some(i);
             }
         }
@@ -231,23 +232,13 @@ impl<N: Copy> Matrix<N> { // implementation of Matrix<N>
 
     // internal use
     fn update_sizes(&mut self) { // helping function to update the size if matrix is modified
-        self.ncols = self.values.len();
+        self.nrows = self.values.len();
 
-        if self.ncols > 0 {
-            self.nrows = self.values[0].len();
+        if self.nrows > 0 {
+            self.ncols = self.values[0].len();
         } else { // if number of columns is 0, the number of rows must be also 0
-            self.nrows = 0;
+            self.ncols = 0;
         }
-    }
-
-    /// Appends a column to the end of the matrix
-    ///
-    /// # Arguments
-    ///
-    /// * `col`: column to push
-    pub fn push_col(&mut self, col: Vec<N>) {
-        self.values.push(col);
-        self.update_sizes();
     }
 
     /// Appends a row to the end of the matrix
@@ -256,40 +247,31 @@ impl<N: Copy> Matrix<N> { // implementation of Matrix<N>
     ///
     /// * `row`: row to push
     pub fn push_row(&mut self, row: Vec<N>) {
+        self.values.push(row);
+        self.update_sizes();
+    }
+
+
+    /// Appends a column to the end of the matrix
+    ///
+    /// # Arguments
+    ///
+    /// * `col`: column to push
+    pub fn push_col(&mut self, col: Vec<N>) {
         if self.ncols > 0 && self.nrows > 0 {
-            if self.ncols != row.len() {
-                panic!("invalid size for a row. ncols = {}, row.len() = {}", self.ncols, row.len())
+            if self.nrows != col.len() {
+                panic!("invalid size for a row. ncols = {}, row.len() = {}", self.ncols, col.len())
             }
 
-            for (i, item) in row.iter().enumerate() {
+            for (i, item) in col.iter().enumerate() {
                 self.values[i].push(*item);
             }
         } else { // if self is empty -> push the first row
-            for (i, item) in row.iter().enumerate() {
+            for (i, item) in col.iter().enumerate() {
                 self.values.push(Vec::new()); // initializye column vector
                 self.values[i].push(*item); // push element
             }
         }
-        self.update_sizes();
-    }
-
-    /// Removes a column of the matrix by its index
-    ///
-    /// # Arguments
-    ///
-    /// `index`: index of the column that has to be removed
-    pub fn pop_col(&mut self, index: usize) {
-        if index >= self.ncols {
-            panic!("invalid index({}). ncols = '{}'", index, self.ncols)
-        }
-
-        let mut new_values: Vec<Vec<N>> = Vec::new();
-        for (i, item) in self.values.iter().enumerate() {
-            if i != index {
-                new_values.push(item.clone());
-            }
-        }
-        self.values = new_values;
         self.update_sizes();
     }
 
@@ -303,24 +285,30 @@ impl<N: Copy> Matrix<N> { // implementation of Matrix<N>
             panic!("invalid index({}). nrows = '{}'", index, self.nrows)
         }
 
+        let mut new_values: Vec<Vec<N>> = Vec::new();
+        for (i, item) in self.values.iter().enumerate() {
+            if i != index {
+                new_values.push(item.clone());
+            }
+        }
+        self.values = new_values;
+        self.update_sizes();
+    }
+
+    /// Removes a column of the matrix by its index
+    ///
+    /// # Arguments
+    ///
+    /// `index`: index of the column that has to be removed
+    pub fn pop_col(&mut self, index: usize) {
+        if index >= self.ncols {
+            panic!("invalid index({}). ncols = '{}'", index, self.nrows)
+        }
+
         for item in self.values.iter_mut() {
             item.remove(index);
         }
         self.update_sizes();
-    }
-
-    /// Swaps the position of two columns in the matrix
-    ///
-    /// # Arguments
-    ///
-    /// * `index_a`: index of the first column that has to be swapped
-    /// * `index_b`: index of the second column that has to be swapped
-    pub fn swap_col(&mut self, index_a: usize, index_b: usize) {
-        if (index_a >= self.ncols) || (index_b >= self.ncols) {
-            panic!("invalid indexes(index_a = {}, index_b = {}). ncols = {}",
-                                    index_a, index_b, self.ncols);
-        }
-        self.values.swap(index_a, index_b);
     }
 
     /// Swaps the position of two rows in the matrix
@@ -333,6 +321,21 @@ impl<N: Copy> Matrix<N> { // implementation of Matrix<N>
         if (index_a >= self.nrows) || (index_b >= self.nrows) {
             panic!("invalid indexes(index_a = {}, index_b = {}). nrows = {}",
                                     index_a, index_b, self.nrows);
+        }
+        self.values.swap(index_a, index_b);
+    }
+
+
+    /// Swaps the position of two columns in the matrix
+    ///
+    /// # Arguments
+    ///
+    /// * `index_a`: index of the first row that has to be swapped
+    /// * `index_b`: index of the second row that has to be swapped
+    pub fn swap_col(&mut self, index_a: usize, index_b: usize) {
+        if (index_a >= self.ncols) || (index_b >= self.ncols) {
+            panic!("invalid indexes(index_a = {}, index_b = {}). ncols = {}",
+                                    index_a, index_b, self.ncols);
         }
         for item in self.values.iter_mut() {
             item.swap(index_a, index_b);
@@ -349,15 +352,15 @@ impl<N: Copy> Matrix<N> { // implementation of Matrix<N>
         where N: Num + PartialEq<N> {
 
         let mut m = Matrix::<bool>::init();
-        for col in self.col_iter() {
-            let mut col_out: Vec<bool> = Vec::new();
+        for col in self.row_iter() {
+            let mut row_out: Vec<bool> = Vec::new();
 
             for el in col.iter() {
-                if el == value { col_out.push(true); }
-                else { col_out.push(false); }
+                if el == value { row_out.push(true); }
+                else { row_out.push(false); }
             }
 
-            m.push_col(col_out);
+            m.push_row(row_out);
         }
         m
     }
@@ -375,18 +378,18 @@ impl<N: Copy> Matrix<N> { // implementation of Matrix<N>
         }
 
         let mut m = Matrix::<bool>::init();
-        for (i, col) in self.values.iter().enumerate() {
-            let mut col_out: Vec<bool> = Vec::new();
+        for (i, row) in self.values.iter().enumerate() {
+            let mut row_out: Vec<bool> = Vec::new();
 
-            for (j, row) in col.iter().enumerate() {
-                if *row == comp_matrix.values[i][j] {
-                    col_out.push(true);
+            for (j, el) in row.iter().enumerate() {
+                if *el == comp_matrix.values[i][j] {
+                    row_out.push(true);
                 } else {
-                    col_out.push(false);
+                    row_out.push(false);
                 }
             }
 
-            m.push_col(col_out);
+            m.push_row(row_out);
         }
         m
     }
@@ -401,18 +404,18 @@ impl<N: Copy> Matrix<N> { // implementation of Matrix<N>
         where N: Num + PartialOrd<N> {
 
         let mut m = Matrix::<bool>::init();
-        for col in self.col_iter() {
-            let mut col_out: Vec<bool> = Vec::new();
+        for row in self.row_iter() {
+            let mut row_out: Vec<bool> = Vec::new();
 
-            for el in col.iter() {
+            for el in row.iter() {
                 if el > value {
-                    col_out.push(true);
+                    row_out.push(true);
                 } else {
-                    col_out.push(false);
+                    row_out.push(false);
                 }
             }
 
-            m.push_col(col_out);
+            m.push_row(row_out);
         }
         m
     }
@@ -431,18 +434,18 @@ impl<N: Copy> Matrix<N> { // implementation of Matrix<N>
         }
 
         let mut m = Matrix::<bool>::init();
-        for (i, col) in self.col_iter().enumerate() {
-            let mut col_out: Vec<bool> = Vec::new();
+        for (i, row) in self.row_iter().enumerate() {
+            let mut row_out: Vec<bool> = Vec::new();
 
-            for (j, row) in col.iter().enumerate() {
-                if *row > comp_matrix.values[i][j] {
-                    col_out.push(true);
+            for (j, el) in row.iter().enumerate() {
+                if *el > comp_matrix.values[i][j] {
+                    row_out.push(true);
                 } else {
-                    col_out.push(false);
+                    row_out.push(false);
                 }
             }
 
-            m.push_col(col_out);
+            m.push_row(row_out);
         }
         m
     }
@@ -455,14 +458,14 @@ impl<N: Copy> Matrix<N> { // implementation of Matrix<N>
     pub fn scalar_mul(&self, scalar: N) -> Matrix<N> where N: Num {
         let mut m: Matrix<N> = Matrix::<N>::init();
 
-        for col in self.col_iter() {
-            let mut new_col: Vec<N> = Vec::new();
+        for col in self.row_iter() {
+            let mut new_row: Vec<N> = Vec::new();
 
             for el in col.iter() {
-                new_col.push(scalar * (*el));
+                new_row.push(scalar * (*el));
             }
 
-            m.values.push(new_col);
+            m.values.push(new_row);
         }
         m.update_sizes();
         m
@@ -472,7 +475,7 @@ impl<N: Copy> Matrix<N> { // implementation of Matrix<N>
     pub fn transpose(&mut self) {
         let mut res: Matrix<N> = Matrix::<N>::init();
         for item in self.values.iter() {
-            res.push_row(item.clone());
+            res.push_col(item.clone());
         }
 
         res.update_sizes();
@@ -487,16 +490,16 @@ impl<N: Copy> Matrix<N> { // implementation of Matrix<N>
         }
 
         let mut m: Matrix<N> = Matrix::<N>::init_with_capacity(self.ncols, self.nrows);
-        for i in 0..m.ncols {
-            let mut col: Vec<N> = Vec::new();
-            for j in 0..m.nrows {
+        for i in 0..m.nrows {
+            let mut row: Vec<N> = Vec::new();
+            for j in 0..m.ncols {
                 if i != j {
-                    col.push(N::default());
+                    row.push(N::default());
                 } else {
-                    col.push(self.values[i][j]);
+                    row.push(self.values[i][j]);
                 }
             }
-            m.values.push(col);
+            m.values.push(row);
         }
         m
     }
@@ -505,9 +508,9 @@ impl<N: Copy> Matrix<N> { // implementation of Matrix<N>
     ///
     /// # Arguments
     ///
-    /// * `range_col`: column's range of the submatrix
     /// * `range_row`: row's range of the submatrix
-    pub fn submatrix(&self, range_col: &[usize; 2], range_row: &[usize; 2]) -> Matrix<N> {
+    /// * `range_col`: column's range of the submatrix
+    pub fn submatrix(&self, range_row: &[usize; 2], range_col: &[usize; 2]) -> Matrix<N> {
         if range_col[0] > range_col[1] || range_row[0] > range_row[1] {
             panic!("please use ascendent ranges. For example '[0 3]'");
         }
@@ -516,37 +519,37 @@ impl<N: Copy> Matrix<N> { // implementation of Matrix<N>
         }
 
         let mut submatrix: Matrix<N> = Matrix::<N>::init_with_capacity(self.ncols, self.nrows);
-        for i in range_col[0]..(range_col[1]+1) {
-            let mut col: Vec<N> = Vec::new();
-            for j in range_row[0]..(range_row[1]+1) {
-                col.push(self.values[i][j]);
+        for i in range_row[0]..(range_row[1]+1) {
+            let mut row: Vec<N> = Vec::new();
+            for j in range_col[0]..(range_col[1]+1) {
+                row.push(self.values[i][j]);
             }
-            submatrix.values.push(col);
+            submatrix.values.push(row);
         }
         submatrix.update_sizes();
         submatrix
     }
 
-    /// Returns a matrix with the Euclidean Distance between the columns
+    /// Returns a matrix with the Euclidean Distance between the rows
     ///
     /// # Remarks
     ///
     /// * The result matrix will be an square matrix with size of the columns
     ///   of the given matrix
-    pub fn eucl_distance_col(&self) -> Matrix<f64> where N: Into<f64> + Num {
+    pub fn eucl_distance_row(&self) -> Matrix<f64> where N: Into<f64> + Num {
         let mut m: Matrix<f64> = Matrix::<f64>::init();
 
-        for (_, col_i) in self.values.iter().enumerate() {
-            let mut eucl_col: Vec<f64> = Vec::new();
+        for (_, row_i) in self.values.iter().enumerate() {
+            let mut eucl_row: Vec<f64> = Vec::new();
 
-            for (_, col_j) in self.values.iter().enumerate() {
+            for (_, row_j) in self.values.iter().enumerate() {
                 let mut val: f64 = 0.0;
-                for x in 0..self.nrows {
-                    val = val + (pow(col_i[x] - col_j[x], 2)).into();
+                for x in 0..self.ncols {
+                    val = val + (pow(row_i[x] - row_j[x], 2)).into();
                 }
-                eucl_col.push(val.sqrt());
+                eucl_row.push(val.sqrt());
             }
-            m.push_col(eucl_col);
+            m.push_col(eucl_row);
         }
         m.update_sizes();
         m
@@ -628,8 +631,8 @@ impl<N: Copy> Clone for Matrix<N> {
 /// Equivalence ´==´ implementation for Matrix
 impl<N: Copy + PartialEq> PartialEq for Matrix<N> {
     fn eq(&self, other: &Matrix<N>) -> bool {
-        for i in 0..self.ncols {
-            for j in 0..self.nrows {
+        for i in 0..self.nrows {
+            for j in 0..self.ncols {
                 if self.values[i][j] != other.values[i][j] {
                     return false;
                 }
@@ -649,14 +652,14 @@ impl<'a, N: Copy> Add for &'a Matrix<N> where N: Num + Add {
         }
 
         let mut res: Matrix<N> = Matrix::<N>::init();
-        for i in 0..self.ncols {
+        for i in 0..self.nrows {
 
-            let mut res_col: Vec<N> = Vec::new();
-            for j in 0..self.nrows {
+            let mut res_row: Vec<N> = Vec::new();
+            for j in 0..self.ncols {
                 let val = self.values[i][j] + other.values[i][j];
-                res_col.push(val);
+                res_row.push(val);
             }
-            res.values.push(res_col);
+            res.values.push(res_row);
         }
         res.ncols = self.ncols;
         res.nrows = self.nrows;
@@ -684,14 +687,14 @@ impl<'a, N: Copy> Sub for &'a Matrix<N> where N: Num + Sub {
         }
 
         let mut res: Matrix<N> = Matrix::<N>::init();
-        for i in 0..self.ncols {
+        for i in 0..self.nrows {
 
-            let mut res_col: Vec<N> = Vec::new();
-            for j in 0..self.nrows {
+            let mut res_row: Vec<N> = Vec::new();
+            for j in 0..self.ncols {
                 let val = self.values[i][j] - other.values[i][j];
-                res_col.push(val);
+                res_row.push(val);
             }
-            res.values.push(res_col);
+            res.values.push(res_row);
         }
         res.ncols = self.ncols;
         res.nrows = self.nrows;
@@ -715,41 +718,40 @@ impl<'a, N: Copy + Default> Mul for &'a Matrix<N> where N: Num + Copy {
     type Output = Matrix<N>;
 
     fn mul(self, other: &'a Matrix<N>) -> Matrix<N> {
-        if self.ncols != other.nrows {
+        if self.nrows != other.ncols {
             panic!("matrix dimension mismatch")
         } else {
             let mut res: Matrix<N> = Matrix::<N>::init();
 
-            for ico in 0..other.ncols {
-                let mut new_col: Vec<N> = Vec::new();
-                for irs in 0..self.nrows {
+            for irs in 0..self.nrows {
+                let mut new_row: Vec<N> = Vec::new();
+                for ico in 0..other.ncols {
                     let rs: Vec<N>;
                     let result_r = self.row(irs);
                     match result_r {
-                        Some(x) => rs = x,
-                        None => panic!("row of input matrix not found {}", irs),
+                        Some(x) => rs = x.clone(),
+                        None => panic!("col of input matrix not found {}", irs),
                     }
 
                     let co: Vec<N>;
                     let result_c = other.col(ico);
                     match result_c {
-                        Some(x) => co = x.clone(),
-                        None => panic!("column of input matrix not found {}", irs),
+                        Some(x) => co = x,
+                        None => panic!("column of input matrix not found {}", ico),
                     }
 
-                    let mut sum_r: N = N::default();
-                    for el_rs in rs.iter() {
-                        sum_r = sum_r + *el_rs;
+                    if rs.len() != co.len() {
+                        panic!("size of picked row/column not equal")
                     }
 
-                    let mut sum_c: N = N::default();
-                    for el_co in co.iter() {
-                        sum_c = sum_c + *el_co;
+                    let mut sum: N = N::default();
+                    for i in 0..rs.len() {
+                        sum = sum + (rs[i] * co[i]);
                     }
 
-                    new_col.push(sum_r * sum_c);
+                    new_row.push(sum);
                 }
-                res.push_col(new_col);
+                res.push_row(new_row);
             }
             res
         }
@@ -769,15 +771,15 @@ impl<N: Copy + Default> Mul for Matrix<N> where N: Num + Copy {
 impl<N: Copy> fmt::Display for Matrix<N> where N: Display {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         try!(writeln!(f, "{{"));
-        for col in self.values.iter() {
+        for row in self.values.iter() {
             try!(write!(f, "[ "));
-            for el in col.iter() {
+            for el in row.iter() {
                 try!(write!(f, "{} ", el));
             }
             try!(writeln!(f, "]"));
         }
         try!(writeln!(f, "}}"));
-        write!(f, "size: {col} x {row}", col = self.ncols, row = self.nrows)
+        write!(f, "size: {row} x {col}", row = self.nrows, col = self.ncols)
     }
 }
 
@@ -791,7 +793,7 @@ pub struct IteratorCol<'a, N: 'a + Copy> {
 
 /// Implementation of the Iterator for IteratorCol
 impl<'a, N: Clone + Copy> Iterator for IteratorCol<'a, N> {
-    type Item = &'a Vec<N>;
+    type Item = Vec<N>;
 
     fn next(&mut self) -> Option<Self::Item> {
         self.index += 1;
@@ -810,7 +812,7 @@ pub struct IteratorRow<'a, N: 'a + Copy> {
 
 /// Implementation of the Iterator for IteratorRow
 impl<'a, N: Clone + Copy> Iterator for IteratorRow<'a, N> {
-    type Item = Vec<N>;
+    type Item = &'a Vec<N>;
 
     fn next(&mut self) -> Option<Self::Item> {
         self.index += 1;
@@ -837,6 +839,6 @@ impl<'a, N: Clone + Copy> Iterator for IteratorElement<'a, N> {
 
         self.index += 1;
 
-        Some(self.m.get_element(col_i, row_i))
+        Some(self.m.get_element(row_i, col_i))
     }
 }
