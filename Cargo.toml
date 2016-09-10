@@ -3,6 +3,8 @@ name = "ralg"
 version = "0.1.2"
 authors = ["Aleix Casanovas <aleics.casanovas@gmail.com>"]
 
+description = "An uncomplicated library for Mathematics written in Rust."
+
 [lib]
 name = "ralg"
 path = "src/lib.rs"

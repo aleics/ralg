@@ -28,6 +28,7 @@
   * *Matrix*
     * *Added complementary Traits*
     * *Euclidean Distance between columns*
+    * *Added row, column and element iterator*
   * *Vector3D*
     * *Initialization*
     * *Modify elements*
