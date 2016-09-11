@@ -57,10 +57,14 @@ impl<N: Copy> Vector<N> {
 
     pub fn push(&mut self, val: N) {
         self.values.push(val);
+        self.size = self.size + 1;
     }
 
-    pub fn remove(&mut self, index: usize) -> N {
-        self.values.remove(index)
+    pub fn remove(&mut self, index: usize) {
+        self.values.remove(index);
+        if self.size > 0 {
+            self.size = self.size - 1;
+        }
     }
 
     pub fn pop(&mut self) -> Option<N> {
@@ -73,6 +77,7 @@ impl<N: Copy> Vector<N> {
 
     pub fn append(&mut self, other: &Vector<N>) {
         self.values.append(&mut other.values.clone());
+        self.size = self.size + other.size;
     }
 
     pub fn clear(&mut self) {

@@ -505,4 +505,39 @@ mod tests {
         assert_eq!(v.el(1), -2.1f64);
         assert_eq!(v.el(2), 5.3f64);
     }
+    #[test]
+    fn vector_zeros_test() {
+        let v = Vector::<i32>::zeros(2);
+
+        assert_eq!(v.size(), 2);
+        assert_eq!(v.el(0), 0);
+        assert_eq!(v.el(1), 0);
+    }
+    #[test]
+    fn vector_ones_test() {
+        let v = Vector::<u32>::ones(2);
+
+        assert_eq!(v.size(), 2);
+        assert_eq!(v.el(0), 1);
+        assert_eq!(v.el(1), 1);
+    }
+    #[test]
+    fn vector_random_test() {
+        let v = Vector::<i32>::random(5, &[-1i32, 2i32]);
+
+        assert_eq!(v.size(), 5);
+        assert_eq!(v.el(0) >= -1i32 && v.el(0) <= 2i32, true);
+        assert_eq!(v.el(1) >= -1i32 && v.el(1) <= 2i32, true);
+        assert_eq!(v.el(2) >= -1i32 && v.el(2) <= 2i32, true);
+        assert_eq!(v.el(3) >= -1i32 && v.el(3) <= 2i32, true);
+        assert_eq!(v.el(4) >= -1i32 && v.el(4) <= 2i32, true);
+    }
+    #[test]
+    fn vector_push_test() {
+        let mut v = Vector::<f32>::init();
+        v.push(1f32);
+
+        assert_eq!(v.size(), 1);
+        assert_eq!(v.el(0), 1f32);
+    }
 }
