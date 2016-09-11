@@ -90,6 +90,38 @@ impl<N: Copy> Matrix<N> { // implementation of Matrix<N>
         m
     }
 
+    /// Creates a Matrix of 0s
+    ///
+    /// # Arguments
+    ///
+    /// `size_rows`: row's size
+    /// `size_columns`: column's size
+    pub fn zeros(size_rows: usize, size_columns: usize)
+        -> Matrix<N> where N: Num + Default {
+
+        let mut m = Matrix::<N>::init();
+        for _ in 0..size_rows {
+            m.push_row(vec![N::zero(); size_columns]);
+        }
+        m
+    }
+
+    /// Creates a Matrix of 1s
+    ///
+    /// # Arguments
+    ///
+    /// `size_rows`: row's size
+    /// `size_columns`: column's size
+    pub fn ones(size_rows: usize, size_columns: usize)
+        -> Matrix<N> where N: Num + Default {
+
+        let mut m = Matrix::<N>::init();
+        for _ in 0..size_rows {
+            m.push_row(vec![N::one(); size_columns]);
+        }
+        m
+    }
+
     /// Creates a Matrix variable with the identity matrix values
     ///
     /// # Arguments
@@ -211,7 +243,14 @@ impl<N: Copy> Matrix<N> { // implementation of Matrix<N>
         self.values[i_row][i_col]
     }
 
-    pub fn set_element(&mut self, i_row: usize, i_col:usize, val: &N) {
+    /// Modifies an element of the matrix
+    ///
+    /// # Arguments
+    ///
+    /// * `i_row`: row's index
+    /// * `i_col`: column's index
+    /// * `val`: new element value
+    pub fn set_element(&mut self, i_row: usize, i_col: usize, val: &N) {
         self.values[i_row][i_col] = *val;
     }
 
@@ -233,7 +272,6 @@ impl<N: Copy> Matrix<N> { // implementation of Matrix<N>
         }
         None
     }
-
 
     /// Returns the index of a row if it's present on the matrix
     ///
@@ -380,6 +418,12 @@ impl<N: Copy> Matrix<N> { // implementation of Matrix<N>
         for item in self.values.iter_mut() {
             item.swap(index_a, index_b);
         }
+    }
+
+    /// Clears a Matrix
+    pub fn clear(&mut self) {
+        self.values.clear();
+        self.update_sizes();
     }
 
     /// Returns a matrix showing at each coordinate if a member was

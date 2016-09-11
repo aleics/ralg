@@ -39,10 +39,7 @@ fn main() {
         // get the fitness: number of '1'
         let mut fitness = Vector::<u32>::init();
         for gene in pop.row_iter() {
-            let mut sum: u32 = 0;
-            for el in gene.iter() {
-                sum = sum + el;
-            }
+            let sum = gene.iter().fold(0u32, |sum, &el| sum + el);
             fitness.push(sum);
         }
 
@@ -56,6 +53,14 @@ fn main() {
         // calculate the median fitness of the current generation
         let median = fitness.median();
         median_fitness_arr.push(median);
+
+        if (max as usize) == n_genes {
+            println!("value found in {} generations", gen);
+            println!("best fitness = {}", max);
+            println!("median fitness = {}", median);
+            println!("final pop:\n{}", pop);
+            break;
+        }
 
         // Tournament selection
         let matchup_a = Matrix::<u32>::random(pop_size, 2, &[0, (pop_size - 1) as u32]);
@@ -74,14 +79,6 @@ fn main() {
 
         // Elitism
         pop.set_row(0, &best_indiv);
-
-        if (max as usize) == n_genes {
-            println!("value found in {} generations", gen);
-            println!("best fitness = {}", max);
-            println!("median fitness = {}", median);
-            println!("final pop:\n{}", pop);
-            break;
-        }
     }
 }
 
