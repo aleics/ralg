@@ -3,6 +3,9 @@ extern crate rsmath as r;
 #[cfg(test)]
 mod tests {
     use r::algebra::matrix::*;
+    use r::algebra::vector::*;
+
+    // --------------- Matrix TEST ----------------------------------------
 
     #[test]
     fn matrix_init_with_values_test() {
@@ -52,7 +55,7 @@ mod tests {
     fn matrix_set_row_test() {
         let v: Vec<i32> = vec![-1, 2];
         let mut m = Matrix::<i32>::init_with_values(&vec![vec![1, 3], vec![2, 5], vec![3, 6]]);
-        
+
         m.set_row(0, &v);
 
         assert_eq!(m.row(0).unwrap().clone(), v);
@@ -490,5 +493,16 @@ mod tests {
         assert_eq!(i.next().unwrap(), m.get_element(0, 1));
         assert_eq!(i.next().unwrap(), m.get_element(1, 0));
         assert_eq!(i.next().unwrap(), m.get_element(1, 1));
+    }
+
+    // --------------- Vector TEST ----------------------------------------
+    #[test]
+    fn vector_init_with_values_test() {
+        let v = Vector::<f64>::init_with_values(&vec![2.5f64, -2.1f64, 5.3f64]);
+
+        assert_eq!(v.size(), 3);
+        assert_eq!(v.el(0), 2.5f64);
+        assert_eq!(v.el(1), -2.1f64);
+        assert_eq!(v.el(2), 5.3f64);
     }
 }

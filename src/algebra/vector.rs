@@ -46,6 +46,10 @@ impl<N: Copy> Vector<N> {
         v
     }
 
+    pub fn size(&self) -> usize {
+        self.size
+    }
+
     pub fn push(&mut self, val: N) {
         self.values.push(val);
     }
