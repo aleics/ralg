@@ -71,7 +71,7 @@ impl<N: Copy> Matrix<N> { // implementation of Matrix<N>
     /// * `size_rows`: number of rows
     /// * `size_columns`: number of columns
     /// * `range`: range of the values
-    pub fn create_random(size_rows: usize, size_columns: usize, range: &[N; 2])
+    pub fn random(size_rows: usize, size_columns: usize, range: &[N; 2])
         -> Matrix<N> where N: Num + PartialOrd + SampleRange {
 
         if range.len() != 2 {
@@ -82,7 +82,7 @@ impl<N: Copy> Matrix<N> { // implementation of Matrix<N>
         for _ in 0..size_rows {
             let mut col: Vec<N> = Vec::new();
             for _ in 0..size_columns {
-                col.push(rand::thread_rng().gen_range(range[0], range[1]));
+                col.push(rand::thread_rng().gen_range(range[0], range[1] + N::one()));
             }
             m.values.push(col);
         }
@@ -148,6 +148,23 @@ impl<N: Copy> Matrix<N> { // implementation of Matrix<N>
         None
     }
 
+    /// Modifies a row with given index and value
+    ///
+    /// # Arguments
+    ///
+    /// * `index`: index of the row that must be modified
+    /// * `new_row`: new row value
+    pub fn set_row(&mut self, index: usize, new_row: &Vec<N>) {
+        if index >= self.nrows() {
+            panic!("index out of range")
+        }
+        if new_row.len() != self.ncols() {
+            panic!("input vector dimension mismatch");
+        }
+
+        self.values[index].clone_from(new_row);
+    }
+
     /// Returns a defined column by an index
     ///
     /// # Arguments
@@ -165,6 +182,25 @@ impl<N: Copy> Matrix<N> { // implementation of Matrix<N>
         Some(ret)
     }
 
+    /// Modifies a column with given index and value
+    ///
+    /// # Arguments
+    ///
+    /// * `index`: index of the column that must be modified
+    /// * `new_col`: new column value
+    pub fn set_col(&mut self, index: usize, new_col: &Vec<N>) {
+        if index >= self.ncols() {
+            panic!("index out of range");
+        }
+        if new_col.len() != self.nrows() {
+            panic!("input vector dimension mismatch");
+        }
+
+        for i in 0..self.nrows() {
+            self.values[i][index] = new_col[i];
+        }
+    }
+
     /// Returns an element by coordinates
     ///
     /// # Arguments
@@ -173,6 +209,10 @@ impl<N: Copy> Matrix<N> { // implementation of Matrix<N>
     /// * `i_col`: column's index
     pub fn get_element(&self, i_row: usize, i_col: usize) -> N {
         self.values[i_row][i_col]
+    }
+
+    pub fn set_element(&mut self, i_row: usize, i_col:usize, val: &N) {
+        self.values[i_row][i_col] = *val;
     }
 
     /// Returns the index of an element if it's present on the matrix

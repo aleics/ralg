@@ -17,9 +17,9 @@ mod tests {
         assert_eq!(m.ncols(), values[0].len());
     }
     #[test]
-    fn matrix_create_random_test() {
+    fn matrix_random_test() {
         let range: [f64; 2] = [0.0, 10.0];
-        let m = Matrix::<f64>::create_random(2, 3, &range);
+        let m = Matrix::<f64>::random(2, 3, &range);
 
         assert_eq!(m.nrows(), 2);
         assert_eq!(m.ncols(), 3);
@@ -47,6 +47,15 @@ mod tests {
     fn matrix_cols_test() {
         let m = Matrix::<u32>::init_with_capacity(5, 10);
         assert_eq!(m.ncols(), 10);
+    }
+    #[test]
+    fn matrix_set_row_test() {
+        let v: Vec<i32> = vec![-1, 2];
+        let mut m = Matrix::<i32>::init_with_values(&vec![vec![1, 3], vec![2, 5], vec![3, 6]]);
+        
+        m.set_row(0, &v);
+
+        assert_eq!(m.row(0).unwrap().clone(), v);
     }
     #[test]
     fn matrix_get_push_row_test() {
@@ -117,6 +126,15 @@ mod tests {
         }
         assert_eq!(get_val.len(), resp.len());
         assert_eq!(get_val[0], resp[0]);
+    }
+    #[test]
+    fn matrix_set_col_test() {
+        let v: Vec<i32> = vec![-1, 2, 4];
+        let mut m = Matrix::<i32>::init_with_values(&vec![vec![1, 3], vec![2, 5], vec![3, 6]]);
+
+        m.set_col(0, &v);
+
+        assert_eq!(m.col(0).unwrap().clone(), v);
     }
     #[test]
     fn matrix_push_col_test() {
