@@ -505,4 +505,131 @@ mod tests {
         assert_eq!(v.el(1), -2.1f64);
         assert_eq!(v.el(2), 5.3f64);
     }
+    #[test]
+    fn vector_zeros_test() {
+        let v = Vector::<i32>::zeros(2);
+
+        assert_eq!(v.size(), 2);
+        assert_eq!(v.el(0), 0);
+        assert_eq!(v.el(1), 0);
+    }
+    #[test]
+    fn vector_ones_test() {
+        let v = Vector::<u32>::ones(2);
+
+        assert_eq!(v.size(), 2);
+        assert_eq!(v.el(0), 1);
+        assert_eq!(v.el(1), 1);
+    }
+    #[test]
+    fn vector_random_test() {
+        let v = Vector::<i32>::random(5, &[-1i32, 2i32]);
+
+        assert_eq!(v.size(), 5);
+        assert_eq!(v.el(0) >= -1i32 && v.el(0) <= 2i32, true);
+        assert_eq!(v.el(1) >= -1i32 && v.el(1) <= 2i32, true);
+        assert_eq!(v.el(2) >= -1i32 && v.el(2) <= 2i32, true);
+        assert_eq!(v.el(3) >= -1i32 && v.el(3) <= 2i32, true);
+        assert_eq!(v.el(4) >= -1i32 && v.el(4) <= 2i32, true);
+    }
+    #[test]
+    fn vector_push_test() {
+        let mut v = Vector::<f32>::init();
+        v.push(1f32);
+
+        assert_eq!(v.size(), 1);
+        assert_eq!(v.el(0), 1f32);
+    }
+    #[test]
+    fn vector_remove_test() {
+        let mut v = Vector::<f32>::init_with_values(&vec![2.0, 3.1, 2.1]);
+        v.remove(1);
+
+        assert_eq!(v.size(), 2);
+        assert_eq!(v.el(0), 2.0);
+        assert_eq!(v.el(1), 2.1);
+    }
+    #[test]
+    fn vector_pop_test() {
+        let mut v = Vector::<f64>::init_with_values(&vec![2.0, 3.1, 2.1]);
+        v.pop();
+
+        assert_eq!(v.size(), 2);
+        assert_eq!(v.el(0), 2.0);
+        assert_eq!(v.el(1), 3.1);
+    }
+    #[test]
+    fn vector_swap_test() {
+        let mut v = Vector::<i64>::init_with_values(&vec![2, -1, 1]);
+        v.swap(0, 1);
+
+        assert_eq!(v.size(), 3);
+        assert_eq!(v.el(0), -1);
+        assert_eq!(v.el(1), 2);
+        assert_eq!(v.el(2), 1);
+    }
+    #[test]
+    fn vector_append_test() {
+        let mut v1 = Vector::<i64>::init_with_values(&vec![2, -1, 1]);
+        let v2 = Vector::<i64>::init_with_values(&vec![5, -7, 10]);
+
+        v1.append(&v2);
+
+        assert_eq!(v1.size(), 6);
+        assert_eq!(v2.size(), 3);
+    }
+    #[test]
+    fn vector_clear_test() {
+        let mut v = Vector::<f32>::init_with_values(&vec![2.0, 3.1, 2.1]);
+        v.clear();
+
+        assert_eq!(v.size(), 0);
+    }
+    #[test]
+    fn vector_sort_min_test() {
+        let mut v = Vector::<i64>::init_with_values(&vec![2, -1, 1]);
+        v.sort_min();
+
+        assert_eq!(v.el(0), -1);
+        assert_eq!(v.el(1), 1);
+        assert_eq!(v.el(2), 2);
+    }
+    #[test]
+    fn vector_sort_max_test() {
+        let mut v = Vector::<i64>::init_with_values(&vec![2, -1, 1]);
+        v.sort_max();
+
+        assert_eq!(v.el(0), 2);
+        assert_eq!(v.el(1), 1);
+    }
+    #[test]
+    fn vector_set_el_test() {
+        let mut v = Vector::<i64>::init_with_values(&vec![2, -1, 1]);
+        v.set_el(2, 5i64);
+
+        assert_eq!(v.el(2), 5i64);
+    }
+    #[test]
+    fn vector_max_test() {
+        let v = Vector::<i64>::init_with_values(&vec![2, -1, 1]);
+        let (max, idx_max) = v.max();
+
+        assert_eq!(max, 2i64);
+        assert_eq!(idx_max, 0usize);
+    }
+    #[test]
+    fn vector_min_test() {
+        let v = Vector::<i64>::init_with_values(&vec![2, -1, 1]);
+        let (min, idx_min) = v.min();
+
+        assert_eq!(min, -1i64);
+        assert_eq!(idx_min, 1usize);
+    }
+    #[test]
+    fn vector_median_test() {
+        let v = Vector::<i64>::init_with_values(&vec![2, 4, 0, 6]);
+        let median = v.median();
+
+        assert_eq!(median, 3f64);
+    }
 }
