@@ -1,7 +1,6 @@
 use num::Num;
 use std::fmt;
 use std::fmt::Display;
-use linspace::point::Point3D;
 use std::ops::{Add, Sub, Mul, Neg};
 
 /// Vector of 3 dimensions with a defined coordinates and origen
@@ -13,7 +12,6 @@ use std::ops::{Add, Sub, Mul, Neg};
 /// * By default, the origen is [0, 0, 0] and currently this cannot be modified.
 #[derive(Clone, Copy)]
 pub struct Vector3D<N: Copy> {
-    origin: Point3D<N>,
     x: N,
     y: N,
     z: N,
@@ -82,8 +80,7 @@ impl<N: Copy + Num> Vector3D<N> {
 
     /// Initializes a Vector3D with default coordinates' values
     pub fn init() -> Vector3D<N> where N: Default {
-        Vector3D { origin: Point3D::<N>::init(),
-                   x: N::default(),
+        Vector3D { x: N::default(),
                    y: N::default(),
                    z: N::default()}
     }
@@ -96,26 +93,10 @@ impl<N: Copy + Num> Vector3D<N> {
     /// * `y`: Y value
     /// * `z`: Z value
     pub fn init_with_values(x: N, y: N, z: N) -> Vector3D<N> where N: Default {
-        Vector3D { origin: Point3D::<N>::init(),
-                   x: x,
+        Vector3D { x: x,
                    y: y,
                    z: z}
     }
-
-    /// Returns the origin point
-    pub fn get_origin(&self) -> Point3D<N> {
-        self.origin
-    }
-
-    /// Modifies the origin of a vector
-    ///
-    /// # Arguments
-    ///
-    /// * `new_origin`: new origin values
-    pub fn set_origin(&mut self, new_origin: &Point3D<N>) {
-        self.origin = *new_origin;
-    }
-
     /// Scale a Vector with a given number
     ///
     /// # Arguments
@@ -155,7 +136,7 @@ impl<N: Copy + Num> Vector3D<N> {
         let new_y: N = -((first.x * second.z) - (first.z * second.x));
         let new_z: N = (first.x * second.y) - (first.y * second.x);
 
-        Vector3D {origin: first.origin, x: new_x, y: new_y, z: new_z}
+        Vector3D { x: new_x, y: new_y, z: new_z }
     }
 }
 
@@ -183,7 +164,7 @@ impl<N: Copy + Num + Default> Add for Vector3D<N> {
     type Output = Vector3D<N>;
 
     fn add(self, other: Vector3D<N>) -> Vector3D<N> {
-        Vector3D {origin: self.origin, x: self.x + other.x, y: self.y + other.y, z: self.z + other.z}
+        Vector3D {x: self.x + other.x, y: self.y + other.y, z: self.z + other.z}
     }
 }
 
@@ -196,7 +177,7 @@ impl<N: Copy + Num + Default> Sub for Vector3D<N> {
     type Output = Vector3D<N>;
 
     fn sub(self, other: Vector3D<N>) -> Vector3D<N> {
-        Vector3D {origin: self.origin, x: self.x - other.x, y: self.y - other.y, z: self.z - other.z}
+        Vector3D {x: self.x - other.x, y: self.y - other.y, z: self.z - other.z}
     }
 }
 
@@ -209,7 +190,7 @@ impl<N: Copy + Num + Default> Mul for Vector3D<N> {
     type Output = Vector3D<N>;
 
     fn mul(self, other: Vector3D<N>) -> Vector3D<N> {
-        Vector3D {origin: self.origin, x: self.x * other.x, y: self.y * other.y, z: self.z * other.z}
+        Vector3D {x: self.x * other.x, y: self.y * other.y, z: self.z * other.z}
     }
 }
 
@@ -217,9 +198,6 @@ impl<N: Copy + Num + Default> Mul for Vector3D<N> {
 /// Display implementation for Vector3D
 impl<N: Copy + Num> fmt::Display for Vector3D<N> where N: Display {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        try!(writeln!(f, "( {x}, {y}, {z} )", x = self.x, y = self.y, z = self.z));
-        write!(f, "origen [ {x}, {y}, {z} ]", x = self.origin.x(),
-                                              y = self.origin.y(),
-                                              z = self.origin.z())
+        writeln!(f, "( {x}, {y}, {z} )", x = self.x, y = self.y, z = self.z)
     }
 }

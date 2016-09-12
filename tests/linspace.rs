@@ -79,7 +79,6 @@ mod tests {
         assert_eq!(v.x(), 0.0);
         assert_eq!(v.y(), 0.0);
         assert_eq!(v.z(), 0.0);
-        assert_eq!(v.get_origin() == Point3D::<f64>::init(), true);
     }
     #[test]
     fn vector_init_with_values_test() {
@@ -88,16 +87,6 @@ mod tests {
         assert_eq!(v.x(), 2.0);
         assert_eq!(v.y(), 3.1);
         assert_eq!(v.z(), 5.2);
-        assert_eq!(v.get_origin() == Point3D::<f64>::init(), true);
-    }
-    #[test]
-    fn vector_set_origin_test() {
-        let mut v = Vector3D::<i32>::init_with_values(2, -1, 5);
-        let new_origin: Point3D<i32> = Point3D::<i32>::init_with_values(1, 1, 1);
-
-        v.set_origin(&new_origin);
-
-        assert_eq!(v.get_origin() == new_origin, true);
     }
     #[test]
     fn vector_scale_test() {
