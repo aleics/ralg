@@ -1,4 +1,4 @@
-use num::Num;
+use num::{Float, Num};
 use std::fmt;
 use std::fmt::Display;
 use std::ops::{Add, Sub, Mul, Neg};
@@ -138,6 +138,25 @@ impl<N: Copy + Num> Vector3D<N> {
 
         Vector3D { x: new_x, y: new_y, z: new_z }
     }
+
+    /// Dot operation for two vectors
+    ///
+    /// # Arguments
+    ///
+    /// * `other`: second vector for the dot
+    pub fn dot(&self, other: &Vector3D<N>) -> N {
+        ((self.x*other.x) + (self.y*other.y) + (self.z*other.z))
+    }
+
+    /// Normalize the vector
+    ///
+    /// # Remarks
+    ///
+    /// * Since this operation requires an `sqrt`, it's just available for float vectors
+    pub fn norm(&mut self) where N: Float {
+        let value = (self.x*self.x) + (self.y*self.y) + (self.z*self.z);
+        self.scale(value.sqrt().recip())
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -198,6 +217,6 @@ impl<N: Copy + Num + Default> Mul for Vector3D<N> {
 /// Display implementation for Vector3D
 impl<N: Copy + Num> fmt::Display for Vector3D<N> where N: Display {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        writeln!(f, "( {x}, {y}, {z} )", x = self.x, y = self.y, z = self.z)
+        write!(f, "( {x}, {y}, {z} )", x = self.x, y = self.y, z = self.z)
     }
 }

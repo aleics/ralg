@@ -178,4 +178,21 @@ mod tests {
 
         assert_eq!(res == c, true);
     }
+    #[test]
+    fn vector_dot_test() {
+        let a = Vector3D::<i64>::init_with_values(1, 0, 2);
+        let b = Vector3D::<i64>::init_with_values(0, 2, 1);
+
+        assert_eq!(a.dot(&b), 1*0 + 0*2 + 2*1);
+    }
+    #[test]
+    fn vector_norm_test() {
+        let mut a = Vector3D::<f64>::init_with_values(2f64, 1f64, 3f64);
+        a.norm();
+
+        // values compared using wolframalpha.com
+        assert_eq!(a.x(), 0.5345224838248488f64);
+        assert_eq!(a.y(), 0.2672612419124244f64);
+        assert_eq!(a.z(), 0.8017837257372732f64);
+    }
 }

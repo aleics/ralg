@@ -46,3 +46,5 @@
     * *Max, min and median of vector*
   * *algebra::Matrix*
     * *Create zeros and ones matrices*
+  * *linspace::Vector3D*
+    * *dot and norm operations*
