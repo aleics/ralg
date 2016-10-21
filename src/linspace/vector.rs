@@ -82,7 +82,7 @@ impl<N: Copy + Num> Vector3D<N> {
     pub fn init() -> Vector3D<N> where N: Default {
         Vector3D { x: N::default(),
                    y: N::default(),
-                   z: N::default()}
+                   z: N::default() }
     }
 
     /// Initializes a Vector3D with given coordinates
@@ -92,10 +92,10 @@ impl<N: Copy + Num> Vector3D<N> {
     /// * `x`: X value
     /// * `y`: Y value
     /// * `z`: Z value
-    pub fn init_with_values(x: N, y: N, z: N) -> Vector3D<N> where N: Default {
+    pub fn init_with_values(x: N, y: N, z: N) -> Vector3D<N> {
         Vector3D { x: x,
                    y: y,
-                   z: z}
+                   z: z }
     }
     /// Scale a Vector with a given number
     ///
@@ -179,7 +179,7 @@ impl<N: Copy + PartialEq> PartialEq for Vector3D<N> {
 /// # Remarks
 ///
 /// * The `origin` of the output vector will be extracted from the `self` input vector
-impl<N: Copy + Num + Default> Add for Vector3D<N> {
+impl<N: Copy + Num> Add for Vector3D<N> {
     type Output = Vector3D<N>;
 
     fn add(self, other: Vector3D<N>) -> Vector3D<N> {
@@ -192,7 +192,7 @@ impl<N: Copy + Num + Default> Add for Vector3D<N> {
 /// # Remarks
 ///
 /// * The `origin` of the output vector will be extracted from the `self` input vector
-impl<N: Copy + Num + Default> Sub for Vector3D<N> {
+impl<N: Copy + Num> Sub for Vector3D<N> {
     type Output = Vector3D<N>;
 
     fn sub(self, other: Vector3D<N>) -> Vector3D<N> {
@@ -205,7 +205,7 @@ impl<N: Copy + Num + Default> Sub for Vector3D<N> {
 /// # Remarks
 ///
 /// * The `origin` of the output vector will be extracted from the `self` input vector
-impl<N: Copy + Num + Default> Mul for Vector3D<N> {
+impl<N: Copy + Num> Mul for Vector3D<N> {
     type Output = Vector3D<N>;
 
     fn mul(self, other: Vector3D<N>) -> Vector3D<N> {

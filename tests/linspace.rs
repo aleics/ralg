@@ -4,6 +4,7 @@ extern crate rsmath as r;
 mod tests {
     use r::linspace::vector::*;
     use r::linspace::point::*;
+    use r::linspace::quat::*;
 
     // --------------- Point3D TEST ----------------------------------------
 
@@ -194,5 +195,106 @@ mod tests {
         assert_eq!(a.x(), 0.5345224838248488f64);
         assert_eq!(a.y(), 0.2672612419124244f64);
         assert_eq!(a.z(), 0.8017837257372732f64);
+    }
+
+     // --------------- QUAT TEST ----------------------------------------
+    #[test]
+    fn quat_coord_test() {
+        let q: Quat<f64> = Quat::<f64>::init_with_values(2f64, 1.5f64, -0.2f64, 3f64);
+
+        assert_eq!(q.x(), 2f64);
+        assert_eq!(q.y(), 1.5f64);
+        assert_eq!(q.z(), -0.2f64);
+        assert_eq!(q.w(), 3f64);
+    }
+    #[test]
+    fn quat_set_x_test() {
+        let mut q: Quat<u64> = Quat::<u64>::init_with_values(2u64, 15u64, 2u64, 3u64);
+        let new_x: u64 = 3u64;
+        q.set_x(new_x);
+        assert_eq!(q.x(), new_x);
+    }
+    #[test]
+    fn quat_set_y_test() {
+        let mut q: Quat<u64> = Quat::<u64>::init_with_values(2u64, 15u64, 2u64, 3u64);
+        let new_y: u64 = 3u64;
+        q.set_y(new_y);
+
+        assert_eq!(q.y(), new_y);
+    }
+    #[test]
+    fn quat_set_z_test() {
+        let mut q: Quat<u64> = Quat::<u64>::init_with_values(2u64, 15u64, 2u64, 3u64);
+        let new_z: u64 = 3u64;
+        q.set_z(new_z);
+
+        assert_eq!(q.z(), new_z);
+    }
+    #[test]
+    fn quat_set_w_test() {
+        let mut q: Quat<u64> = Quat::<u64>::init_with_values(2u64, 15u64, 2u64, 2u64);
+        let new_w: u64 = 3u64;
+        q.set_w(new_w);
+
+        assert_eq!(q.w(), new_w);
+    }
+    #[test]
+    fn quat_set_test() {
+        let mut q: Quat<i64> = Quat::<i64>::init_with_values(2i64, -15i64, 0i64, -3i64);
+        
+        let new_x: i64 = 0i64;
+        let new_y: i64 = -2i64;
+        let new_z: i64 = -1i64;
+        let new_w: i64 = 3i64;
+        q.set(new_x, new_y, new_z, new_w);
+
+        assert_eq!(q.x(), new_x);
+        assert_eq!(q.y(), new_y);
+        assert_eq!(q.z(), new_z);
+        assert_eq!(q.w(), new_w);
+    }
+    #[test]
+    fn quat_scale_test() {
+        let mut q: Quat<f64> = Quat::<f64>::init_with_values(2f64, 1.5f64, -0.2f64, 3f64);
+        q.scale(2f64);
+
+        assert_eq!(q.x(), 4f64);
+        assert_eq!(q.y(), 3f64);
+        assert_eq!(q.z(), -0.4f64);
+        assert_eq!(q.w(), 6f64);
+    }
+    #[test]
+    fn quat_add_test() {
+        let q: Quat<i32> = Quat::<i32>::init_with_values(2i32, 1i32, -2i32, 2i32);
+        let p: Quat<i32> = Quat::<i32>::init_with_values(3i32, 0i32, 2i32, -1i32);
+
+        let add: Quat<i32> = p + q;
+
+        assert_eq!(add.x(), 5i32);
+        assert_eq!(add.y(), 1i32);
+        assert_eq!(add.z(), 0i32);
+        assert_eq!(add.w(), 1i32);
+    }
+    #[test]
+    fn quat_sub_test() {
+        let q: Quat<i32> = Quat::<i32>::init_with_values(2i32, 1i32, -2i32, 2i32);
+        let p: Quat<i32> = Quat::<i32>::init_with_values(3i32, 0i32, 2i32, -1i32);
+
+        let sub: Quat<i32> = p - q;
+
+        assert_eq!(sub.x(), 1i32);
+        assert_eq!(sub.y(), -1i32);
+        assert_eq!(sub.z(), 4i32);
+        assert_eq!(sub.w(), -3i32);
+    }
+    #[test]
+    fn quat_neg_test() {
+        let q: Quat<f64> = Quat::<f64>::init_with_values(2.3f64, 1f64, -0.2f64, 2f64);
+        let neg = -q;
+
+        assert_eq!(neg.x(), -2.3f64);
+        assert_eq!(neg.y(), -1f64);
+        assert_eq!(neg.z(), 0.2f64);
+        assert_eq!(neg.w(), -2f64);
     }
 }
