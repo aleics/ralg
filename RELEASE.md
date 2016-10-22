@@ -48,3 +48,12 @@
     * *Create zeros and ones matrices*
   * *linspace::Vector3D*
     * *dot and norm operations*
+
+* **0.1.4**
+  * *linspace::Quat*
+    * *Initialization*
+    * *Create and modify*
+    * *Add, Sub, Neg, Mul, Display*
+    * *Conjugate*
+    * *Magnitude and normalization*
+    * *Rotation*
