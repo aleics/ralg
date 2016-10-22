@@ -1,6 +1,5 @@
 use num::{Float, Num};
 use std::fmt;
-use std::fmt::Display;
 use std::ops::{Add, Sub, Mul, Neg};
 
 /// Vector of 3 dimensions with a defined coordinates and origen
@@ -215,7 +214,7 @@ impl<N: Copy + Num> Mul for Vector3D<N> {
 
 
 /// Display implementation for Vector3D
-impl<N: Copy + Num> fmt::Display for Vector3D<N> where N: Display {
+impl<N: Copy + Num> fmt::Display for Vector3D<N> where N: fmt::Display {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "( {x}, {y}, {z} )", x = self.x, y = self.y, z = self.z)
     }

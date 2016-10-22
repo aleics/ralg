@@ -297,4 +297,56 @@ mod tests {
         assert_eq!(neg.z(), 0.2f64);
         assert_eq!(neg.w(), -2f64);
     }
+    #[test]
+    fn quat_mul_test() {
+        let q: Quat<i32> = Quat::<i32>::init_with_values(2i32, 1i32, -2i32, 2i32);
+        let p: Quat<i32> = Quat::<i32>::init_with_values(3i32, 0i32, 2i32, -1i32);
+
+        let mul: Quat<i32> = q * p;
+        
+        // results from wolframalpha
+        assert_eq!(mul.x(), 6i32); 
+        assert_eq!(mul.y(), -11i32);
+        assert_eq!(mul.z(), 3i32);
+        assert_eq!(mul.w(), -4i32);
+    }
+    #[test]
+    fn quat_conjugate_test() {
+        let q: Quat<f64> = Quat::<f64>::init_with_values(2.3f64, 1f64, -0.2f64, 2f64);
+        let c: Quat<f64> = q.conjugate();
+
+        assert_eq!(c.x(), -2.3f64);
+        assert_eq!(c.y(), -1f64);
+        assert_eq!(c.z(), 0.2f64);
+        assert_eq!(c.w(), 2f64);
+    }
+    #[test]
+    fn quat_magnitude_test() {
+        let q: Quat<i32> = Quat::<i32>::init_with_values(2i32, 1i32, -2i32, 2i32);
+        let m: f64 = q.magnitude();
+
+        // results from wolframalpha
+        assert_eq!(m, 3.605551275463989f64);
+    }
+    #[test]
+    fn quat_norm_test() {
+        let q: Quat<i32> = Quat::<i32>::init_with_values(2i32, 1i32, -2i32, 2i32);
+        let norm = q.norm();
+
+        let m = q.magnitude();
+        assert_eq!(norm.x(), (q.x() as f64)/m);
+        assert_eq!(norm.y(), (q.y() as f64)/m);
+        assert_eq!(norm.z(), (q.z() as f64)/m);
+        assert_eq!(norm.w(), (q.w() as f64)/m);
+    }
+    #[test]
+    fn quat_rotation_test() {
+        let pi = 3.14159265358979323846264338327950288f64;
+        let r = Quat::rotation(2i32, 1i32, -2i32, 2f64*pi);
+
+        assert_eq!(r.x().round(), 0f64);
+        assert_eq!(r.y().round(), 0f64);
+        assert_eq!(r.z().round(), 0f64);
+        assert_eq!(r.w().round(), -1f64);
+    }
 }
