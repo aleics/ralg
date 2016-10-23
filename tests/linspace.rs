@@ -9,8 +9,8 @@ mod tests {
     // --------------- Point3D TEST ----------------------------------------
 
     #[test]
-    fn point_init_test() {
-        let p3 = Point3D::<f64>::init();
+    fn point_new_test() {
+        let p3 = Point3D::<f64>::new();
 
         assert_eq!(p3.x(), 0.0);
         assert_eq!(p3.y(), 0.0);
@@ -18,8 +18,8 @@ mod tests {
     }
 
     #[test]
-    fn point_init_with_values_test() {
-        let p3 = Point3D::<f64>::init_with_values(1.0, 2.5, -3.0);
+    fn point_init_test() {
+        let p3 = Point3D::<f64>::init(1.0, 2.5, -3.0);
 
         assert_eq!(p3.x(), 1.0);
         assert_eq!(p3.y(), 2.5);
@@ -27,7 +27,7 @@ mod tests {
     }
     #[test]
     fn point_set_x_test(){
-        let mut a = Point3D::<u64>::init_with_values(256, 450, 178);
+        let mut a = Point3D::<u64>::init(256, 450, 178);
         a.set_x(200);
 
         assert_eq!(a.x(), 200);
@@ -36,7 +36,7 @@ mod tests {
     }
     #[test]
     fn point_set_y_test(){
-        let mut a = Point3D::<i64>::init_with_values(-25, 40, -17);
+        let mut a = Point3D::<i64>::init(-25, 40, -17);
         a.set_y(20);
 
         assert_eq!(a.x(), a.x());
@@ -45,7 +45,7 @@ mod tests {
     }
     #[test]
     fn point_set_z_test(){
-        let mut a = Point3D::<f32>::init_with_values(25.6, 4.5, 17.8);
+        let mut a = Point3D::<f32>::init(25.6, 4.5, 17.8);
         a.set_z(2.5);
 
         assert_eq!(a.x(), a.x());
@@ -54,7 +54,7 @@ mod tests {
     }
     #[test]
     fn point_set_test(){
-        let mut a = Point3D::<f32>::init_with_values(25.6, 4.5, 17.8);
+        let mut a = Point3D::<f32>::init(25.6, 4.5, 17.8);
         a.set(2.5, 0.1, 1.2);
 
         assert_eq!(a.x(), 2.5);
@@ -63,8 +63,8 @@ mod tests {
     }
     #[test]
     fn point_eucl_distance_test() {
-        let p1 = Point3D::<i32>::init_with_values(-1, 2, 3);
-        let p2 = Point3D::<i32>::init_with_values(0, 5, 8);
+        let p1 = Point3D::<i32>::init(-1, 2, 3);
+        let p2 = Point3D::<i32>::init(0, 5, 8);
 
         let d = Point3D::<i32>::eucl_distance(&p1, &p2);
 
@@ -74,16 +74,16 @@ mod tests {
     // --------------- Vector3D TEST ----------------------------------------
 
     #[test]
-    fn vector_init_test() {
-        let v = Vector3D::<f64>::init();
+    fn vector_new_test() {
+        let v = Vector3D::<f64>::new();
 
         assert_eq!(v.x(), 0.0);
         assert_eq!(v.y(), 0.0);
         assert_eq!(v.z(), 0.0);
     }
     #[test]
-    fn vector_init_with_values_test() {
-        let v = Vector3D::<f64>::init_with_values(2.0, 3.1, 5.2);
+    fn vector_init_test() {
+        let v = Vector3D::<f64>::init(2.0, 3.1, 5.2);
 
         assert_eq!(v.x(), 2.0);
         assert_eq!(v.y(), 3.1);
@@ -91,7 +91,7 @@ mod tests {
     }
     #[test]
     fn vector_scale_test() {
-        let mut v3 = Vector3D::<i32>::init_with_values(-1, 2, 3);
+        let mut v3 = Vector3D::<i32>::init(-1, 2, 3);
         let copy = v3.clone();
         v3.scale(2);
 
@@ -101,8 +101,8 @@ mod tests {
     }
     #[test]
     fn vector_add_test() {
-        let a = Vector3D::<i32>::init_with_values(-2, 3, 5);
-        let b = Vector3D::<i32>::init_with_values(5, -2, -3);
+        let a = Vector3D::<i32>::init(-2, 3, 5);
+        let b = Vector3D::<i32>::init(5, -2, -3);
 
         let sum = a + b;
 
@@ -112,8 +112,8 @@ mod tests {
     }
     #[test]
     fn vector_sub_test() {
-        let a = Vector3D::<f32>::init_with_values(0.2, 10.1, -2.5);
-        let b = Vector3D::<f32>::init_with_values(5.7, -2.1, -3.0);
+        let a = Vector3D::<f32>::init(0.2, 10.1, -2.5);
+        let b = Vector3D::<f32>::init(5.7, -2.1, -3.0);
 
         let sub = a - b;
 
@@ -123,8 +123,8 @@ mod tests {
     }
     #[test]
     fn vector_mul_test() {
-        let a = Vector3D::<u32>::init_with_values(0, 10, 5);
-        let b = Vector3D::<u32>::init_with_values(7, 2, 0);
+        let a = Vector3D::<u32>::init(0, 10, 5);
+        let b = Vector3D::<u32>::init(7, 2, 0);
 
         let mul = a * b;
 
@@ -134,7 +134,7 @@ mod tests {
     }
     #[test]
     fn vector_set_x_test(){
-        let mut a = Vector3D::<u64>::init_with_values(256, 450, 178);
+        let mut a = Vector3D::<u64>::init(256, 450, 178);
         a.set_x(200);
 
         assert_eq!(a.x(), 200);
@@ -143,7 +143,7 @@ mod tests {
     }
     #[test]
     fn vector_set_y_test(){
-        let mut a = Vector3D::<i64>::init_with_values(-25, 40, -17);
+        let mut a = Vector3D::<i64>::init(-25, 40, -17);
         a.set_y(20);
 
         assert_eq!(a.x(), a.x());
@@ -152,7 +152,7 @@ mod tests {
     }
     #[test]
     fn vector_set_z_test(){
-        let mut a = Vector3D::<f32>::init_with_values(25.6, 4.5, 17.8);
+        let mut a = Vector3D::<f32>::init(25.6, 4.5, 17.8);
         a.set_z(2.5);
 
         assert_eq!(a.x(), a.x());
@@ -161,7 +161,7 @@ mod tests {
     }
     #[test]
     fn vector_set_test(){
-        let mut a = Vector3D::<f32>::init_with_values(25.6, 4.5, 17.8);
+        let mut a = Vector3D::<f32>::init(25.6, 4.5, 17.8);
         a.set(2.5, 0.1, 1.2);
 
         assert_eq!(a.x(), 2.5);
@@ -170,25 +170,25 @@ mod tests {
     }
     #[test]
     fn vector_cross_test() {
-        let a = Vector3D::<i32>::init_with_values(-1, 2, 3);
-        let b = Vector3D::<i32>::init_with_values(0, 2, 5);
+        let a = Vector3D::<i32>::init(-1, 2, 3);
+        let b = Vector3D::<i32>::init(0, 2, 5);
 
         let c = Vector3D::<i32>::cross(&a, &b);
 
-        let res = Vector3D::<i32>::init_with_values(4, 5, -2); // online cross vector calculator
+        let res = Vector3D::<i32>::init(4, 5, -2); // online cross vector calculator
 
         assert_eq!(res == c, true);
     }
     #[test]
     fn vector_dot_test() {
-        let a = Vector3D::<i64>::init_with_values(1, 0, 2);
-        let b = Vector3D::<i64>::init_with_values(0, 2, 1);
+        let a = Vector3D::<i64>::init(1, 0, 2);
+        let b = Vector3D::<i64>::init(0, 2, 1);
 
         assert_eq!(a.dot(&b), 1*0 + 0*2 + 2*1);
     }
     #[test]
     fn vector_norm_test() {
-        let mut a = Vector3D::<f64>::init_with_values(2f64, 1f64, 3f64);
+        let mut a = Vector3D::<f64>::init(2f64, 1f64, 3f64);
         a.norm();
 
         // values compared using wolframalpha.com
@@ -198,7 +198,7 @@ mod tests {
     }
     #[test]
     fn vector_dist_test() {
-        let a = Vector3D::<f64>::init_with_values(2f64, 2f64, 1f64);
+        let a = Vector3D::<f64>::init(2f64, 2f64, 1f64);
         let dist = a.dist();
 
         assert_eq!(dist, (2f64*2f64 + 2f64*2f64 + 1f64).sqrt());
@@ -207,7 +207,7 @@ mod tests {
      // --------------- QUAT TEST ----------------------------------------
     #[test]
     fn quat_coord_test() {
-        let q: Quat<f64> = Quat::<f64>::init_with_values(2f64, 1.5f64, -0.2f64, 3f64);
+        let q: Quat<f64> = Quat::<f64>::init(2f64, 1.5f64, -0.2f64, 3f64);
 
         assert_eq!(q.x(), 2f64);
         assert_eq!(q.y(), 1.5f64);
@@ -216,14 +216,14 @@ mod tests {
     }
     #[test]
     fn quat_set_x_test() {
-        let mut q: Quat<u64> = Quat::<u64>::init_with_values(2u64, 15u64, 2u64, 3u64);
+        let mut q: Quat<u64> = Quat::<u64>::init(2u64, 15u64, 2u64, 3u64);
         let new_x: u64 = 3u64;
         q.set_x(new_x);
         assert_eq!(q.x(), new_x);
     }
     #[test]
     fn quat_set_y_test() {
-        let mut q: Quat<u64> = Quat::<u64>::init_with_values(2u64, 15u64, 2u64, 3u64);
+        let mut q: Quat<u64> = Quat::<u64>::init(2u64, 15u64, 2u64, 3u64);
         let new_y: u64 = 3u64;
         q.set_y(new_y);
 
@@ -231,7 +231,7 @@ mod tests {
     }
     #[test]
     fn quat_set_z_test() {
-        let mut q: Quat<u64> = Quat::<u64>::init_with_values(2u64, 15u64, 2u64, 3u64);
+        let mut q: Quat<u64> = Quat::<u64>::init(2u64, 15u64, 2u64, 3u64);
         let new_z: u64 = 3u64;
         q.set_z(new_z);
 
@@ -239,7 +239,7 @@ mod tests {
     }
     #[test]
     fn quat_set_w_test() {
-        let mut q: Quat<u64> = Quat::<u64>::init_with_values(2u64, 15u64, 2u64, 2u64);
+        let mut q: Quat<u64> = Quat::<u64>::init(2u64, 15u64, 2u64, 2u64);
         let new_w: u64 = 3u64;
         q.set_w(new_w);
 
@@ -247,7 +247,7 @@ mod tests {
     }
     #[test]
     fn quat_set_test() {
-        let mut q: Quat<i64> = Quat::<i64>::init_with_values(2i64, -15i64, 0i64, -3i64);
+        let mut q: Quat<i64> = Quat::<i64>::init(2i64, -15i64, 0i64, -3i64);
         
         let new_x: i64 = 0i64;
         let new_y: i64 = -2i64;
@@ -262,7 +262,7 @@ mod tests {
     }
     #[test]
     fn quat_scale_test() {
-        let mut q: Quat<f64> = Quat::<f64>::init_with_values(2f64, 1.5f64, -0.2f64, 3f64);
+        let mut q: Quat<f64> = Quat::<f64>::init(2f64, 1.5f64, -0.2f64, 3f64);
         q.scale(2f64);
 
         assert_eq!(q.x(), 4f64);
@@ -272,8 +272,8 @@ mod tests {
     }
     #[test]
     fn quat_add_test() {
-        let q: Quat<i32> = Quat::<i32>::init_with_values(2i32, 1i32, -2i32, 2i32);
-        let p: Quat<i32> = Quat::<i32>::init_with_values(3i32, 0i32, 2i32, -1i32);
+        let q: Quat<i32> = Quat::<i32>::init(2i32, 1i32, -2i32, 2i32);
+        let p: Quat<i32> = Quat::<i32>::init(3i32, 0i32, 2i32, -1i32);
 
         let add: Quat<i32> = p + q;
 
@@ -284,8 +284,8 @@ mod tests {
     }
     #[test]
     fn quat_sub_test() {
-        let q: Quat<i32> = Quat::<i32>::init_with_values(2i32, 1i32, -2i32, 2i32);
-        let p: Quat<i32> = Quat::<i32>::init_with_values(3i32, 0i32, 2i32, -1i32);
+        let q: Quat<i32> = Quat::<i32>::init(2i32, 1i32, -2i32, 2i32);
+        let p: Quat<i32> = Quat::<i32>::init(3i32, 0i32, 2i32, -1i32);
 
         let sub: Quat<i32> = p - q;
 
@@ -296,7 +296,7 @@ mod tests {
     }
     #[test]
     fn quat_neg_test() {
-        let q: Quat<f64> = Quat::<f64>::init_with_values(2.3f64, 1f64, -0.2f64, 2f64);
+        let q: Quat<f64> = Quat::<f64>::init(2.3f64, 1f64, -0.2f64, 2f64);
         let neg = -q;
 
         assert_eq!(neg.x(), -2.3f64);
@@ -306,8 +306,8 @@ mod tests {
     }
     #[test]
     fn quat_mul_test() {
-        let q: Quat<i32> = Quat::<i32>::init_with_values(2i32, 1i32, -2i32, 2i32);
-        let p: Quat<i32> = Quat::<i32>::init_with_values(3i32, 0i32, 2i32, -1i32);
+        let q: Quat<i32> = Quat::<i32>::init(2i32, 1i32, -2i32, 2i32);
+        let p: Quat<i32> = Quat::<i32>::init(3i32, 0i32, 2i32, -1i32);
 
         let mul: Quat<i32> = q * p;
         
@@ -319,7 +319,7 @@ mod tests {
     }
     #[test]
     fn quat_conjugate_test() {
-        let q: Quat<f64> = Quat::<f64>::init_with_values(2.3f64, 1f64, -0.2f64, 2f64);
+        let q: Quat<f64> = Quat::<f64>::init(2.3f64, 1f64, -0.2f64, 2f64);
         let c: Quat<f64> = q.conjugate();
 
         assert_eq!(c.x(), -2.3f64);
@@ -329,7 +329,7 @@ mod tests {
     }
     #[test]
     fn quat_magnitude_test() {
-        let q: Quat<i32> = Quat::<i32>::init_with_values(2i32, 1i32, -2i32, 2i32);
+        let q: Quat<i32> = Quat::<i32>::init(2i32, 1i32, -2i32, 2i32);
         let m: f64 = q.magnitude();
 
         // results from wolframalpha
@@ -337,7 +337,7 @@ mod tests {
     }
     #[test]
     fn quat_norm_test() {
-        let q: Quat<i32> = Quat::<i32>::init_with_values(2i32, 1i32, -2i32, 2i32);
+        let q: Quat<i32> = Quat::<i32>::init(2i32, 1i32, -2i32, 2i32);
         let norm = q.norm();
 
         let m = q.magnitude();

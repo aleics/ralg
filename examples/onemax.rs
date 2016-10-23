@@ -37,7 +37,7 @@ fn main() {
     for gen in 0..max_gens {
 
         // get the fitness: number of '1'
-        let mut fitness = Vector::<u32>::init();
+        let mut fitness = Vector::<u32>::new();
         for gene in pop.row_iter() {
             let sum = gene.iter().fold(0u32, |sum, &el| sum + el);
             fitness.push(sum);
@@ -87,7 +87,7 @@ fn get_parent(matchup: &Matrix<u32>, fitness: &Vector<u32>) -> Vector<u32> {
         panic!("number of rows of matchup must be 2");
     }
 
-    let mut parent = Vector::<u32>::init();
+    let mut parent = Vector::<u32>::new();
     for row in matchup.row_iter() {
         let idx_first = row[0] as usize;
         let idx_second = row[1] as usize;
@@ -102,7 +102,7 @@ fn get_parent(matchup: &Matrix<u32>, fitness: &Vector<u32>) -> Vector<u32> {
 }
 
 fn x_over(pop: &Matrix<u32>, parent_a: &Vector<u32>, parent_b: &Vector<u32>) -> Matrix<u32> {
-    let mut new_pop = Matrix::<u32>::init();
+    let mut new_pop = Matrix::<u32>::new();
     let do_xover = Vector::<u32>::random(pop.nrows(), &[0, 1]);
     for i in 0..pop.nrows() {
         let mut new_indiv: Vec<u32> = Vec::new();

@@ -29,7 +29,7 @@ pub struct Matrix<N: Copy> {
 impl<N: Copy> Matrix<N> { // implementation of Matrix<N>
 
     /// Initializes a Matrix variable with empty values
-    pub fn init() -> Matrix<N> {
+    pub fn new() -> Matrix<N> {
         Matrix::<N> { values: Vec::new(),
                       nrows: 0,
                       ncols: 0 }
@@ -57,8 +57,8 @@ impl<N: Copy> Matrix<N> { // implementation of Matrix<N>
     /// # Arguments
     ///
     /// * `val`: the matrix will be initialized with these values
-    pub fn init_with_values(val: &Vec<Vec<N>>) -> Matrix<N> {
-        let mut m = Matrix::<N>::init();
+    pub fn init(val: &Vec<Vec<N>>) -> Matrix<N> {
+        let mut m = Matrix::<N>::new();
         m.values = val.clone();
         m.update_sizes();
         m
@@ -78,7 +78,7 @@ impl<N: Copy> Matrix<N> { // implementation of Matrix<N>
                 panic!("just permitted range of size 2 (actual={})", range.len());
         }
 
-        let mut m = Matrix::<N>::init();
+        let mut m = Matrix::<N>::new();
         for _ in 0..size_rows {
             let mut col: Vec<N> = Vec::new();
             for _ in 0..size_columns {
@@ -99,7 +99,7 @@ impl<N: Copy> Matrix<N> { // implementation of Matrix<N>
     pub fn zeros(size_rows: usize, size_columns: usize)
         -> Matrix<N> where N: Num + Default {
 
-        let mut m = Matrix::<N>::init();
+        let mut m = Matrix::<N>::new();
         for _ in 0..size_rows {
             m.push_row(vec![N::zero(); size_columns]);
         }
@@ -115,7 +115,7 @@ impl<N: Copy> Matrix<N> { // implementation of Matrix<N>
     pub fn ones(size_rows: usize, size_columns: usize)
         -> Matrix<N> where N: Num + Default {
 
-        let mut m = Matrix::<N>::init();
+        let mut m = Matrix::<N>::new();
         for _ in 0..size_rows {
             m.push_row(vec![N::one(); size_columns]);
         }
@@ -435,7 +435,7 @@ impl<N: Copy> Matrix<N> { // implementation of Matrix<N>
     pub fn equal_to(&self, value: &N) -> Matrix<bool>
         where N: Num + PartialEq<N> {
 
-        let mut m = Matrix::<bool>::init();
+        let mut m = Matrix::<bool>::new();
         for col in self.row_iter() {
             let mut row_out: Vec<bool> = Vec::new();
 
@@ -461,7 +461,7 @@ impl<N: Copy> Matrix<N> { // implementation of Matrix<N>
             panic!("sizes not equal!");
         }
 
-        let mut m = Matrix::<bool>::init();
+        let mut m = Matrix::<bool>::new();
         for (i, row) in self.values.iter().enumerate() {
             let mut row_out: Vec<bool> = Vec::new();
 
@@ -487,7 +487,7 @@ impl<N: Copy> Matrix<N> { // implementation of Matrix<N>
     pub fn bigger_than(&self, value: &N) -> Matrix<bool>
         where N: Num + PartialOrd<N> {
 
-        let mut m = Matrix::<bool>::init();
+        let mut m = Matrix::<bool>::new();
         for row in self.row_iter() {
             let mut row_out: Vec<bool> = Vec::new();
 
@@ -517,7 +517,7 @@ impl<N: Copy> Matrix<N> { // implementation of Matrix<N>
             panic!("sizes not equal!");
         }
 
-        let mut m = Matrix::<bool>::init();
+        let mut m = Matrix::<bool>::new();
         for (i, row) in self.row_iter().enumerate() {
             let mut row_out: Vec<bool> = Vec::new();
 
@@ -540,7 +540,7 @@ impl<N: Copy> Matrix<N> { // implementation of Matrix<N>
     ///
     /// * `scalar`: number to multiply
     pub fn scalar_mul(&self, scalar: N) -> Matrix<N> where N: Num {
-        let mut m: Matrix<N> = Matrix::<N>::init();
+        let mut m: Matrix<N> = Matrix::<N>::new();
 
         for col in self.row_iter() {
             let mut new_row: Vec<N> = Vec::new();
@@ -557,7 +557,7 @@ impl<N: Copy> Matrix<N> { // implementation of Matrix<N>
 
     /// Transposes a Matrix
     pub fn transpose(&mut self) {
-        let mut res: Matrix<N> = Matrix::<N>::init();
+        let mut res: Matrix<N> = Matrix::<N>::new();
         for item in self.values.iter() {
             res.push_col(item.clone());
         }
@@ -621,7 +621,7 @@ impl<N: Copy> Matrix<N> { // implementation of Matrix<N>
     /// * The result matrix will be an square matrix with size of the columns
     ///   of the given matrix
     pub fn eucl_distance_row(&self) -> Matrix<f64> where N: Into<f64> + Num {
-        let mut m: Matrix<f64> = Matrix::<f64>::init();
+        let mut m: Matrix<f64> = Matrix::<f64>::new();
 
         for (_, row_i) in self.values.iter().enumerate() {
             let mut eucl_row: Vec<f64> = Vec::new();
@@ -703,7 +703,7 @@ impl<N: Copy> Copy for Matrix<N> where Vec<Vec<N>>: Copy + Clone { }
 /// Clone implementation for Matrix
 impl<N: Copy> Clone for Matrix<N> {
     fn clone(&self) -> Matrix<N> {
-        let mut m: Matrix<N> = Matrix::<N>::init();
+        let mut m: Matrix<N> = Matrix::<N>::new();
         m.values = self.values.clone();
         m.ncols = self.ncols;
         m.nrows = self.nrows;
@@ -735,7 +735,7 @@ impl<'a, N: Copy> Add for &'a Matrix<N> where N: Num + Add {
             panic!("sizes not compatible!");
         }
 
-        let mut res: Matrix<N> = Matrix::<N>::init();
+        let mut res: Matrix<N> = Matrix::<N>::new();
         for i in 0..self.nrows {
 
             let mut res_row: Vec<N> = Vec::new();
@@ -770,7 +770,7 @@ impl<'a, N: Copy> Sub for &'a Matrix<N> where N: Num + Sub {
             panic!("sizes not compatible!");
         }
 
-        let mut res: Matrix<N> = Matrix::<N>::init();
+        let mut res: Matrix<N> = Matrix::<N>::new();
         for i in 0..self.nrows {
 
             let mut res_row: Vec<N> = Vec::new();
@@ -805,7 +805,7 @@ impl<'a, N: Copy + Default> Mul for &'a Matrix<N> where N: Num + Copy {
         if self.nrows != other.ncols {
             panic!("matrix dimension mismatch")
         } else {
-            let mut res: Matrix<N> = Matrix::<N>::init();
+            let mut res: Matrix<N> = Matrix::<N>::new();
 
             for irs in 0..self.nrows {
                 let mut new_row: Vec<N> = Vec::new();

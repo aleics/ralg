@@ -8,9 +8,9 @@ mod tests {
     // --------------- Matrix TEST ----------------------------------------
 
     #[test]
-    fn matrix_init_with_values_test() {
+    fn matrix_init_test() {
         let values: Vec<Vec<i32>> = vec![vec![1, 2], vec![3, 4]];
-        let m = Matrix::<i32>::init_with_values(&values);
+        let m = Matrix::<i32>::init(&values);
 
         assert_eq!(m.get_element(0, 0), values[0][0]);
         assert_eq!(m.get_element(1, 0), values[1][0]);
@@ -54,7 +54,7 @@ mod tests {
     #[test]
     fn matrix_set_row_test() {
         let v: Vec<i32> = vec![-1, 2];
-        let mut m = Matrix::<i32>::init_with_values(&vec![vec![1, 3], vec![2, 5], vec![3, 6]]);
+        let mut m = Matrix::<i32>::init(&vec![vec![1, 3], vec![2, 5], vec![3, 6]]);
 
         m.set_row(0, &v);
 
@@ -79,7 +79,7 @@ mod tests {
     fn matrix_pop_row_test() {
         let val: Vec<u32> = vec![1, 2, 3, 4, 5];
 
-        let mut m = Matrix::<u32>::init();
+        let mut m = Matrix::<u32>::new();
         for _ in 0..2 {
             m.push_row(val.clone());
         }
@@ -93,7 +93,7 @@ mod tests {
         let val: Vec<u32> = vec![1, 2, 3, 4, 5];
         let val2: Vec<u32> = vec![6, 7, 8, 9, 10];
 
-        let mut m = Matrix::<u32>::init();
+        let mut m = Matrix::<u32>::new();
         m.push_row(val.clone());
         m.push_row(val2.clone());
 
@@ -106,7 +106,7 @@ mod tests {
         let val: Vec<u32> = vec![1, 2, 3, 4, 5];
         let val2: Vec<u32> = vec![6, 7, 8, 9, 10];
 
-        let mut m = Matrix::<u32>::init();
+        let mut m = Matrix::<u32>::new();
         m.push_row(val.clone());
         m.push_row(val2.clone());
 
@@ -133,7 +133,7 @@ mod tests {
     #[test]
     fn matrix_set_col_test() {
         let v: Vec<i32> = vec![-1, 2, 4];
-        let mut m = Matrix::<i32>::init_with_values(&vec![vec![1, 3], vec![2, 5], vec![3, 6]]);
+        let mut m = Matrix::<i32>::init(&vec![vec![1, 3], vec![2, 5], vec![3, 6]]);
 
         m.set_col(0, &v);
 
@@ -142,7 +142,7 @@ mod tests {
     #[test]
     fn matrix_push_col_test() {
         let mut val: Vec<u32> = vec![1, 2, 3, 4, 5];
-        let mut m = Matrix::<u32>::init();
+        let mut m = Matrix::<u32>::new();
         for _ in 0..2 {
             m.push_row(val.clone());
         }
@@ -159,7 +159,7 @@ mod tests {
         let mut resp: Vec<u32> = val.clone();
         resp.remove(0);
 
-        let mut m = Matrix::<u32>::init();
+        let mut m = Matrix::<u32>::new();
         m.push_row(val.clone());
 
         m.pop_col(0);
@@ -185,7 +185,7 @@ mod tests {
     #[test]
     fn matrix_contains_test() {
         let row: Vec<f32> = vec![0.2, 2.5, 10.2, 8.7, 5.0];
-        let mut m = Matrix::<f32>::init();
+        let mut m = Matrix::<f32>::new();
         m.push_row(row);
 
         let mut result = m.contains(&0.2);
@@ -205,7 +205,7 @@ mod tests {
         let row: Vec<i32> = vec![-1, 0, -2, 2, 3];
         let row2: Vec<i32> = vec![0, 0, -2, 2, 2];
 
-        let mut m = Matrix::<i32>::init();
+        let mut m = Matrix::<i32>::new();
         m.push_row(row.clone());
 
         let mut result = m.contains_row(&row);
@@ -225,7 +225,7 @@ mod tests {
         let row: Vec<i32> = vec![-1, 0, -2, 2, 3];
         let row2: Vec<i32> = vec![0, 0, -2, 2, 2];
 
-        let mut m = Matrix::<i32>::init();
+        let mut m = Matrix::<i32>::new();
         m.push_row(row.clone());
         m.push_row(row2.clone());
 
@@ -247,7 +247,7 @@ mod tests {
     #[test]
     fn matrix_equal_to_test() {
         let row: Vec<i32> = vec![1, 3, 2, 3];
-        let mut m = Matrix::<i32>::init();
+        let mut m = Matrix::<i32>::new();
         m.push_row(row);
 
         let eq = m.equal_to(&3);
@@ -260,11 +260,11 @@ mod tests {
     #[test]
     fn matrix_equal_to_matrix_test() {
         let row: Vec<f32> = vec![1.0, 3.0, 2.0, 3.0];
-        let mut m = Matrix::<f32>::init();
+        let mut m = Matrix::<f32>::new();
         m.push_row(row);
 
         let row2: Vec<f32> = vec![1.0, 0.5, 0.2, 3.0];
-        let mut m2 = Matrix::<f32>::init();
+        let mut m2 = Matrix::<f32>::new();
         m2.push_row(row2);
 
         let eq_matrix = m.equal_to_matrix(&m2);
@@ -277,7 +277,7 @@ mod tests {
     #[test]
     fn matrix_bigger_than_test() {
         let row: Vec<f32> = vec![0.1, 0.5, 0.8, 1.2];
-        let mut m = Matrix::<f32>::init();
+        let mut m = Matrix::<f32>::new();
         m.push_row(row);
 
         let bigger = m.bigger_than(&0.9);
@@ -290,11 +290,11 @@ mod tests {
     #[test]
     fn matrix_bigger_than_matrix_test() {
         let row: Vec<u32> = vec![1, 3, 2, 3];
-        let mut m = Matrix::<u32>::init();
+        let mut m = Matrix::<u32>::new();
         m.push_row(row);
 
         let row2: Vec<u32> = vec![2, 0, 6, 3];
-        let mut m2 = Matrix::<u32>::init();
+        let mut m2 = Matrix::<u32>::new();
         m2.push_row(row2);
 
         let eq_matrix = m.bigger_than_matrix(&m2);
@@ -307,13 +307,13 @@ mod tests {
     #[test]
     fn matrix_eq_trait_test() {
         let row: Vec<u32> = vec![1, 3, 2, 3];
-        let mut m = Matrix::<u32>::init();
+        let mut m = Matrix::<u32>::new();
         m.push_row(row);
 
         let m2 = m.clone();
 
         let row3: Vec<u32> = vec![1, 2, 3, 4];
-        let mut m3 = Matrix::<u32>::init();
+        let mut m3 = Matrix::<u32>::new();
         m3.push_row(row3);
 
         assert_eq!(m == m2, true);
@@ -322,7 +322,7 @@ mod tests {
     #[test]
     fn matrix_add_trait_test(){
         let row: Vec<u32> = vec![1, 3, 2, 3];
-        let mut m = Matrix::<u32>::init();
+        let mut m = Matrix::<u32>::new();
         m.push_row(row);
 
         let m2: Matrix<u32> = m.clone();
@@ -339,11 +339,11 @@ mod tests {
     #[test]
     fn matrix_sub_trait_test(){
         let row: Vec<u32> = vec![5, 6, 7, 8];
-        let mut m = Matrix::<u32>::init();
+        let mut m = Matrix::<u32>::new();
         m.push_row(row);
 
         let row2: Vec<u32> = vec![1, 2, 3, 3];
-        let mut m2 = Matrix::<u32>::init();
+        let mut m2 = Matrix::<u32>::new();
         m2.push_row(row2);
 
         let res = &m - &m2;
@@ -358,7 +358,7 @@ mod tests {
     #[test]
     fn matrix_transpose_test(){
         let mut row: Vec<i32> = vec![1, 2, 3];
-        let mut m = Matrix::<i32>::init();
+        let mut m = Matrix::<i32>::new();
         m.push_row(row);
 
         row = vec![5, 7, 8];
@@ -377,7 +377,7 @@ mod tests {
     #[test]
     fn matrix_scalar_mul_test() {
         let values: Vec<Vec<i32>> = vec![vec![1, 2, 3], vec![4, 5, 6]];
-        let m = Matrix::<i32>::init_with_values(&values);
+        let m = Matrix::<i32>::init(&values);
         let pr = m.scalar_mul(2);
 
         assert_eq!(pr.get_element(0, 0), 2);
@@ -390,10 +390,10 @@ mod tests {
     #[test]
     fn matrix_mul_trait_test(){
         let mut values: Vec<Vec<i32>> = vec![vec![1, 4], vec![2, 5], vec![3, 6]];
-        let m = Matrix::<i32>::init_with_values(&values);
+        let m = Matrix::<i32>::init(&values);
 
         values = vec![vec![7, 8, 9], vec![10, 11, 12]];
-        let m2 = Matrix::<i32>::init_with_values(&values);
+        let m2 = Matrix::<i32>::init(&values);
 
         let prod = &m * &m2;
 
@@ -403,7 +403,7 @@ mod tests {
     #[test]
     fn matrix_get_diagonal_test() {
         let values: Vec<Vec<i64>> = vec![vec![1, -2, 2], vec![4, -5, 6], vec![2, 1, -2]];
-        let m = Matrix::<i64>::init_with_values(&values);
+        let m = Matrix::<i64>::init(&values);
 
         let d: Matrix<i64> = m.get_diagonal();
 
@@ -422,7 +422,7 @@ mod tests {
     #[test]
     fn matrix_submatrix_test() {
         let values: Vec<Vec<f32>> = vec![vec![1.0, 4.0], vec![2.0, 5.0], vec![3.0, 6.0]];
-        let m = Matrix::<f32>::init_with_values(&values);
+        let m = Matrix::<f32>::init(&values);
 
         let range_row: [usize; 2] = [1, 2];
         let range_col: [usize; 2] = [0, 0];
@@ -434,7 +434,7 @@ mod tests {
     }
     #[test]
     fn matrix_eucl_distance_col_test() {
-        let m = Matrix::<i32>::init_with_values(&vec![vec![1, 3], vec![2, 5], vec![3, 6]]);
+        let m = Matrix::<i32>::init(&vec![vec![1, 3], vec![2, 5], vec![3, 6]]);
 
         let d = m.eucl_distance_row();
 
@@ -443,7 +443,7 @@ mod tests {
     }
     #[test]
     fn matrix_row_iter_at_test() {
-        let m = Matrix::<i32>::init_with_values(&vec![vec![1, 3], vec![2, 5], vec![3, 6]]);
+        let m = Matrix::<i32>::init(&vec![vec![1, 3], vec![2, 5], vec![3, 6]]);
         let mut i = m.row_iter_at(1);
 
         assert_eq!(i.next().unwrap(), &vec![2, 5]);
@@ -451,7 +451,7 @@ mod tests {
     }
     #[test]
     fn matrix_row_iter_test() {
-        let m = Matrix::<i32>::init_with_values(&vec![vec![1, 3], vec![2, 5], vec![3, 6]]);
+        let m = Matrix::<i32>::init(&vec![vec![1, 3], vec![2, 5], vec![3, 6]]);
         let mut i = m.row_iter();
 
         assert_eq!(i.next().unwrap(), &vec![1, 3]);
@@ -460,14 +460,14 @@ mod tests {
     }
     #[test]
     fn matrix_col_iter_at_test() {
-        let m = Matrix::<i32>::init_with_values(&vec![vec![1, 3], vec![2, 5], vec![3, 6]]);
+        let m = Matrix::<i32>::init(&vec![vec![1, 3], vec![2, 5], vec![3, 6]]);
         let mut i = m.col_iter_at(1);
 
         assert_eq!(i.next().unwrap(), vec![3, 5, 6]);
     }
     #[test]
     fn matrix_col_iter_test() {
-        let m = Matrix::<i32>::init_with_values(&vec![vec![1, 3], vec![2, 5], vec![3, 6]]);
+        let m = Matrix::<i32>::init(&vec![vec![1, 3], vec![2, 5], vec![3, 6]]);
         let mut i = m.col_iter();
 
         assert_eq!(i.next().unwrap(), vec![1, 2, 3]);
@@ -475,7 +475,7 @@ mod tests {
     }
     #[test]
     fn matrix_el_iter_at_test() {
-        let m = Matrix::<i32>::init_with_values(&vec![vec![1, 3], vec![2, 5], vec![3, 6]]);
+        let m = Matrix::<i32>::init(&vec![vec![1, 3], vec![2, 5], vec![3, 6]]);
         let mut i = m.el_iter_at(1);
 
         assert_eq!(i.next().unwrap(), 3);
@@ -486,7 +486,7 @@ mod tests {
     }
     #[test]
     fn matrix_el_iter_test() {
-        let m = Matrix::<i32>::init_with_values(&vec![vec![8, 3], vec![5, 10]]);
+        let m = Matrix::<i32>::init(&vec![vec![8, 3], vec![5, 10]]);
         let mut i = m.el_iter();
 
         assert_eq!(i.next().unwrap(), m.get_element(0, 0));
@@ -497,8 +497,8 @@ mod tests {
 
     // --------------- Vector TEST ----------------------------------------
     #[test]
-    fn vector_init_with_values_test() {
-        let v = Vector::<f64>::init_with_values(&vec![2.5f64, -2.1f64, 5.3f64]);
+    fn vector_init_test() {
+        let v = Vector::<f64>::init(&vec![2.5f64, -2.1f64, 5.3f64]);
 
         assert_eq!(v.size(), 3);
         assert_eq!(v.el(0), 2.5f64);
@@ -534,7 +534,7 @@ mod tests {
     }
     #[test]
     fn vector_push_test() {
-        let mut v = Vector::<f32>::init();
+        let mut v = Vector::<f32>::new();
         v.push(1f32);
 
         assert_eq!(v.size(), 1);
@@ -542,7 +542,7 @@ mod tests {
     }
     #[test]
     fn vector_remove_test() {
-        let mut v = Vector::<f32>::init_with_values(&vec![2.0, 3.1, 2.1]);
+        let mut v = Vector::<f32>::init(&vec![2.0, 3.1, 2.1]);
         v.remove(1);
 
         assert_eq!(v.size(), 2);
@@ -551,7 +551,7 @@ mod tests {
     }
     #[test]
     fn vector_pop_test() {
-        let mut v = Vector::<f64>::init_with_values(&vec![2.0, 3.1, 2.1]);
+        let mut v = Vector::<f64>::init(&vec![2.0, 3.1, 2.1]);
         v.pop();
 
         assert_eq!(v.size(), 2);
@@ -560,7 +560,7 @@ mod tests {
     }
     #[test]
     fn vector_swap_test() {
-        let mut v = Vector::<i64>::init_with_values(&vec![2, -1, 1]);
+        let mut v = Vector::<i64>::init(&vec![2, -1, 1]);
         v.swap(0, 1);
 
         assert_eq!(v.size(), 3);
@@ -570,8 +570,8 @@ mod tests {
     }
     #[test]
     fn vector_append_test() {
-        let mut v1 = Vector::<i64>::init_with_values(&vec![2, -1, 1]);
-        let v2 = Vector::<i64>::init_with_values(&vec![5, -7, 10]);
+        let mut v1 = Vector::<i64>::init(&vec![2, -1, 1]);
+        let v2 = Vector::<i64>::init(&vec![5, -7, 10]);
 
         v1.append(&v2);
 
@@ -580,14 +580,14 @@ mod tests {
     }
     #[test]
     fn vector_clear_test() {
-        let mut v = Vector::<f32>::init_with_values(&vec![2.0, 3.1, 2.1]);
+        let mut v = Vector::<f32>::init(&vec![2.0, 3.1, 2.1]);
         v.clear();
 
         assert_eq!(v.size(), 0);
     }
     #[test]
     fn vector_sort_min_test() {
-        let mut v = Vector::<i64>::init_with_values(&vec![2, -1, 1]);
+        let mut v = Vector::<i64>::init(&vec![2, -1, 1]);
         v.sort_min();
 
         assert_eq!(v.el(0), -1);
@@ -596,7 +596,7 @@ mod tests {
     }
     #[test]
     fn vector_sort_max_test() {
-        let mut v = Vector::<i64>::init_with_values(&vec![2, -1, 1]);
+        let mut v = Vector::<i64>::init(&vec![2, -1, 1]);
         v.sort_max();
 
         assert_eq!(v.el(0), 2);
@@ -604,14 +604,14 @@ mod tests {
     }
     #[test]
     fn vector_set_el_test() {
-        let mut v = Vector::<i64>::init_with_values(&vec![2, -1, 1]);
+        let mut v = Vector::<i64>::init(&vec![2, -1, 1]);
         v.set_el(2, 5i64);
 
         assert_eq!(v.el(2), 5i64);
     }
     #[test]
     fn vector_max_test() {
-        let v = Vector::<i64>::init_with_values(&vec![2, -1, 1]);
+        let v = Vector::<i64>::init(&vec![2, -1, 1]);
         let (max, idx_max) = v.max();
 
         assert_eq!(max, 2i64);
@@ -619,7 +619,7 @@ mod tests {
     }
     #[test]
     fn vector_min_test() {
-        let v = Vector::<i64>::init_with_values(&vec![2, -1, 1]);
+        let v = Vector::<i64>::init(&vec![2, -1, 1]);
         let (min, idx_min) = v.min();
 
         assert_eq!(min, -1i64);
@@ -627,7 +627,7 @@ mod tests {
     }
     #[test]
     fn vector_median_test() {
-        let v = Vector::<i64>::init_with_values(&vec![2, 4, 0, 6]);
+        let v = Vector::<i64>::init(&vec![2, 4, 0, 6]);
         let median = v.median();
 
         assert_eq!(median, 3f64);

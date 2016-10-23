@@ -20,7 +20,7 @@ pub struct Vector<N: Copy> {
 impl<N: Copy> Vector<N> {
 
     /// Initializes a Vector variable
-    pub fn init() -> Vector<N> {
+    pub fn new() -> Vector<N> {
         Vector::<N> {
             values: Vec::new()}
     }
@@ -30,8 +30,8 @@ impl<N: Copy> Vector<N> {
     /// # Parameters
     ///
     /// * `val`: defined vector values
-    pub fn init_with_values(val: &Vec<N>) -> Vector<N> {
-        let mut v = Vector::<N>::init();
+    pub fn init(val: &Vec<N>) -> Vector<N> {
+        let mut v = Vector::<N>::new();
         v.values = val.clone();
         v
     }
@@ -42,7 +42,7 @@ impl<N: Copy> Vector<N> {
     ///
     /// * `size`: vector's size
     pub fn zeros(size: usize) -> Vector<N> where N: Num {
-        let mut v = Vector::<N>::init();
+        let mut v = Vector::<N>::new();
         v.values = vec![N::zero(); size];
         v
     }
@@ -53,7 +53,7 @@ impl<N: Copy> Vector<N> {
     ///
     /// * `size`: vector's size
     pub fn ones(size: usize) -> Vector<N> where N: Num {
-        let mut v = Vector::<N>::init();
+        let mut v = Vector::<N>::new();
         v.values = vec![N::one(); size];
         v
     }
@@ -68,7 +68,7 @@ impl<N: Copy> Vector<N> {
         if range.len() != 2 {
                 panic!("just permitted range of size 2 (actual={})", range.len());
         }
-        let mut v = Vector::<N>::init();
+        let mut v = Vector::<N>::new();
         for _ in 0..size {
             v.push(rand::thread_rng().gen_range(range[0], range[1] + N::one()));
         }

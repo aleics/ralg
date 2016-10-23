@@ -57,5 +57,15 @@
     * *Conjugate*
     * *Magnitude and normalization*
     * *Rotation*
+
+* **0.1.5**
+  * *algebra::Matrix*
+    * *Change init for new and init_with_values for init*
+  * *algebra::Vector*
+    * *Change init for new and init_with_values for init*
   * *linspace::Vector3D*
-    *Distance*
+    * *Distance*
+  * *linspace::Point3D*
+    * *Change init for new and init_with_values for init*
+  * *linspace::Quat*
+    * *Change init for new and init_with_values for init*

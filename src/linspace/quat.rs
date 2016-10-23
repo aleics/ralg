@@ -24,7 +24,7 @@ pub struct Quat<N: Copy> {
 impl<N: Copy + Num> Quat<N> { // implementation of Quat<N>
 
     /// Initializes a Matrix with default values
-    pub fn init() -> Quat<N> where N: Default {
+    pub fn new() -> Quat<N> where N: Default {
         Quat { x: N::default(),
                y: N::default(),
                z: N::default(),
@@ -39,7 +39,7 @@ impl<N: Copy + Num> Quat<N> { // implementation of Quat<N>
     /// * `y`: Y dimension value
     /// * `z`: Z dimension value
     /// * `w`: rotation value
-    pub fn init_with_values(x: N, y: N, z: N, w: N) -> Quat<N> {
+    pub fn init(x: N, y: N, z: N, w: N) -> Quat<N> {
         Quat { x: x,
                y: y,
                z: z,

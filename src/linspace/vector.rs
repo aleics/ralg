@@ -79,7 +79,7 @@ impl<N: Copy + Num> Vector3D<N> {
     }
 
     /// Initializes a Vector3D with default coordinates' values
-    pub fn init() -> Vector3D<N> where N: Default {
+    pub fn new() -> Vector3D<N> where N: Default {
         Vector3D { x: N::default(),
                    y: N::default(),
                    z: N::default() }
@@ -92,7 +92,7 @@ impl<N: Copy + Num> Vector3D<N> {
     /// * `x`: X value
     /// * `y`: Y value
     /// * `z`: Z value
-    pub fn init_with_values(x: N, y: N, z: N) -> Vector3D<N> {
+    pub fn init(x: N, y: N, z: N) -> Vector3D<N> {
         Vector3D { x: x,
                    y: y,
                    z: z }

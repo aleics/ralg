@@ -38,7 +38,7 @@ impl<N: Copy + Num> Point3D<N> {
     }
 
     /// Initializes a Point3D with default coordinates' values
-    pub fn init() -> Point3D<N> where N: Default {
+    pub fn new() -> Point3D<N> where N: Default {
         Point3D {x: N::default(), y: N::default(), z: N::default()}
     }
 
@@ -49,7 +49,7 @@ impl<N: Copy + Num> Point3D<N> {
     /// * `x`: X coordinate
     /// * `y`: Y coordinate
     /// * `z`: Z coordinate
-    pub fn init_with_values(x: N, y: N, z: N) -> Point3D<N> {
+    pub fn init(x: N, y: N, z: N) -> Point3D<N> {
         Point3D {x: x, y: y, z: z}
     }
 
