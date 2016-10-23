@@ -196,6 +196,13 @@ mod tests {
         assert_eq!(a.y(), 0.2672612419124244f64);
         assert_eq!(a.z(), 0.8017837257372732f64);
     }
+    #[test]
+    fn vector_dist_test() {
+        let a = Vector3D::<f64>::init_with_values(2f64, 2f64, 1f64);
+        let dist = a.dist();
+
+        assert_eq!(dist, (2f64*2f64 + 2f64*2f64 + 1f64).sqrt());
+    }
 
      // --------------- QUAT TEST ----------------------------------------
     #[test]

@@ -1,4 +1,5 @@
 use num::{Float, Num};
+use num::pow;
 use std::fmt;
 use std::ops::{Add, Sub, Mul, Neg};
 
@@ -155,6 +156,11 @@ impl<N: Copy + Num> Vector3D<N> {
     pub fn norm(&mut self) where N: Float {
         let value = (self.x*self.x) + (self.y*self.y) + (self.z*self.z);
         self.scale(value.sqrt().recip())
+    }
+
+    /// Return the Eucledian distance from vector
+    pub fn dist(&self) -> f64 where N: Into<f64> {
+        (pow(self.x, 2) + pow(self.y, 2) + pow(self.z, 2)).into().sqrt()
     }
 }
 
