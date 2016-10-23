@@ -57,3 +57,5 @@
     * *Conjugate*
     * *Magnitude and normalization*
     * *Rotation*
+  * *linspace::Vector3D*
+    *Distance*
