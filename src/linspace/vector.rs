@@ -24,16 +24,19 @@ pub struct Vector3D<N: Copy> {
 impl<N: Copy + Num> Vector3D<N> {
 
     /// Returns the `x` coordinate
+    #[inline]
     pub fn x(&self) -> N {
         self.x
     }
 
     /// Returns the `y` coordinate
+    #[inline]
     pub fn y(&self) -> N {
         self.y
     }
 
     /// Returns the `z` coordinate
+    #[inline]
     pub fn z(&self) -> N {
         self.z
     }
@@ -43,6 +46,7 @@ impl<N: Copy + Num> Vector3D<N> {
     /// # Arguments
     ///
     /// * `new_x`: new X value
+    #[inline]
     pub fn set_x(&mut self, new_x: N) {
         self.x = new_x;
     }
@@ -52,6 +56,7 @@ impl<N: Copy + Num> Vector3D<N> {
     /// # Arguments
     ///
     /// * `new_y`: new Y value
+    #[inline]
     pub fn set_y(&mut self, new_y: N) {
         self.y = new_y;
     }
@@ -61,6 +66,7 @@ impl<N: Copy + Num> Vector3D<N> {
     /// # Arguments
     ///
     /// * `new_z`: new Z value
+    #[inline]
     pub fn set_z(&mut self, new_z: N) {
         self.z = new_z;
     }
@@ -72,6 +78,7 @@ impl<N: Copy + Num> Vector3D<N> {
     /// * `new_x`: new X value
     /// * `new_y`: new Y value
     /// * `new_z`: new Z value
+    #[inline]
     pub fn set(&mut self, new_x: N, new_y: N, new_z: N) {
         self.x = new_x;
         self.y = new_y;
@@ -79,6 +86,7 @@ impl<N: Copy + Num> Vector3D<N> {
     }
 
     /// Initializes a Vector3D with default coordinates' values
+    #[inline]
     pub fn new() -> Vector3D<N> where N: Default {
         Vector3D { x: N::default(),
                    y: N::default(),
@@ -92,6 +100,7 @@ impl<N: Copy + Num> Vector3D<N> {
     /// * `x`: X value
     /// * `y`: Y value
     /// * `z`: Z value
+    #[inline]
     pub fn init(x: N, y: N, z: N) -> Vector3D<N> {
         Vector3D { x: x,
                    y: y,
@@ -102,6 +111,7 @@ impl<N: Copy + Num> Vector3D<N> {
     /// # Arguments
     ///
     /// * `scalar`: scalar value
+    #[inline]
     pub fn scale(&mut self, scalar: N) {
         self.x = self.x * scalar;
         self.y = self.y * scalar;
@@ -113,6 +123,7 @@ impl<N: Copy + Num> Vector3D<N> {
     /// # Arguments
     ///
     /// * `vec`: vector value
+    #[inline]
     pub fn scale_vec(&mut self, vec: &Vector3D<N>) {
         self.x = self.x * vec.x();
         self.y = self.y * vec.y();
@@ -129,6 +140,7 @@ impl<N: Copy + Num> Vector3D<N> {
     /// # Remarks
     ///
     /// * The `origin` of the output vector will be extracted from the `first` input vector
+    #[inline]
     pub fn cross(first: &Vector3D<N>, second: &Vector3D<N>) -> Vector3D<N>
         where N: Default + Neg<Output = N> {
 
@@ -144,6 +156,7 @@ impl<N: Copy + Num> Vector3D<N> {
     /// # Arguments
     ///
     /// * `other`: second vector for the dot
+    #[inline]
     pub fn dot(&self, other: &Vector3D<N>) -> N {
         ((self.x*other.x) + (self.y*other.y) + (self.z*other.z))
     }
@@ -153,12 +166,14 @@ impl<N: Copy + Num> Vector3D<N> {
     /// # Remarks
     ///
     /// * Since this operation requires an `sqrt`, it's just available for float vectors
+    #[inline]
     pub fn norm(&mut self) where N: Float {
         let value = (self.x*self.x) + (self.y*self.y) + (self.z*self.z);
         self.scale(value.sqrt().recip())
     }
 
     /// Return the Eucledian distance from vector
+    #[inline]
     pub fn dist(&self) -> f64 where N: Into<f64> {
         (pow(self.x, 2) + pow(self.y, 2) + pow(self.z, 2)).into().sqrt()
     }

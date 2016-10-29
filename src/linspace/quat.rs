@@ -24,6 +24,7 @@ pub struct Quat<N: Copy> {
 impl<N: Copy + Num> Quat<N> { // implementation of Quat<N>
 
     /// Initializes a Matrix with default values
+    #[inline]
     pub fn new() -> Quat<N> where N: Default {
         Quat { x: N::default(),
                y: N::default(),
@@ -39,6 +40,7 @@ impl<N: Copy + Num> Quat<N> { // implementation of Quat<N>
     /// * `y`: Y dimension value
     /// * `z`: Z dimension value
     /// * `w`: rotation value
+    #[inline]
     pub fn init(x: N, y: N, z: N, w: N) -> Quat<N> {
         Quat { x: x,
                y: y,
@@ -47,11 +49,13 @@ impl<N: Copy + Num> Quat<N> { // implementation of Quat<N>
     }
 
     /// Returns X dimension value
+    #[inline]
     pub fn x(&self) -> N {
         self.x
     }
 
     /// Returns Y dimension value
+    #[inline]
     pub fn y(&self) -> N {
         self.y
     }
@@ -62,6 +66,7 @@ impl<N: Copy + Num> Quat<N> { // implementation of Quat<N>
     }
 
     /// Returns rotation value
+    #[inline]
     pub fn w(&self) -> N {
         self.w
     }
@@ -71,6 +76,7 @@ impl<N: Copy + Num> Quat<N> { // implementation of Quat<N>
     /// # Arguments
     ///
     /// * `x`: new X dimension value
+    #[inline]
     pub fn set_x(&mut self, x: N) {
         self.x = x;
     }
@@ -80,6 +86,7 @@ impl<N: Copy + Num> Quat<N> { // implementation of Quat<N>
     /// # Arguments
     ///
     /// * `y`: new Y dimension value
+    #[inline]
     pub fn set_y(&mut self, y: N) {
         self.y = y;
     }
@@ -89,6 +96,7 @@ impl<N: Copy + Num> Quat<N> { // implementation of Quat<N>
     /// # Arguments
     ///
     /// * `z`: new Z dimension value
+    #[inline]
     pub fn set_z(&mut self, z: N) {
         self.z = z;
     }
@@ -98,6 +106,7 @@ impl<N: Copy + Num> Quat<N> { // implementation of Quat<N>
     /// # Arguments
     ///
     /// * `w`: new rotation value
+    #[inline]
     pub fn set_w(&mut self, w: N) {
         self.w = w;
     }
@@ -110,6 +119,7 @@ impl<N: Copy + Num> Quat<N> { // implementation of Quat<N>
     /// * `y`: new Y dimension value
     /// * `z`: new Z dimension value
     /// * `w`: new rotation value
+    #[inline]
     pub fn set(&mut self, x: N, y: N, z: N, w: N) {
         self.x = x;
         self.y = y;
@@ -122,6 +132,7 @@ impl<N: Copy + Num> Quat<N> { // implementation of Quat<N>
     /// # Arguments
     ///
     /// * `scalar`: value of the scalation
+    #[inline]
     pub fn scale(&mut self, scalar: N) {
         self.x = self.x * scalar;
         self.y = self.y * scalar;
@@ -130,6 +141,7 @@ impl<N: Copy + Num> Quat<N> { // implementation of Quat<N>
     }
 
     /// Returns the conjugation of a quaternion
+    #[inline]
     pub fn conjugate(&self) -> Quat<N> where N: Neg<Output = N> {
         Quat {
             x: -self.x,
@@ -140,11 +152,13 @@ impl<N: Copy + Num> Quat<N> { // implementation of Quat<N>
     }
 
     /// Returns the magnitude of a quaternion
+    #[inline]
     pub fn magnitude(&self) -> f64 where N: Into<f64> {
         (pow(self.x, 2) + pow(self.y, 2) + pow(self.z, 2) + pow(self.w, 2)).into().sqrt()
     }
 
     /// Returns the normalization of a quaternion in decimal values
+    #[inline]
     pub fn norm(&self) -> Quat<f64> where N: Into<f64> {
         let m: f64 = self.magnitude();
         Quat::<f64> {
@@ -163,6 +177,7 @@ impl<N: Copy + Num> Quat<N> { // implementation of Quat<N>
     /// * `y`: y dimensional value
     /// * `z`: z dimensional value
     /// * `angle`: angle of the rotation 
+    #[inline]
     pub fn rotation(x: N, y: N, z: N, angle: f64) -> Quat<f64> 
         where N: Into<f64> {
 

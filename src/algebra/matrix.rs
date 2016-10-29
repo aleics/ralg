@@ -29,6 +29,7 @@ pub struct Matrix<N: Copy> {
 impl<N: Copy> Matrix<N> { // implementation of Matrix<N>
 
     /// Initializes a Matrix variable with empty values
+    #[inline]
     pub fn new() -> Matrix<N> {
         Matrix::<N> { values: Vec::new(),
                       nrows: 0,
@@ -42,6 +43,7 @@ impl<N: Copy> Matrix<N> { // implementation of Matrix<N>
     ///
     /// * `nr`: rows capacity
     /// * `nc`: columns capacity
+    #[inline]
     pub fn init_with_capacity(nr: usize, nc: usize) -> Matrix<N> {
         let mut vec: Vec<Vec<N>> = Vec::with_capacity(nr);
         for i in 0..vec.len() {
@@ -57,6 +59,7 @@ impl<N: Copy> Matrix<N> { // implementation of Matrix<N>
     /// # Arguments
     ///
     /// * `val`: the matrix will be initialized with these values
+    #[inline]
     pub fn init(val: &Vec<Vec<N>>) -> Matrix<N> {
         let mut m = Matrix::<N>::new();
         m.values = val.clone();
@@ -71,6 +74,7 @@ impl<N: Copy> Matrix<N> { // implementation of Matrix<N>
     /// * `size_rows`: number of rows
     /// * `size_columns`: number of columns
     /// * `range`: range of the values
+    #[inline]
     pub fn random(size_rows: usize, size_columns: usize, range: &[N; 2])
         -> Matrix<N> where N: Num + PartialOrd + SampleRange {
 
@@ -96,6 +100,7 @@ impl<N: Copy> Matrix<N> { // implementation of Matrix<N>
     ///
     /// `size_rows`: row's size
     /// `size_columns`: column's size
+    #[inline]
     pub fn zeros(size_rows: usize, size_columns: usize)
         -> Matrix<N> where N: Num + Default {
 
@@ -112,6 +117,7 @@ impl<N: Copy> Matrix<N> { // implementation of Matrix<N>
     ///
     /// `size_rows`: row's size
     /// `size_columns`: column's size
+    #[inline]
     pub fn ones(size_rows: usize, size_columns: usize)
         -> Matrix<N> where N: Num + Default {
 
@@ -127,6 +133,7 @@ impl<N: Copy> Matrix<N> { // implementation of Matrix<N>
     /// # Arguments
     ///
     /// * `size`: size of columns and rows (the identity matrix is always square)
+    #[inline]
     pub fn create_identity(size: usize) -> Matrix<N>
         where N: Num + NumCast + ToPrimitive {
 
@@ -150,6 +157,7 @@ impl<N: Copy> Matrix<N> { // implementation of Matrix<N>
     /// # Arguments
     ///
     /// * `m`: matrix to be copied
+    #[inline]
     pub fn copy(&mut self, m: Matrix<N>) {
         self.values = m.values;
         self.ncols = m.ncols;
@@ -157,11 +165,13 @@ impl<N: Copy> Matrix<N> { // implementation of Matrix<N>
     }
 
     /// Returns the number of currently rows
+    #[inline]
     pub fn nrows(&self) -> usize {
         self.nrows
     }
 
     /// Returns the number of currently columns
+    #[inline]
     pub fn ncols(&self) -> usize {
         self.ncols
     }
@@ -171,6 +181,7 @@ impl<N: Copy> Matrix<N> { // implementation of Matrix<N>
     /// # Arguments
     ///
     /// * `index`: index of the row that wants to be returned
+    #[inline]
     pub fn row(&self, index: usize) -> Option<&Vec<N>> {
         for (i, item) in self.values.iter().enumerate() {
             if i == index {
@@ -186,6 +197,7 @@ impl<N: Copy> Matrix<N> { // implementation of Matrix<N>
     ///
     /// * `index`: index of the row that must be modified
     /// * `new_row`: new row value
+    #[inline]
     pub fn set_row(&mut self, index: usize, new_row: &Vec<N>) {
         if index >= self.nrows() {
             panic!("index out of range")
@@ -202,6 +214,7 @@ impl<N: Copy> Matrix<N> { // implementation of Matrix<N>
     /// # Arguments
     ///
     /// * `index`: index of the column that wants to be returned
+    #[inline]
     pub fn col(&self, index: usize) -> Option<Vec<N>> {
         if self.ncols == 0 {
             return None;
@@ -220,6 +233,7 @@ impl<N: Copy> Matrix<N> { // implementation of Matrix<N>
     ///
     /// * `index`: index of the column that must be modified
     /// * `new_col`: new column value
+    #[inline]
     pub fn set_col(&mut self, index: usize, new_col: &Vec<N>) {
         if index >= self.ncols() {
             panic!("index out of range");
@@ -239,6 +253,7 @@ impl<N: Copy> Matrix<N> { // implementation of Matrix<N>
     ///
     /// * `i_row`: row's index
     /// * `i_col`: column's index
+    #[inline]
     pub fn get_element(&self, i_row: usize, i_col: usize) -> N {
         self.values[i_row][i_col]
     }
@@ -250,6 +265,7 @@ impl<N: Copy> Matrix<N> { // implementation of Matrix<N>
     /// * `i_row`: row's index
     /// * `i_col`: column's index
     /// * `val`: new element value
+    #[inline]
     pub fn set_element(&mut self, i_row: usize, i_col: usize, val: &N) {
         self.values[i_row][i_col] = *val;
     }
@@ -263,6 +279,7 @@ impl<N: Copy> Matrix<N> { // implementation of Matrix<N>
     /// # Remarks
     ///
     /// If the value is found then `Some(usize)` is returned, if not `None`
+    #[inline]
     pub fn contains(&self, element: &N) -> Option<usize> where N: Num {
 
         for (i, item) in self.row_iter().enumerate() {
@@ -282,6 +299,7 @@ impl<N: Copy> Matrix<N> { // implementation of Matrix<N>
     /// # Remarks
     ///
     /// If the value is found then `Some(usize)` is returned, if not `None`
+    #[inline]
     pub fn contains_row(&self, row: &Vec<N>) -> Option<usize>
         where Vec<N>: PartialEq {
 
@@ -297,6 +315,7 @@ impl<N: Copy> Matrix<N> { // implementation of Matrix<N>
     /// # Remarks
     ///
     /// If the value is found then `Some(usize)` is returned, if not `None`
+    #[inline]
     pub fn contains_col(&self, column: &Vec<N>) -> Option<usize>
         where Vec<N>: PartialEq {
 
@@ -324,6 +343,7 @@ impl<N: Copy> Matrix<N> { // implementation of Matrix<N>
     /// # Arguments
     ///
     /// * `row`: row to push
+    #[inline]
     pub fn push_row(&mut self, row: Vec<N>) {
         self.values.push(row);
         self.update_sizes();
@@ -335,6 +355,7 @@ impl<N: Copy> Matrix<N> { // implementation of Matrix<N>
     /// # Arguments
     ///
     /// * `col`: column to push
+    #[inline]
     pub fn push_col(&mut self, col: Vec<N>) {
         if self.ncols > 0 && self.nrows > 0 {
             if self.nrows != col.len() {
@@ -358,6 +379,7 @@ impl<N: Copy> Matrix<N> { // implementation of Matrix<N>
     /// # Arguments
     ///
     /// `index`: index of the row that has to be removed
+    #[inline]
     pub fn pop_row(&mut self, index: usize) {
         if index >= self.nrows {
             panic!("invalid index({}). nrows = '{}'", index, self.nrows)
@@ -378,6 +400,7 @@ impl<N: Copy> Matrix<N> { // implementation of Matrix<N>
     /// # Arguments
     ///
     /// `index`: index of the column that has to be removed
+    #[inline]
     pub fn pop_col(&mut self, index: usize) {
         if index >= self.ncols {
             panic!("invalid index({}). ncols = '{}'", index, self.nrows)
@@ -395,6 +418,7 @@ impl<N: Copy> Matrix<N> { // implementation of Matrix<N>
     ///
     /// * `index_a`: index of the first row that has to be swapped
     /// * `index_b`: index of the second row that has to be swapped
+    #[inline]
     pub fn swap_row(&mut self, index_a: usize, index_b: usize) {
         if (index_a >= self.nrows) || (index_b >= self.nrows) {
             panic!("invalid indexes(index_a = {}, index_b = {}). nrows = {}",
@@ -410,6 +434,7 @@ impl<N: Copy> Matrix<N> { // implementation of Matrix<N>
     ///
     /// * `index_a`: index of the first row that has to be swapped
     /// * `index_b`: index of the second row that has to be swapped
+    #[inline]
     pub fn swap_col(&mut self, index_a: usize, index_b: usize) {
         if (index_a >= self.ncols) || (index_b >= self.ncols) {
             panic!("invalid indexes(index_a = {}, index_b = {}). ncols = {}",
@@ -421,6 +446,7 @@ impl<N: Copy> Matrix<N> { // implementation of Matrix<N>
     }
 
     /// Clears a Matrix
+    #[inline]
     pub fn clear(&mut self) {
         self.values.clear();
         self.update_sizes();
@@ -432,6 +458,7 @@ impl<N: Copy> Matrix<N> { // implementation of Matrix<N>
     /// # Arguments
     ///
     /// * `value`: value to compare
+    #[inline]
     pub fn equal_to(&self, value: &N) -> Matrix<bool>
         where N: Num + PartialEq<N> {
 
@@ -454,6 +481,7 @@ impl<N: Copy> Matrix<N> { // implementation of Matrix<N>
     /// # Arguments
     ///
     /// * `comp_matrix`: matrix to compare
+    #[inline]
     pub fn equal_to_matrix(&self, comp_matrix: &Matrix<N>) -> Matrix<bool>
         where N: Num + PartialEq<N> {
 
@@ -484,6 +512,7 @@ impl<N: Copy> Matrix<N> { // implementation of Matrix<N>
     /// # Arguments
     ///
     /// * `value`: value to compare
+    #[inline]
     pub fn bigger_than(&self, value: &N) -> Matrix<bool>
         where N: Num + PartialOrd<N> {
 
@@ -510,6 +539,7 @@ impl<N: Copy> Matrix<N> { // implementation of Matrix<N>
     /// # Arguments
     ///
     /// * `comp_matrix`: matrix to compare
+    #[inline]
     pub fn bigger_than_matrix(&self, comp_matrix: &Matrix<N>) -> Matrix<bool>
         where N: Num + PartialOrd<N> {
 
@@ -539,6 +569,7 @@ impl<N: Copy> Matrix<N> { // implementation of Matrix<N>
     /// # Arguments
     ///
     /// * `scalar`: number to multiply
+    #[inline]
     pub fn scalar_mul(&self, scalar: N) -> Matrix<N> where N: Num {
         let mut m: Matrix<N> = Matrix::<N>::new();
 
@@ -556,6 +587,7 @@ impl<N: Copy> Matrix<N> { // implementation of Matrix<N>
     }
 
     /// Transposes a Matrix
+    #[inline]
     pub fn transpose(&mut self) {
         let mut res: Matrix<N> = Matrix::<N>::new();
         for item in self.values.iter() {
@@ -567,6 +599,7 @@ impl<N: Copy> Matrix<N> { // implementation of Matrix<N>
     }
 
     /// Returns the diagonal of a Matrix
+    #[inline]
     pub fn get_diagonal(&self) -> Matrix<N> where N: Num + Default {
 
         if self.ncols != self.nrows {
@@ -594,6 +627,7 @@ impl<N: Copy> Matrix<N> { // implementation of Matrix<N>
     ///
     /// * `range_row`: row's range of the submatrix
     /// * `range_col`: column's range of the submatrix
+    #[inline]
     pub fn submatrix(&self, range_row: &[usize; 2], range_col: &[usize; 2]) -> Matrix<N> {
         if range_col[0] > range_col[1] || range_row[0] > range_row[1] {
             panic!("please use ascendent ranges. For example '[0 3]'");
@@ -620,6 +654,7 @@ impl<N: Copy> Matrix<N> { // implementation of Matrix<N>
     ///
     /// * The result matrix will be an square matrix with size of the columns
     ///   of the given matrix
+    #[inline]
     pub fn eucl_distance_row(&self) -> Matrix<f64> where N: Into<f64> + Num {
         let mut m: Matrix<f64> = Matrix::<f64>::new();
 
@@ -645,6 +680,7 @@ impl<N: Copy> Matrix<N> { // implementation of Matrix<N>
     /// # Arguments
     ///
     /// * `n`: index that the iterator will point to
+    #[inline]
     pub fn col_iter_at(&self, n: usize) -> IteratorCol<N> {
         IteratorCol {
             m: self,
@@ -653,6 +689,7 @@ impl<N: Copy> Matrix<N> { // implementation of Matrix<N>
     }
 
     /// Returns a IteratorCol pointing to the initial value
+    #[inline]
     pub fn col_iter(&self) -> IteratorCol<N> {
         self.col_iter_at(0)
     }
@@ -662,6 +699,7 @@ impl<N: Copy> Matrix<N> { // implementation of Matrix<N>
     /// # Arguments
     ///
     /// * `n`: index that the iterator will point to
+    #[inline]
     pub fn row_iter_at(&self, n: usize) -> IteratorRow<N> {
         IteratorRow {
             m: self,
@@ -670,6 +708,7 @@ impl<N: Copy> Matrix<N> { // implementation of Matrix<N>
     }
 
     /// Returns a IteratorRow pointing to the initial value
+    #[inline]
     pub fn row_iter(&self) -> IteratorRow<N> {
         self.row_iter_at(0)
     }
@@ -679,6 +718,7 @@ impl<N: Copy> Matrix<N> { // implementation of Matrix<N>
     /// # Arguments
     ///
     /// * `n`: index that the iterator will point to
+    #[inline]
     pub fn el_iter_at(&self, n: usize) -> IteratorElement<N> {
         IteratorElement {
             m: self,
@@ -687,6 +727,7 @@ impl<N: Copy> Matrix<N> { // implementation of Matrix<N>
     }
 
     /// Returns a IteratorElement pointing to the initial value
+    #[inline]
     pub fn el_iter(&self) -> IteratorElement<N> {
         self.el_iter_at(0)
     }

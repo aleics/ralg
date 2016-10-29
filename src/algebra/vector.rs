@@ -20,6 +20,7 @@ pub struct Vector<N: Copy> {
 impl<N: Copy> Vector<N> {
 
     /// Initializes a Vector variable
+    #[inline]
     pub fn new() -> Vector<N> {
         Vector::<N> {
             values: Vec::new()}
@@ -30,6 +31,7 @@ impl<N: Copy> Vector<N> {
     /// # Parameters
     ///
     /// * `val`: defined vector values
+    #[inline]
     pub fn init(val: &Vec<N>) -> Vector<N> {
         let mut v = Vector::<N>::new();
         v.values = val.clone();
@@ -41,6 +43,7 @@ impl<N: Copy> Vector<N> {
     /// # Parameters
     ///
     /// * `size`: vector's size
+    #[inline]
     pub fn zeros(size: usize) -> Vector<N> where N: Num {
         let mut v = Vector::<N>::new();
         v.values = vec![N::zero(); size];
@@ -52,6 +55,7 @@ impl<N: Copy> Vector<N> {
     /// # Parameters
     ///
     /// * `size`: vector's size
+    #[inline]
     pub fn ones(size: usize) -> Vector<N> where N: Num {
         let mut v = Vector::<N>::new();
         v.values = vec![N::one(); size];
@@ -64,6 +68,7 @@ impl<N: Copy> Vector<N> {
     ///
     /// * `size`: vector's size
     /// * `range`: values range
+    #[inline]
     pub fn random(size: usize, range: &[N; 2]) -> Vector<N> where N: Num + PartialOrd + SampleRange {
         if range.len() != 2 {
                 panic!("just permitted range of size 2 (actual={})", range.len());
@@ -76,6 +81,7 @@ impl<N: Copy> Vector<N> {
     }
 
     /// Returns the size of Vector
+    #[inline]
     pub fn size(&self) -> usize {
         self.values.len()
     }
@@ -85,6 +91,7 @@ impl<N: Copy> Vector<N> {
     /// # Parameters
     ///
     /// * `val`: new element's value
+    #[inline]
     pub fn push(&mut self, val: N) {
         self.values.push(val);
     }
@@ -94,6 +101,7 @@ impl<N: Copy> Vector<N> {
     /// # Parameters
     ///
     /// * `index`: deleting index
+    #[inline]
     pub fn remove(&mut self, index: usize) {
         if self.size() > 0 {
             self.values.remove(index);
@@ -101,6 +109,7 @@ impl<N: Copy> Vector<N> {
     }
 
     /// Removes the last element of Vector
+    #[inline]
     pub fn pop(&mut self) -> Option<N> {
         if self.size() > 0 {
             return self.values.pop();
@@ -114,6 +123,7 @@ impl<N: Copy> Vector<N> {
     ///
     /// * `a`: first element's index
     /// * `b`: second element's index
+    #[inline]
     pub fn swap(&mut self, a: usize, b: usize) {
         self.values.swap(a, b);
     }
@@ -127,21 +137,25 @@ impl<N: Copy> Vector<N> {
     /// # Remarks
     ///
     /// * The introduced vector won't lost the values
+    #[inline]
     pub fn append(&mut self, other: &Vector<N>) {
         self.values.append(&mut other.values.clone());
     }
 
     /// Clears a vector
+    #[inline]
     pub fn clear(&mut self) {
         self.values.clear();
     }
 
     /// Orders a vector from the minimum to maximum value
+    #[inline]
     pub fn sort_min(&mut self) where N: Num + Ord {
         self.values.sort_by(|a, b| a.cmp(b));
     }
 
     /// Orders a vector from the maximum to minimum value
+    #[inline]
     pub fn sort_max(&mut self) where N: Num + Ord {
         self.values.sort_by(|a, b| b.cmp(a));
     }
@@ -151,6 +165,7 @@ impl<N: Copy> Vector<N> {
     /// # Parameters
     ///
     /// * `idx`: element's index to return
+    #[inline]
     pub fn el(&self, idx: usize) -> N {
         self.values[idx]
     }
@@ -161,11 +176,13 @@ impl<N: Copy> Vector<N> {
     ///
     /// * `idx`: index of element to set
     ///* `val`: new value for the selected element
+    #[inline]
     pub fn set_el(&mut self, idx: usize, val: N) {
         self.values[idx] = val;
     }
 
     /// Returns the maximal element and its index of a Vector
+    #[inline]
     pub fn max(&self) -> (N, usize) where N: Num + Ord {
         let mut i: usize = 0;
 
@@ -179,6 +196,7 @@ impl<N: Copy> Vector<N> {
     }
 
     /// Returns the minimal element and its index of a Vector
+    #[inline]
     pub fn min(&self) -> (N, usize) where N: Num + Ord {
         let mut i: usize = 0;
 
@@ -192,6 +210,7 @@ impl<N: Copy> Vector<N> {
     }
 
     /// Returns the median value of the Vector's elements value
+    #[inline]
     pub fn median(&self) -> f64 where N: Num + Default + ToPrimitive {
         let sum = self.values.iter().fold(N::zero(), |sum, &el| sum + el).to_f64().unwrap();
         (sum / self.values.len() as f64)

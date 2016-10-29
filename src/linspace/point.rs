@@ -23,21 +23,25 @@ pub struct Point3D<N: Copy> {
 impl<N: Copy + Num> Point3D<N> {
 
     /// Returns the `x` coordinate
+    #[inline]
     pub fn x(&self) -> N {
         self.x
     }
 
     /// Returns the `y` coordinate
+    #[inline]
     pub fn y(&self) -> N {
         self.y
     }
 
     /// Returns the `z` coordinate
+    #[inline]
     pub fn z(&self) -> N {
         self.z
     }
 
     /// Initializes a Point3D with default coordinates' values
+    #[inline]
     pub fn new() -> Point3D<N> where N: Default {
         Point3D {x: N::default(), y: N::default(), z: N::default()}
     }
@@ -49,6 +53,7 @@ impl<N: Copy + Num> Point3D<N> {
     /// * `x`: X coordinate
     /// * `y`: Y coordinate
     /// * `z`: Z coordinate
+    #[inline]
     pub fn init(x: N, y: N, z: N) -> Point3D<N> {
         Point3D {x: x, y: y, z: z}
     }
@@ -58,6 +63,7 @@ impl<N: Copy + Num> Point3D<N> {
     /// # Arguments
     ///
     /// * `new_x`: new X value
+    #[inline]
     pub fn set_x(&mut self, new_x: N) {
         self.x = new_x;
     }
@@ -67,6 +73,7 @@ impl<N: Copy + Num> Point3D<N> {
     /// # Arguments
     ///
     /// * `new_y`: new Y value
+    #[inline]
     pub fn set_y(&mut self, new_y: N) {
         self.y = new_y;
     }
@@ -76,6 +83,7 @@ impl<N: Copy + Num> Point3D<N> {
     /// # Arguments
     ///
     /// * `new_z`: new Z value
+    #[inline]
     pub fn set_z(&mut self, new_z: N) {
         self.z = new_z;
     }
@@ -87,6 +95,7 @@ impl<N: Copy + Num> Point3D<N> {
     /// * `new_x`: new X value
     /// * `new_y`: new Y value
     /// * `new_z`: new Z value
+    #[inline]
     pub fn set(&mut self, new_x: N, new_y: N, new_z: N) {
         self.x = new_x;
         self.y = new_y;
@@ -99,6 +108,7 @@ impl<N: Copy + Num> Point3D<N> {
     ///
     /// * `a`: first point
     /// * `b`: second point
+    #[inline]
     pub fn eucl_distance(a: &Point3D<N>, b: &Point3D<N>) -> f64 where N: Into<f64> {
         let val: f64 = (pow((a.x() - b.x()), 2) +
                         pow((a.y() - b.y()), 2) +
