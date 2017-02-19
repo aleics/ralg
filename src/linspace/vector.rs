@@ -177,6 +177,30 @@ impl<N: Copy + Num> Vector3D<N> {
     pub fn dist(&self) -> f64 where N: Into<f64> {
         (pow(self.x, 2) + pow(self.y, 2) + pow(self.z, 2)).into().sqrt()
     }
+
+    #[inline]
+    pub fn max(&self) -> Option<N> where N: PartialOrd {
+        if self.x >= self.y && self.x >= self.z {
+            return Some(self.x);
+        } else if self.y >= self.x && self.y >= self.z {
+            return Some(self.y);
+        } else if self.z >= self.x && self.z >= self.y {
+            return Some(self.z);
+        }
+        None
+    }
+
+    #[inline]
+    pub fn min(&self) -> Option<N> where N: PartialOrd {
+        if self.x <= self.y && self.x <= self.z {
+            return Some(self.x);
+        } else if self.y <= self.x && self.y <= self.z {
+           return Some(self.y);
+        } else if self.z <= self.x && self.z <= self.y {
+            return Some(self.z);
+        }
+        None
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////

@@ -214,6 +214,28 @@ mod tests {
 
         assert_eq!(dist, (2f64*2f64 + 2f64*2f64 + 1f64).sqrt());
     }
+    #[test]
+    fn vector_max_test() {
+        let a = Vector3D::<f64>::init(2f64, 2f64, 1f64);
+        let b = Vector3D::<i32>::init(-1, 2, -5);
+
+        let max_a = a.max();
+        let max_b = b.max();
+
+        assert_eq!(max_a.unwrap(), 2f64);
+        assert_eq!(max_b.unwrap(), 2);
+    }
+    #[test]
+    fn vector_min_test() {
+        let a = Vector3D::<f64>::init(2f64, 2f64, 1f64);
+        let b = Vector3D::<i32>::init(-1, 2, -5);
+
+        let min_a = a.min();
+        let min_b = b.min();
+
+        assert_eq!(min_a.unwrap(), 1f64);
+        assert_eq!(min_b.unwrap(), -5);
+    }
 
      // --------------- QUAT TEST ----------------------------------------
     #[test]
