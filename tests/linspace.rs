@@ -133,6 +133,17 @@ mod tests {
         assert_eq!(mul.z(), a.z() * b.z());
     }
     #[test]
+    fn vector_scalar_mul_test() {
+        let a = Vector3D::<u32>::init(0, 10, 5);
+        let b = 2;
+
+        let mul = a * b;
+
+        assert_eq!(mul.x(), a.x() * b);
+        assert_eq!(mul.y(), a.y() * b);
+        assert_eq!(mul.z(), a.z() * b);
+    }
+    #[test]
     fn vector_set_x_test(){
         let mut a = Vector3D::<u64>::init(256, 450, 178);
         a.set_x(200);
@@ -248,7 +259,7 @@ mod tests {
     #[test]
     fn quat_set_test() {
         let mut q: Quat<i64> = Quat::<i64>::init(2i64, -15i64, 0i64, -3i64);
-        
+
         let new_x: i64 = 0i64;
         let new_y: i64 = -2i64;
         let new_z: i64 = -1i64;
@@ -310,9 +321,9 @@ mod tests {
         let p: Quat<i32> = Quat::<i32>::init(3i32, 0i32, 2i32, -1i32);
 
         let mul: Quat<i32> = q * p;
-        
+
         // results from wolframalpha
-        assert_eq!(mul.x(), 6i32); 
+        assert_eq!(mul.x(), 6i32);
         assert_eq!(mul.y(), -11i32);
         assert_eq!(mul.z(), 3i32);
         assert_eq!(mul.w(), -4i32);

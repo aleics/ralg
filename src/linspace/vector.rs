@@ -233,6 +233,14 @@ impl<N: Copy + Num> Mul for Vector3D<N> {
     }
 }
 
+impl<N: Copy + Num> Mul<N> for Vector3D<N> {
+    type Output = Vector3D<N>;
+
+    fn mul(self, other: N) -> Vector3D<N> {
+        Vector3D {x: self.x * other, y: self.y * other, z: self.z * other}
+    }
+}
+
 
 /// Display implementation for Vector3D
 impl<N: Copy + Num> fmt::Display for Vector3D<N> where N: fmt::Display {
