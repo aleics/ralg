@@ -93,7 +93,7 @@ mod tests {
     fn vector_scale_test() {
         let mut v3 = Vector3D::<i32>::init(-1, 2, 3);
         let copy = v3.clone();
-        v3.scale(2);
+        v3 = v3.scale(2);
 
         assert_eq!(v3.x(), copy.x() * 2);
         assert_eq!(v3.y(), copy.y() * 2);
@@ -142,6 +142,26 @@ mod tests {
         assert_eq!(mul.x(), a.x() * b);
         assert_eq!(mul.y(), a.y() * b);
         assert_eq!(mul.z(), a.z() * b);
+    }
+    #[test]
+    fn vector_scalar_div_test() {
+        let a = Vector3D::<f32>::init(0.0, 1.0, 3.0);
+        let d = 3.0;
+
+        let div = a / d;
+
+        assert_eq!(div.x(), a.x() / d);
+        assert_eq!(div.y(), a.y() / d);
+        assert_eq!(div.z(), a.z() / d);
+    }
+    #[test]
+    fn vector_neg_test() {
+        let a = Vector3D::<f32>::init(1.0, 2.0, 3.0);
+        let n = -a;
+
+        assert_eq!(n.x(), -a.x());
+        assert_eq!(n.y(), -a.y());
+        assert_eq!(n.z(), -a.z());
     }
     #[test]
     fn vector_set_x_test(){
@@ -199,8 +219,7 @@ mod tests {
     }
     #[test]
     fn vector_norm_test() {
-        let mut a = Vector3D::<f64>::init(2f64, 1f64, 3f64);
-        a.norm();
+        let a = Vector3D::<f64>::init(2f64, 1f64, 3f64).norm();
 
         // values compared using wolframalpha.com
         assert_eq!(a.x(), 0.5345224838248488f64);
@@ -222,8 +241,8 @@ mod tests {
         let max_a = a.max();
         let max_b = b.max();
 
-        assert_eq!(max_a.unwrap(), 2f64);
-        assert_eq!(max_b.unwrap(), 2);
+        assert_eq!(max_a, 2f64);
+        assert_eq!(max_b, 2);
     }
     #[test]
     fn vector_min_test() {
@@ -233,8 +252,8 @@ mod tests {
         let min_a = a.min();
         let min_b = b.min();
 
-        assert_eq!(min_a.unwrap(), 1f64);
-        assert_eq!(min_b.unwrap(), -5);
+        assert_eq!(min_a, 1f64);
+        assert_eq!(min_b, -5);
     }
 
      // --------------- QUAT TEST ----------------------------------------

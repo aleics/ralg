@@ -1,7 +1,7 @@
 use num::{Float, Num};
 use num::pow;
 use std::fmt;
-use std::ops::{Add, Sub, Mul, Neg};
+use std::ops::{Add, Sub, Mul, Neg, Div};
 
 /// Vector of 3 dimensions with a defined coordinates and origen
 ///
@@ -112,10 +112,8 @@ impl<N: Copy + Num> Vector3D<N> {
     ///
     /// * `scalar`: scalar value
     #[inline]
-    pub fn scale(&mut self, scalar: N) {
-        self.x = self.x * scalar;
-        self.y = self.y * scalar;
-        self.z = self.z * scalar;
+    pub fn scale(self, scalar: N) -> Vector3D<N> {
+        Vector3D::<N>::init(self.x * scalar, self.y * scalar, self.z * scalar)
     }
 
     /// Scale a vector with a given vector
@@ -124,10 +122,8 @@ impl<N: Copy + Num> Vector3D<N> {
     ///
     /// * `vec`: vector value
     #[inline]
-    pub fn scale_vec(&mut self, vec: &Vector3D<N>) {
-        self.x = self.x * vec.x();
-        self.y = self.y * vec.y();
-        self.z = self.z * vec.z();
+    pub fn scale_vec(self, vec: &Vector3D<N>) -> Vector3D<N> {
+        Vector3D::<N>::init(self.x *  vec.x(), self.y *  vec.y(), self.z *  vec.z())
     }
 
     /// Cross multiplication of two vectors
@@ -167,8 +163,9 @@ impl<N: Copy + Num> Vector3D<N> {
     ///
     /// * Since this operation requires an `sqrt`, it's just available for float vectors
     #[inline]
-    pub fn norm(&mut self) where N: Float {
+    pub fn norm(self) -> Vector3D<N> where N: Float {
         let value = (self.x*self.x) + (self.y*self.y) + (self.z*self.z);
+
         self.scale(value.sqrt().recip())
     }
 
@@ -179,27 +176,25 @@ impl<N: Copy + Num> Vector3D<N> {
     }
 
     #[inline]
-    pub fn max(&self) -> Option<N> where N: PartialOrd {
+    pub fn max(&self) -> N where N: PartialOrd {
         if self.x >= self.y && self.x >= self.z {
-            return Some(self.x);
-        } else if self.y >= self.x && self.y >= self.z {
-            return Some(self.y);
-        } else if self.z >= self.x && self.z >= self.y {
-            return Some(self.z);
+           self.x
+        } else if self.y >= self.z {
+            self.y
+        } else {
+            self.z
         }
-        None
     }
 
     #[inline]
-    pub fn min(&self) -> Option<N> where N: PartialOrd {
+    pub fn min(&self) -> N where N: PartialOrd {
         if self.x <= self.y && self.x <= self.z {
-            return Some(self.x);
-        } else if self.y <= self.x && self.y <= self.z {
-           return Some(self.y);
-        } else if self.z <= self.x && self.z <= self.y {
-            return Some(self.z);
+            self.x
+        } else if self.y <= self.z {
+           self.y
+        } else {
+            self.z
         }
-        None
     }
 }
 
@@ -262,6 +257,22 @@ impl<N: Copy + Num> Mul<N> for Vector3D<N> {
 
     fn mul(self, other: N) -> Vector3D<N> {
         Vector3D {x: self.x * other, y: self.y * other, z: self.z * other}
+    }
+}
+
+impl<N: Copy + Num> Div<N> for Vector3D<N> {
+    type Output = Vector3D<N>;
+
+    fn div(self, other: N) -> Vector3D<N> {
+        Vector3D { x: self.x / other, y: self.y / other, z: self.z / other }
+    }
+}
+
+impl<N: Copy + Num + Neg<Output = N>> Neg for Vector3D<N> {
+    type Output = Vector3D<N>;
+
+    fn neg(self) -> Vector3D<N> {
+        Vector3D { x: -self.x, y: -self.y, z: -self.z }
     }
 }
 
