@@ -1,6 +1,6 @@
 [package]
 name = "rsmath"
-version = "0.1.6"
+version = "0.1.7"
 authors = ["Aleix Casanovas <aleics.casanovas@gmail.com>"]
 
 description = "An uncomplicated library for Mathematics written in Rust"

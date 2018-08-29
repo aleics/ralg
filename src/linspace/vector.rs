@@ -12,9 +12,9 @@ use std::ops::{Add, Sub, Mul, Neg, Div};
 /// * By default, the origen is [0, 0, 0] and currently this cannot be modified.
 #[derive(Clone, Copy)]
 pub struct Vector3D<N: Copy> {
-    x: N,
-    y: N,
-    z: N,
+    pub x: N,
+    pub y: N,
+    pub z: N,
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -137,14 +137,13 @@ impl<N: Copy + Num> Vector3D<N> {
     ///
     /// * The `origin` of the output vector will be extracted from the `first` input vector
     #[inline]
-    pub fn cross(first: &Vector3D<N>, second: &Vector3D<N>) -> Vector3D<N>
+    pub fn cross(&self, second: &Vector3D<N>) -> Vector3D<N>
         where N: Default + Neg<Output = N> {
-
-        let new_x: N = (first.y * second.z) - (first.z * second.y);
-        let new_y: N = -((first.x * second.z) - (first.z * second.x));
-        let new_z: N = (first.x * second.y) - (first.y * second.x);
-
-        Vector3D { x: new_x, y: new_y, z: new_z }
+        Vector3D {
+            x: self.y * second.z - self.z * second.y,
+            y: self.z * second.x - self.x * second.z,
+            z: self.x * second.y - self.y * second.x
+        }
     }
 
     /// Dot operation for two vectors
@@ -164,7 +163,7 @@ impl<N: Copy + Num> Vector3D<N> {
     /// * Since this operation requires an `sqrt`, it's just available for float vectors
     #[inline]
     pub fn norm(self) -> Vector3D<N> where N: Float {
-        let value = (self.x*self.x) + (self.y*self.y) + (self.z*self.z);
+        let value = self.dot(&self);
 
         self.scale(value.sqrt().recip())
     }
@@ -194,6 +193,20 @@ impl<N: Copy + Num> Vector3D<N> {
            self.y
         } else {
             self.z
+        }
+    }
+
+    #[inline]
+    pub fn clamp(&self) -> Vector3D<N> where N: Float {
+        let func = |x: N| {
+            if x < N::zero() { N::zero()  }
+                else if x > N::one() { N::one() }
+                    else { x }
+        };
+        Vector3D {
+            x: func(self.x),
+            y: func(self.y),
+            z: func(self.z)
         }
     }
 }
