@@ -196,6 +196,20 @@ impl<N: Copy + Num> Vector3D<N> {
             self.z
         }
     }
+
+    #[inline]
+    pub fn clamp(&self) -> Vector3D<N> where N: Float {
+        let func = |x: N| {
+            if x < N::zero() { N::zero()  }
+                else if x > N::one() { N::one() }
+                    else { x }
+        };
+        Vector3D {
+            x: func(self.x),
+            y: func(self.y),
+            z: func(self.z)
+        }
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////
