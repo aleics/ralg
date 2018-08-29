@@ -110,9 +110,9 @@ impl<N: Copy + Num> Point3D<N> {
     /// * `b`: second point
     #[inline]
     pub fn eucl_distance(a: &Point3D<N>, b: &Point3D<N>) -> f64 where N: Into<f64> {
-        let val: f64 = (pow((a.x() - b.x()), 2) +
-                        pow((a.y() - b.y()), 2) +
-                        pow((a.z() - b.z()), 2)).into();
+        let val: f64 = (pow(a.x() - b.x(), 2) +
+                        pow(a.y() - b.y(), 2) +
+                        pow(a.z() - b.z(), 2)).into();
         val.sqrt()
     }
 }
